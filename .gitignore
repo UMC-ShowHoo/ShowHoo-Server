@@ -27,7 +27,8 @@ out/
 !**/src/test/**/out/
 
 ### UserSpecific Stuffs ###
-resources/
+resources/application.properties/
+resources/application.yml/
 
 ### NetBeans ###
 /nbproject/private/
