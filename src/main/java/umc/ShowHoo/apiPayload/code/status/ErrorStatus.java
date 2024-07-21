@@ -21,6 +21,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     //추가
     SPACE_NOT_FOUND(HttpStatus.NOT_FOUND, "SPACE001", "Space not found"),
+
     ;
 
     private final HttpStatus httpStatus;

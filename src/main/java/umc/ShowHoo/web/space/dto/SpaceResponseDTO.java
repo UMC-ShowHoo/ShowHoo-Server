@@ -20,6 +20,10 @@ public class SpaceResponseDTO {
         LocalDateTime createdAt;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class SpaceDescriptionDTO{
         String name;
         String description;

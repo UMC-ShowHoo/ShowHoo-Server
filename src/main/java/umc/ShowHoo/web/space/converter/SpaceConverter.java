@@ -56,5 +56,17 @@ public class SpaceConverter {
                 .build();
     }
 
+    public static SpaceResponseDTO.SpaceDescriptionDTO toSpaceDescriptionDTO(Space space) {
+        return SpaceResponseDTO.SpaceDescriptionDTO.builder()
+                .name(space.getName())
+                .description(space.getDescription())
+                .rentalHours(space.getRentalHours())
+                .location(space.getLocation())
+                .area(space.getArea())
+                .seatingCapacity(space.getSeatingCapacity())
+                .standingCapacity(space.getStandingCapacity())
+                .additionalServices(space.getAdditionalServices())
+                .build();
+    }
 
 }
