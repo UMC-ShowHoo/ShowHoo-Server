@@ -11,5 +11,8 @@ public class BookRequestDTO {
         String name;
         @NotNull
         String phoneNum;
+        @NotNull
+        Long audienceId;
+        //Long showId;
     }
 }
