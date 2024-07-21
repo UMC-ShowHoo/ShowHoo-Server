@@ -5,6 +5,7 @@ import lombok.*;
 import umc.ShowHoo.web.member.entity.Member;
 import umc.ShowHoo.web.rentalFee.entity.RentalFee;
 import umc.ShowHoo.web.spacePhoto.entity.SpacePhoto;
+import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
 
 import java.net.URL;
 import java.util.List;
@@ -34,8 +35,8 @@ public class Space {
     private String notice; // 유의사항
 
     @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "space_user_id")
+    private SpaceUser spaceUser;
 
 
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)

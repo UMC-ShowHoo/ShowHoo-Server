@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.spacePhoto.entity.SpacePhoto;
+import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
 
 import java.net.URL;
 import java.util.List;
@@ -26,8 +27,8 @@ public class Member {
     @Column(unique = true)
     private String accessToken;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<Space> spaces;
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
+    private SpaceUser spaceUser;
 
 
 }
