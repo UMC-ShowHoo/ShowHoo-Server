@@ -47,5 +47,11 @@ public class SpaceService {
                 .orElseThrow(() -> new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND));
         return SpaceConverter.toSpaceDescriptionDTO(space);
     }
+
+    public SpaceResponseDTO.SpaceNoticeDTO getSpaceNotice(Long spaceUserId) {
+        Space space = spaceRepository.findById(spaceUserId)
+                .orElseThrow(() -> new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND));
+        return SpaceConverter.toSpaceNoticeDTO(space);
+    }
 }
 

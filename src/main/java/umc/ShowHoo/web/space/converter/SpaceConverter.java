@@ -69,4 +69,9 @@ public class SpaceConverter {
                 .build();
     }
 
+    public static SpaceResponseDTO.SpaceNoticeDTO toSpaceNoticeDTO(Space space) {
+        return SpaceResponseDTO.SpaceNoticeDTO.builder()
+                .notice(space.getNotice())
+                .build();
+    }
 }

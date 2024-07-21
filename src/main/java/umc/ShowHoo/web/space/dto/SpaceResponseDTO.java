@@ -35,5 +35,13 @@ public class SpaceResponseDTO {
         String additionalServices;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SpaceNoticeDTO{
+        String notice;
+    }
+
 
 }

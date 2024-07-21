@@ -73,7 +73,16 @@ public class SpaceController {
 
     }
 
+    @GetMapping("/spaces/{spaceUserId}/notice")
+    @Operation(summary = "공연장 세부정보 유의사항 API", description = "공연장 세부정보를 조회할 때 유의사항에 필요한 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
+    })
+    public ApiResponse<SpaceResponseDTO.SpaceNoticeDTO> getSpaceNotice(@PathVariable Long spaceUserId) {
+        SpaceResponseDTO.SpaceNoticeDTO spaceNotice = spaceService.getSpaceNotice(spaceUserId);
+        return ApiResponse.onSuccess(spaceNotice);
 
+    }
 
 
 }
