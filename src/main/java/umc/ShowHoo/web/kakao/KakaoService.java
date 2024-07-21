@@ -47,7 +47,7 @@ public class KakaoService {
         HashMap<String, Object> userInfo = getKakaoUserInfo(accessToken);
 
         // 3. 카카오ID로 회원가입 & 로그인 처리
-        LoginResponseDTO kakaoUserResponse = kakaoUserLogin(userInfo);
+        LoginResponseDTO kakaoUserResponse = kakaoUserLogin(userInfo, accessToken);
 
         return kakaoUserResponse;
     }
@@ -149,7 +149,7 @@ public class KakaoService {
     }
 
     // 3. 카카오ID로 회원가입 & 로그인 처리
-    private LoginResponseDTO kakaoUserLogin(HashMap<String, Object> userInfo) {
+    private LoginResponseDTO kakaoUserLogin(HashMap<String, Object> userInfo, String accessToken) {
         Long uid = Long.valueOf(userInfo.get("id").toString());
         String name = userInfo.get("nickname").toString();
 //        String email = userInfo.get("email").toString();
@@ -170,6 +170,11 @@ public class KakaoService {
             kakaoUser.setName(name);
 //            kakaoUser.setEmail(email);
             kakaoUser.setProfileimage(profileImageUrl);
+            kakaoUser.setAccessToken(accessToken);
+            memberRepository.save(kakaoUser);
+        }else {
+            // 사용자 정보가 이미 존재하면 액세스 토큰 업데이트
+            kakaoUser.setAccessToken(accessToken);
             memberRepository.save(kakaoUser);
         }
 

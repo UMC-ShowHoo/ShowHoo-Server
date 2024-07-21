@@ -1,9 +1,8 @@
 package umc.ShowHoo.web.space.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import umc.ShowHoo.web.member.entity.Member;
 import umc.ShowHoo.web.rentalFee.entity.RentalFee;
 import umc.ShowHoo.web.spacePhoto.entity.SpacePhoto;
 
@@ -14,6 +13,8 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Space {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +32,11 @@ public class Space {
     private URL lightingEquipment; //조명 장비 정보 - 사진을 담을거기 때문에 사진 URL
     private URL stageMachinery; //무대 기계 장치 - 사진을 담을거기 때문에 사진 URL
     private String notice; // 유의사항
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
 
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
     private List<SpacePhoto> photos;
