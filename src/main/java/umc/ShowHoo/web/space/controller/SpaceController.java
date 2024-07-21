@@ -36,7 +36,7 @@ public class SpaceController {
     public ApiResponse<SpaceResponseDTO.ResultDTO> createSpace(@PathVariable Long spaceUserId, @RequestBody SpaceRequestDTO spaceRequestDTO) {
         logger.info("Received request to create space: {}", spaceRequestDTO);
         try {
-            // memberId로 Member 조회
+            // spaceUserId로 SpaceUser 조회
             Optional<SpaceUser> optionalSpaceUser = spaceUserRepository.findById(spaceUserId);
             SpaceUser spaceUser = optionalSpaceUser.orElse(null);
             if (spaceUser == null) {

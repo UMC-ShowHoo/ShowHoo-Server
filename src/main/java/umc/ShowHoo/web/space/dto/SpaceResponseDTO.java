@@ -20,5 +20,16 @@ public class SpaceResponseDTO {
         LocalDateTime createdAt;
     }
 
+    public static class SpaceDescriptionDTO{
+        String name;
+        String description;
+        String rentalHours;
+        String location;
+        String area;
+        Integer seatingCapacity;
+        Integer standingCapacity;
+        String additionalServices;
+    }
+
 
 }

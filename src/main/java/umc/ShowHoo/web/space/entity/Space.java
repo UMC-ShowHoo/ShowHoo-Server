@@ -25,7 +25,7 @@ public class Space {
     private String description; // 공연장 소개
     private String rentalHours; // 대관 시간
     private String location; // 공연장 위치
-    private String area; // 공연장 위치
+    private String area; // 공연장 면적
     private Integer seatingCapacity; // 좌석 수용인원
     private Integer standingCapacity; // 입석 수용인원
     private String additionalServices; // 추가 서비스
