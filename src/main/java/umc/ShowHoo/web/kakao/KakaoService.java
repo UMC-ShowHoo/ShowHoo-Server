@@ -9,16 +9,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import umc.ShowHoo.jwt.AuthTokens;
 import umc.ShowHoo.jwt.AuthTokensGenerator;
-import umc.ShowHoo.jwt.JwtTokenProvider;
 import umc.ShowHoo.web.login.dto.LoginResponseDTO;
 import umc.ShowHoo.web.member.entity.Member;
 import umc.ShowHoo.web.member.repository.MemberRepository;
+import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
+import umc.ShowHoo.web.spaceUser.repository.SpaceUserRepository;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -31,7 +33,7 @@ public class KakaoService {
 
     private final MemberRepository memberRepository;
     private final AuthTokensGenerator authTokensGenerator;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final SpaceUserRepository spaceUserRepository;
 
     @Value("${kakao.client.id}")
     private String clientId;
@@ -47,7 +49,7 @@ public class KakaoService {
         HashMap<String, Object> userInfo = getKakaoUserInfo(accessToken);
 
         // 3. 카카오ID로 회원가입 & 로그인 처리
-        LoginResponseDTO kakaoUserResponse = kakaoUserLogin(userInfo);
+        LoginResponseDTO kakaoUserResponse = kakaoUserLogin(userInfo, accessToken);
 
         return kakaoUserResponse;
     }
@@ -149,7 +151,8 @@ public class KakaoService {
     }
 
     // 3. 카카오ID로 회원가입 & 로그인 처리
-    private LoginResponseDTO kakaoUserLogin(HashMap<String, Object> userInfo) {
+    @Transactional
+    public LoginResponseDTO kakaoUserLogin(HashMap<String, Object> userInfo, String accessToken) {
         Long uid = Long.valueOf(userInfo.get("id").toString());
         String name = userInfo.get("nickname").toString();
 //        String email = userInfo.get("email").toString();
@@ -170,6 +173,20 @@ public class KakaoService {
             kakaoUser.setName(name);
 //            kakaoUser.setEmail(email);
             kakaoUser.setProfileimage(profileImageUrl);
+            kakaoUser.setAccessToken(accessToken);
+
+            Member savedMember = memberRepository.save(kakaoUser);
+
+            // member 엔티티 만드는 동시에 spaceUser 엔티티도 생성
+            SpaceUser spaceUser = new SpaceUser();
+            spaceUser.setStatus(false); // 초기 상태 설정
+            spaceUser.setMember(savedMember);
+            kakaoUser.setSpaceUser(spaceUser);
+
+            spaceUserRepository.save(spaceUser);
+        }else {
+            // 사용자 정보가 이미 존재하면 액세스 토큰 업데이트
+            kakaoUser.setAccessToken(accessToken);
             memberRepository.save(kakaoUser);
         }
 

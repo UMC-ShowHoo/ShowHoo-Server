@@ -1,13 +1,14 @@
 package umc.ShowHoo.web.member.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import umc.ShowHoo.web.space.entity.Space;
+import umc.ShowHoo.web.spacePhoto.entity.SpacePhoto;
+import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
 
 import java.net.URL;
+import java.util.List;
 
 @Entity
 @Setter
@@ -19,9 +20,15 @@ public class Member {
 
     private String name;
 
-//    private String kakaoAccessToken;
-
     private URL profileimage;
 
     private String email;
+
+    @Column(unique = true)
+    private String accessToken;
+
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
+    private SpaceUser spaceUser;
+
+
 }
