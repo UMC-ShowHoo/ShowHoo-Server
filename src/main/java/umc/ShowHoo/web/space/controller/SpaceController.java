@@ -4,6 +4,7 @@ package umc.ShowHoo.web.space.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import umc.ShowHoo.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -60,6 +61,12 @@ public class SpaceController {
             logger.error("Unexpected error occurred while creating space", e);
             return ApiResponse.onFailure("ERROR_CODE", "Unexpected error occurred while creating space", null);
         }
+    }
+
+    @GetMapping("/spaces")
+    public ApiResponse<SpaceResponseDTO.SpaceListDTO> getAllSpaces(){
+        SpaceResponseDTO.SpaceListDTO spaces = spaceService.getAllSpaces();
+        return ApiResponse.onSuccess(spaces);
     }
 
 }
