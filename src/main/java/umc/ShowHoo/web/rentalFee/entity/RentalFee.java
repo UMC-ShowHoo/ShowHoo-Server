@@ -1,15 +1,15 @@
 package umc.ShowHoo.web.rentalFee.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import umc.ShowHoo.web.space.entity.Space;
 
 @Entity
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class RentalFee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
