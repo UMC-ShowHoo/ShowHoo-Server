@@ -4,12 +4,10 @@ package umc.ShowHoo.web.space.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 import umc.ShowHoo.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
 import org.springframework.web.bind.annotation.RestController;
 import umc.ShowHoo.web.space.converter.SpaceConverter;
 import umc.ShowHoo.web.space.dto.SpaceRequestDTO;
@@ -20,6 +18,7 @@ import umc.ShowHoo.web.space.service.SpaceService;
 import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
 import umc.ShowHoo.web.spaceUser.repository.SpaceUserRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController

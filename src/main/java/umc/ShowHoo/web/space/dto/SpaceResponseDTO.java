@@ -5,6 +5,7 @@ import org.hibernate.type.internal.ImmutableNamedBasicTypeImpl;
 
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 public class SpaceResponseDTO {
@@ -33,7 +34,16 @@ public class SpaceResponseDTO {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class SpaceListDTO{
+    public static class SpaceListDTO {
+        private List<SpaceSummaryDTO> spaces;
+    }
+
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SpaceSummaryDTO{
         String name;
         String location;
         Integer totalCapacity;
