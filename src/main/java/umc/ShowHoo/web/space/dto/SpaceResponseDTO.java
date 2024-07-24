@@ -44,4 +44,11 @@ public class SpaceResponseDTO {
     }
 
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SpaceDateDTO {
+
+    }
 }

@@ -84,5 +84,15 @@ public class SpaceController {
 
     }
 
+    @PostMapping("/spaces/{spaceUserId}/date")
+    @Operation(summary = "공연장 세부정보 예약 날짜 API", description = "공연장 세부정보 조회할 때 예약 날짜를 받는 API입니다. 요일마다 가격이 달라서 날짜를 선택한 후 날짜에 맞는 대관비가 응답으로 나옵니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
+    })
+    public ApiResponse<SpaceResponseDTO.SpaceDateDTO> getSpaceDate(@PathVariable Long spaceUserId, @RequestBody SpaceRequestDTO spaceRequestDTO) {
+        SpaceResponseDTO.SpaceDateDTO spaceDate = spaceService.getSpaceDate(spaceUserId);
+        return ApiResponse.onSuccess(spaceDate);
+    }
+
 
 }

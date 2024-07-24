@@ -53,5 +53,9 @@ public class SpaceService {
                 .orElseThrow(() -> new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND));
         return SpaceConverter.toSpaceNoticeDTO(space);
     }
+
+    public SpaceResponseDTO.SpaceDateDTO getSpaceDate(Long spaceUserId) {
+        return null;
+    }
 }
 
