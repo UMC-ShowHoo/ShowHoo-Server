@@ -2,13 +2,13 @@ package umc.ShowHoo.web.performerProfile.entity;
 
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter @Setter
 @Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class PerformerPoster {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

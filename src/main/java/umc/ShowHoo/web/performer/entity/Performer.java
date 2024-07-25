@@ -1,9 +1,7 @@
 package umc.ShowHoo.web.performer.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import umc.ShowHoo.web.performerProfile.entity.PerformerProfile;
 
 import java.util.List;
@@ -12,6 +10,8 @@ import java.util.List;
 @Setter
 @Builder
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Performer {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
