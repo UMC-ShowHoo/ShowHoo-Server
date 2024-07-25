@@ -67,8 +67,8 @@ jobs:
           port: ${{ secrets.EC2_PORT }}
           script: |
             sudo usermod -aG docker $USER
-            sudo docker stop showhoo-server
-            sudo docker rm showhoo-server
-            sudo docker image rm ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
+            sudo docker stop showhoo-server || true
+            sudo docker rm showhoo-server || true
+            sudo docker image rm ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }} || true
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
             sudo docker run -e SPRING_PROFILES_ACTIVE=prod --name showhoo-server -p 8080:8080 -d ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
