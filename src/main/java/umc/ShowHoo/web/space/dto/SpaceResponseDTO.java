@@ -19,6 +19,10 @@ public class SpaceResponseDTO {
         LocalDateTime createdAt;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class SpaceDescriptionDTO{
         String name;
         String description;
@@ -29,6 +33,21 @@ public class SpaceResponseDTO {
         Integer standingCapacity;
         String additionalServices;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SpaceNoticeDTO{
+        String notice;
+    }
+
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SpaceDateDTO {
 
     @Getter
     @Setter
@@ -54,5 +73,5 @@ public class SpaceResponseDTO {
         Integer minRentalFee;
     }
 
-
+    }
 }
