@@ -48,6 +48,9 @@ public class SpaceResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SpaceDateDTO {
+        String date;
+
+    }
 
     @Getter
     @Setter
@@ -73,5 +76,4 @@ public class SpaceResponseDTO {
         Integer minRentalFee;
     }
 
-    }
 }

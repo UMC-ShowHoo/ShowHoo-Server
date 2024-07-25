@@ -27,6 +27,7 @@ public class SpaceService {
     private final RentalFeeRepository rentalFeeRepository;
 
     private SpaceConverter spaceConverter;
+
     @Transactional
     public Space saveSpace(Space space) {
         Space savedSpace = spaceRepository.save(space);
@@ -63,6 +64,7 @@ public class SpaceService {
 
     public SpaceResponseDTO.SpaceDateDTO getSpaceDate(Long spaceUserId) {
         return null;
+    }
 
     @Transactional
     public SpaceResponseDTO.SpaceListDTO getAllSpaces() {

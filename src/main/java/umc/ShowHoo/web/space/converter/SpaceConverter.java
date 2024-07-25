@@ -79,7 +79,7 @@ public class SpaceConverter {
                 .area(space.getArea())
                 .seatingCapacity(space.getSeatingCapacity())
                 .standingCapacity(space.getStandingCapacity())
-                .additionalServices(space.getAdditionalServices())
+//                .additionalServices(space.getAdditionalServices())
                 .build();
     }
 
@@ -87,6 +87,7 @@ public class SpaceConverter {
         return SpaceResponseDTO.SpaceNoticeDTO.builder()
                 .notice(space.getNotice())
                 .build();
+    }
 
     public static SpaceResponseDTO.SpaceListDTO toSpaceListDTO(List<Space> spaces) {
         List<SpaceResponseDTO.SpaceSummaryDTO> spaceSummaryDTOs = spaces.stream()
