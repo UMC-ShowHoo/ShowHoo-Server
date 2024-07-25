@@ -8,7 +8,6 @@ import umc.ShowHoo.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
 import org.springframework.web.bind.annotation.RestController;
 import umc.ShowHoo.web.space.converter.SpaceConverter;
 import umc.ShowHoo.web.space.dto.SpaceRequestDTO;
@@ -19,6 +18,7 @@ import umc.ShowHoo.web.space.service.SpaceService;
 import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
 import umc.ShowHoo.web.spaceUser.repository.SpaceUserRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -94,5 +94,11 @@ public class SpaceController {
         return ApiResponse.onSuccess(spaceDate);
     }
 
+
+    @GetMapping("/spaces")
+    public ApiResponse<SpaceResponseDTO.SpaceListDTO> getAllSpaces(){
+        SpaceResponseDTO.SpaceListDTO spaces = spaceService.getAllSpaces();
+        return ApiResponse.onSuccess(spaces);
+    }
 
 }

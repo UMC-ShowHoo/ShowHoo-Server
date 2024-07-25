@@ -14,6 +14,11 @@ import umc.ShowHoo.web.space.repository.SpaceRepository;
 import umc.ShowHoo.web.spacePhoto.entity.SpacePhoto;
 import umc.ShowHoo.web.spacePhoto.repository.SpacePhotoRepository;
 
+import java.net.URL;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class SpaceService {
@@ -21,6 +26,7 @@ public class SpaceService {
     private final SpacePhotoRepository spacePhotoRepository;
     private final RentalFeeRepository rentalFeeRepository;
 
+    private SpaceConverter spaceConverter;
     @Transactional
     public Space saveSpace(Space space) {
         Space savedSpace = spaceRepository.save(space);
@@ -42,6 +48,7 @@ public class SpaceService {
         return savedSpace;
     }
 
+
     public SpaceResponseDTO.SpaceDescriptionDTO getSpaceDescriptionBySpaceUserId(Long spaceUserId) {
         Space space = spaceRepository.findById(spaceUserId)
                 .orElseThrow(() -> new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND));
@@ -56,6 +63,13 @@ public class SpaceService {
 
     public SpaceResponseDTO.SpaceDateDTO getSpaceDate(Long spaceUserId) {
         return null;
+
+    @Transactional
+    public SpaceResponseDTO.SpaceListDTO getAllSpaces() {
+        List<Space> spaces = spaceRepository.findAll();
+
+        return SpaceConverter.toSpaceListDTO(spaces);
+
     }
 }
 

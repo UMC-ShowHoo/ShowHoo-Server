@@ -1,24 +1,20 @@
-package umc.ShowHoo.web.rentalFee.entity;
+package umc.ShowHoo.web.spaceAdditionalService.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import umc.ShowHoo.web.space.entity.Space;
 
 @Entity
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-public class RentalFee {
+public class SpaceAdditionalService {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private DayOfWeek dayOfWeek;
-
-    private Integer fee;
+    private String title; //서비스명
+    private Boolean isSelected; // 선택여부
 
     @ManyToOne
     @JoinColumn(name = "space_id")
