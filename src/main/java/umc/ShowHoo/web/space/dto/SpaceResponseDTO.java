@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.type.internal.ImmutableNamedBasicTypeImpl;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class SpaceResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SpaceDateDTO {
-        String date;
+        Integer price;
 
     }
 

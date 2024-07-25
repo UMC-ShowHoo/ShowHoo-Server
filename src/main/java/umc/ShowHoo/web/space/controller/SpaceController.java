@@ -12,7 +12,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
+import umc.ShowHoo.web.rentalFee.service.RentalFeeService;
 import umc.ShowHoo.web.space.converter.SpaceConverter;
+import umc.ShowHoo.web.space.dto.SpaceDateRequestDTO;
 import umc.ShowHoo.web.space.dto.SpaceRequestDTO;
 import umc.ShowHoo.web.space.dto.SpaceResponseDTO;
 import umc.ShowHoo.web.space.entity.Space;
@@ -21,7 +23,6 @@ import umc.ShowHoo.web.space.service.SpaceService;
 import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
 import umc.ShowHoo.web.spaceUser.repository.SpaceUserRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -30,6 +31,7 @@ public class SpaceController {
     private static final Logger logger = LoggerFactory.getLogger(SpaceController.class);
     private final SpaceService spaceService;
     private final SpaceUserRepository spaceUserRepository;
+    private final RentalFeeService rentalFeeService;
 
     @PostMapping("/spaces/{spaceUserId}")
     @Operation(summary = "공연장 등록 API", description = "공연장 등록할 때 필요한 API입니다.")
@@ -97,8 +99,8 @@ public class SpaceController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
-    public ApiResponse<SpaceResponseDTO.SpaceDateDTO> getSpaceDate(@PathVariable Long spaceUserId, @RequestBody SpaceRequestDTO spaceRequestDTO) {
-        SpaceResponseDTO.SpaceDateDTO spaceDate = spaceService.getSpaceDate(spaceUserId);
+    public ApiResponse<SpaceResponseDTO.SpaceDateDTO> getSpaceDate(@PathVariable Long spaceUserId, @RequestBody SpaceDateRequestDTO dateRequestDTO) {
+        SpaceResponseDTO.SpaceDateDTO spaceDate = rentalFeeService.getSpaceDate(spaceUserId, dateRequestDTO.getDate());
         return ApiResponse.onSuccess(spaceDate);
     }
 
