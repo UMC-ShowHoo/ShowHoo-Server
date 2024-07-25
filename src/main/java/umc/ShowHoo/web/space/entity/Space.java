@@ -45,5 +45,5 @@ public class Space {
     private List<RentalFee> rentalFees;
 
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
-    private List<SpaceAdditionalService> spaceAdditionalServices;
+    private List<SpaceAdditionalService> AdditionalServices;
 }

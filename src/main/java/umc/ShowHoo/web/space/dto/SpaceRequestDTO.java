@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import umc.ShowHoo.web.rentalFee.dto.RentalFeeRequestDTO;
+import umc.ShowHoo.web.spaceAdditionalService.dto.SpaceAdditionalServiceRequestDTO;
 import umc.ShowHoo.web.spacePhoto.dto.SpacePhotoRequestDTO;
 
 import java.net.URL;
@@ -22,7 +23,7 @@ public class SpaceRequestDTO {
     private String area;
     private Integer seatingCapacity;
     private Integer standingCapacity;
-    private String additionalServices;
+    private List<SpaceAdditionalServiceRequestDTO> additionalServices;
     private URL soundEquipment;
     private URL lightingEquipment;
     private URL stageMachinery;

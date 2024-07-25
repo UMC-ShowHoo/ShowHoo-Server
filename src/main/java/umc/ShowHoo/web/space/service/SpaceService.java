@@ -11,13 +11,11 @@ import umc.ShowHoo.web.space.dto.SpaceResponseDTO;
 import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.space.exception.handler.SpaceHandler;
 import umc.ShowHoo.web.space.repository.SpaceRepository;
+import umc.ShowHoo.web.spaceAdditionalService.entity.SpaceAdditionalService;
+import umc.ShowHoo.web.spaceAdditionalService.repository.SpaceAdditionalServiceRepository;
 import umc.ShowHoo.web.spacePhoto.entity.SpacePhoto;
 import umc.ShowHoo.web.spacePhoto.repository.SpacePhotoRepository;
-
-import java.net.URL;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,12 +23,20 @@ public class SpaceService {
     private final SpaceRepository spaceRepository;
     private final SpacePhotoRepository spacePhotoRepository;
     private final RentalFeeRepository rentalFeeRepository;
+    private final SpaceAdditionalServiceRepository spaceAdditionalServiceRepository;
 
     private SpaceConverter spaceConverter;
 
     @Transactional
     public Space saveSpace(Space space) {
         Space savedSpace = spaceRepository.save(space);
+
+        if (space.getAdditionalServices() != null) {
+            for (SpaceAdditionalService service : space.getAdditionalServices()) {
+                service.setSpace(savedSpace);
+                spaceAdditionalServiceRepository.save(service);
+            }
+        }
 
         if (space.getPhotos() != null) {
             for (SpacePhoto photo : space.getPhotos()) {

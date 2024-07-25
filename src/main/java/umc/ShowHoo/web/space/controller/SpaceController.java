@@ -2,6 +2,9 @@ package umc.ShowHoo.web.space.controller;
 
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import umc.ShowHoo.apiPayload.ApiResponse;
@@ -30,11 +33,16 @@ public class SpaceController {
 
     @PostMapping("/spaces/{spaceUserId}")
     @Operation(summary = "공연장 등록 API", description = "공연장 등록할 때 필요한 API입니다.")
+    @Parameter(
+            in = ParameterIn.HEADER,
+            name = "Authorization", required = true,
+            schema = @Schema(type = "string"),
+            description = "Bearer [Access 토큰]"
+    )
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
     public ApiResponse<SpaceResponseDTO.ResultDTO> createSpace(@PathVariable Long spaceUserId, @RequestBody SpaceRequestDTO spaceRequestDTO) {
-        logger.info("Received request to create space: {}", spaceRequestDTO);
         try {
             // spaceUserId로 SpaceUser 조회
             Optional<SpaceUser> optionalSpaceUser = spaceUserRepository.findById(spaceUserId);

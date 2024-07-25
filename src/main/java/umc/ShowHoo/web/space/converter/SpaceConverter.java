@@ -17,8 +17,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import java.util.Random;
+
 @Component
 public class SpaceConverter {
+    private static final Random RANDOM = new Random();
+
 
     private static SpaceAdditionalServiceRepository spaceAdditionalServiceRepository;
 
@@ -57,8 +61,16 @@ public class SpaceConverter {
                         .build())
                 .collect(Collectors.toList());
 
+        List<SpaceAdditionalService> additionalServices = dto.getAdditionalServices().stream()
+                .map(serviceDTO -> SpaceAdditionalService.builder()
+                        .title(serviceDTO.getTitle())
+                        .space(space)
+                        .build())
+                .collect(Collectors.toList());
+
         space.setPhotos(photos);
         space.setRentalFees(rentalFees);
+        space.setAdditionalServices(additionalServices);
 
         return space;
     }
@@ -106,10 +118,11 @@ public class SpaceConverter {
                 .orElse(null);
 
         String additionalService = null;
-        SpaceAdditionalService selectedService = spaceAdditionalServiceRepository
-                .findBySpaceAndIsSelected(space, true)
-                .orElse(null);
-        if (selectedService != null) { additionalService = selectedService.getTitle(); }
+        if (!space.getAdditionalServices().isEmpty()) {
+            int randomIndex = RANDOM.nextInt(space.getAdditionalServices().size());
+            SpaceAdditionalService selectedService = space.getAdditionalServices().get(randomIndex);
+            additionalService = selectedService.getTitle();
+        }
 
         return new SpaceResponseDTO.SpaceSummaryDTO(
                 space.getName(),
