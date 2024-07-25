@@ -70,6 +70,25 @@ public class SpaceConverter {
                 .build();
     }
 
+    public static SpaceResponseDTO.SpaceDescriptionDTO toSpaceDescriptionDTO(Space space) {
+        return SpaceResponseDTO.SpaceDescriptionDTO.builder()
+                .name(space.getName())
+                .description(space.getDescription())
+                .rentalHours(space.getRentalHours())
+                .location(space.getLocation())
+                .area(space.getArea())
+                .seatingCapacity(space.getSeatingCapacity())
+                .standingCapacity(space.getStandingCapacity())
+//                .additionalServices(space.getAdditionalServices())
+                .build();
+    }
+
+    public static SpaceResponseDTO.SpaceNoticeDTO toSpaceNoticeDTO(Space space) {
+        return SpaceResponseDTO.SpaceNoticeDTO.builder()
+                .notice(space.getNotice())
+                .build();
+    }
+
     public static SpaceResponseDTO.SpaceListDTO toSpaceListDTO(List<Space> spaces) {
         List<SpaceResponseDTO.SpaceSummaryDTO> spaceSummaryDTOs = spaces.stream()
                 .map(SpaceConverter::toSpaceDTO)
