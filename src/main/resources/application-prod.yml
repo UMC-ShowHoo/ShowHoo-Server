@@ -28,6 +28,15 @@ cloud:
       credentials:
         accessKey: {accesskey}
         secretKey: {secretkey}
+      path:
+        review: reviews
+    region:
+      static: {region}
+    stack:
+      auto: false
+    credentials:
+      accessKey: {accesskey}
+      secretKey: {secretkey}
 
 security:
   oauth2:
