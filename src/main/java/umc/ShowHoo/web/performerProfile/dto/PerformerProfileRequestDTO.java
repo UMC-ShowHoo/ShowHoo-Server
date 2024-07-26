@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 import umc.ShowHoo.web.spacePhoto.dto.SpacePhotoRequestDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PerformerProfileRequestDTO {
@@ -20,7 +21,7 @@ public class PerformerProfileRequestDTO {
         private String team;
         private String introduction;
 
-        private List<PerformerProfileImageDTO> performerProfileImages;
+        private List<PerformerProfileImageDTO> performerProfileImages = new ArrayList<>();
     }
 
     @Builder

@@ -4,6 +4,7 @@ import umc.ShowHoo.web.performerProfile.dto.PerformerProfileRequestDTO;
 import umc.ShowHoo.web.performerProfile.entity.PerformerProfile;
 import umc.ShowHoo.web.performerProfile.entity.ProfileImage;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,7 +15,8 @@ public class PerformerProfileConverter {
                 .introduction(dto.getIntroduction())
                 .build();
 
-        List<ProfileImage> profileImages = dto.getPerformerProfileImages().stream()
+        List<ProfileImage> profileImages = (dto.getPerformerProfileImages() != null ? dto.getPerformerProfileImages() : new ArrayList<>())
+                .stream()
                 .map(imageDTO -> ProfileImage.builder()
                         .profileImageUrl(null)  // URL은 후에 설정
                         .performerProfile(performerProfile)
