@@ -3,7 +3,8 @@ package umc.ShowHoo.web.performer.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import umc.ShowHoo.web.performerProfile.entity.PerformerProfile;
-
+import umc.ShowHoo.web.member.entity.Member;
+import umc.ShowHoo.web.spacePrefer.entity.SpacePrefer;
 import java.util.List;
 
 @Getter
@@ -19,4 +20,11 @@ public class Performer {
 
     @OneToMany(mappedBy = "performer",cascade = CascadeType.ALL)
     private List<PerformerProfile> profiles;
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    @OneToMany(mappedBy = "performer", cascade = CascadeType.ALL)
+    private List<SpacePrefer> spacePrefers;
 }
