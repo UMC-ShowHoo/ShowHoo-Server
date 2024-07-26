@@ -1,20 +1,25 @@
 package umc.ShowHoo.web.performer.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import umc.ShowHoo.web.performerProfile.entity.PerformerProfile;
 import umc.ShowHoo.web.member.entity.Member;
 import umc.ShowHoo.web.spacePrefer.entity.SpacePrefer;
-
 import java.util.List;
 
-@Entity
 @Getter
 @Setter
+@Builder
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Performer {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToMany(mappedBy = "performer",cascade = CascadeType.ALL)
+    private List<PerformerProfile> profiles;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
