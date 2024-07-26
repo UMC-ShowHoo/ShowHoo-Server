@@ -20,8 +20,7 @@ public class PerformerProfile {
 
     private String introduction;
 
-    @OneToMany(mappedBy = "performerProfile",cascade = CascadeType.ALL)
-    private List<PerformerPoster> posters;
+    private String posterImage;
 
     @ManyToOne @JoinColumn(name = "performer_id")
     private Performer performer;
