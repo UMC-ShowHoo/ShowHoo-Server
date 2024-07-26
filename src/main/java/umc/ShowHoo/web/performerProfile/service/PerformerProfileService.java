@@ -2,6 +2,7 @@ package umc.ShowHoo.web.performerProfile.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import umc.ShowHoo.aws.s3.AmazonS3Manager;
 import umc.ShowHoo.aws.s3.Uuid;
 import umc.ShowHoo.web.performer.entity.Performer;
@@ -25,28 +26,28 @@ public class PerformerProfileService {
     private final PerformerRepository performerRepository;
     private final UuidRepository uuidRepository;
 
-    public PerformerProfile createProfile(Long performerUserId, PerformerProfileRequestDTO.CreateProfileDTO profileDTO) {
+    public PerformerProfile createProfile(Long performerUserId, PerformerProfileRequestDTO.CreateProfileDTO profileDTO, List<MultipartFile> profileImages) {
         Performer performer = performerRepository.findById(performerUserId)
                 .orElseThrow(() -> new IllegalArgumentException("Performer not found"));
 
         PerformerProfile performerProfile = PerformerProfileConverter.toCreateProfile(profileDTO);
         performerProfile.setPerformer(performer);
 
-        List<ProfileImage> profileImages = new ArrayList<>();
-        for (PerformerProfileRequestDTO.PerformerProfileImageDTO imageDTO : profileDTO.getPerformerProfileImages()) {
+        List<ProfileImage> profileImageList = new ArrayList<>();
+        for (MultipartFile image : profileImages) {
             String uuid = UUID.randomUUID().toString();
             Uuid savedUuid = uuidRepository.save(Uuid.builder().uuid(uuid).build());
 
             String keyName = amazonS3Manager.generatePerformerProfileImageKeyName(savedUuid);
-            String imageUrl = amazonS3Manager.uploadFile(keyName, imageDTO.getProfileImage());
+            String imageUrl = amazonS3Manager.uploadFile(keyName, image);
 
             ProfileImage profileImage = ProfileImage.builder()
                     .profileImageUrl(imageUrl)
                     .performerProfile(performerProfile)
                     .build();
-            profileImages.add(profileImage);
+            profileImageList.add(profileImage);
         }
-        performerProfile.setProfileImages(profileImages);
+        performerProfile.setProfileImages(profileImageList);
 
         return performerProfileRepository.save(performerProfile);
     }
