@@ -1,4 +1,4 @@
-package umc.ShowHoo.web.Show.entity;
+package umc.ShowHoo.web.Shows.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,7 +13,7 @@ import java.net.URL;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Show {
+public class Shows {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
