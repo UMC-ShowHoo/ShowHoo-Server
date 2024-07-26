@@ -4,4 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import umc.ShowHoo.web.performer.entity.Performer;
 
 public interface PerformerRepository extends JpaRepository<Performer, Long> {
+    public Performer findById(long id);
 }
