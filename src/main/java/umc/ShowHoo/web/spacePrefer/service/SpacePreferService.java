@@ -3,6 +3,8 @@ package umc.ShowHoo.web.spacePrefer.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
+import umc.ShowHoo.web.space.exception.handler.SpaceHandler;
 import umc.ShowHoo.web.spacePrefer.converter.SpacePreferConverter;
 import umc.ShowHoo.web.spacePrefer.dto.SpacePreferRequestDTO;
 import umc.ShowHoo.web.spacePrefer.dto.SpacePreferResponseDTO;
@@ -25,7 +27,7 @@ public class SpacePreferService {
     @Transactional
     public void deleteSpacePrefer(Long id) {
         if (!spacePreferRepository.existsById(id)) {
-            throw new IllegalArgumentException("Invalid space prefer ID: " + id);
+            throw new SpaceHandler(ErrorStatus.SPACE_PREFER_NOT_FOUND);
         }
         spacePreferRepository.deleteById(id);
     }
