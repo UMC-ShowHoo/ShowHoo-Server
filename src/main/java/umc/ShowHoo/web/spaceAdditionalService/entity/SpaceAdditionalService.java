@@ -16,6 +16,7 @@ public class SpaceAdditionalService {
     private Long id;
 
     private String title; //서비스명
+    private String price; // 추가서비스 가격
 
     @ManyToOne
     @JoinColumn(name = "space_id")

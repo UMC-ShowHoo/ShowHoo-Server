@@ -68,9 +68,6 @@ public class SpaceService {
         return SpaceConverter.toSpaceNoticeDTO(space);
     }
 
-    public SpaceResponseDTO.SpaceDateDTO getSpaceDate(Long spaceUserId) {
-        return null;
-    }
 
     @Transactional
     public SpaceResponseDTO.SpaceListDTO getAllSpaces() {

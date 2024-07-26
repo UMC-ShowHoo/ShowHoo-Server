@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 import umc.ShowHoo.web.rentalFee.service.RentalFeeService;
 import umc.ShowHoo.web.space.converter.SpaceConverter;
-import umc.ShowHoo.web.space.dto.SpaceDateRequestDTO;
 import umc.ShowHoo.web.space.dto.SpaceRequestDTO;
 import umc.ShowHoo.web.space.dto.SpaceResponseDTO;
 import umc.ShowHoo.web.space.entity.Space;
@@ -44,7 +43,7 @@ public class SpaceController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
-    public ApiResponse<SpaceResponseDTO.ResultDTO> createSpace(@PathVariable Long spaceUserId, @RequestBody SpaceRequestDTO spaceRequestDTO) {
+    public ApiResponse<SpaceResponseDTO.ResultDTO> createSpace(@PathVariable Long spaceUserId, @RequestBody SpaceRequestDTO.SpaceRegisterRequestDTO spaceRegisterRequestDTO) {
         try {
             // spaceUserId로 SpaceUser 조회
             Optional<SpaceUser> optionalSpaceUser = spaceUserRepository.findById(spaceUserId);
@@ -54,7 +53,7 @@ public class SpaceController {
             }
 
             // Space 엔티티 생성 및 Member 설정
-            Space space = SpaceConverter.toEntity(spaceRequestDTO);
+            Space space = SpaceConverter.toEntity(spaceRegisterRequestDTO);
             space.setSpaceUser(spaceUser);
 
             // Space 저장
@@ -94,14 +93,14 @@ public class SpaceController {
 
     }
 
-    @PostMapping("/spaces/{spaceUserId}/date")
-    @Operation(summary = "공연장 세부정보 예약 날짜 API", description = "공연장 세부정보 조회할 때 예약 날짜를 받는 API입니다. 요일마다 가격이 달라서 날짜를 선택한 후 날짜에 맞는 대관비가 응답으로 나옵니다.")
+    @PostMapping("/spaces/{spaceUserId}/price")
+    @Operation(summary = "공연장 세부정보 가격 API", description = "공연장 세부정보 조회할 때 예약 날짜와 추가서비스를 받는 API입니다. 요일마다, 추가서비스를 추가할때마다 가격이 달라서 날짜를 선택하고 추가서비스를 선택한 후 대관비가 응답으로 나옵니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
-    public ApiResponse<SpaceResponseDTO.SpaceDateDTO> getSpaceDate(@PathVariable Long spaceUserId, @RequestBody SpaceDateRequestDTO dateRequestDTO) {
-        SpaceResponseDTO.SpaceDateDTO spaceDate = rentalFeeService.getSpaceDate(spaceUserId, dateRequestDTO.getDate());
-        return ApiResponse.onSuccess(spaceDate);
+    public ApiResponse<SpaceResponseDTO.SpacePriceDTO> getSpaceDate(@PathVariable Long spaceUserId, @RequestBody SpaceRequestDTO.SpacePriceDTO spacePriceDTO) {
+        SpaceResponseDTO.SpacePriceDTO spacePrice = rentalFeeService.getSpaceDate(spaceUserId, spacePriceDTO.getDate(), spacePriceDTO.getAdditionalServices());
+        return ApiResponse.onSuccess(spacePrice);
     }
 
 

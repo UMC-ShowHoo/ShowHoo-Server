@@ -48,9 +48,10 @@ public class SpaceResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class SpaceDateDTO {
-        Integer price;
-
+    public static class SpacePriceDTO {
+        private Integer basePrice;
+        private Integer additionalServicePrice;
+        private Integer totalPrice;
     }
 
     @Getter

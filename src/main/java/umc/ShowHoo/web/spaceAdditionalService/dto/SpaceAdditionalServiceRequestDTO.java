@@ -11,4 +11,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class SpaceAdditionalServiceRequestDTO {
     private String title;
+    private String price;
 }

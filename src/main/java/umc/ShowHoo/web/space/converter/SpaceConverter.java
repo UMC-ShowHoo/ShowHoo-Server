@@ -31,7 +31,7 @@ public class SpaceConverter {
         this.spaceAdditionalServiceRepository = spaceAdditionalServiceRepository;
     }
 
-    public static Space toEntity(SpaceRequestDTO dto) {
+    public static Space toEntity(SpaceRequestDTO.SpaceRegisterRequestDTO dto) {
         Space space = Space.builder()
                 .name(dto.getName())
                 .description(dto.getDescription())
@@ -64,6 +64,7 @@ public class SpaceConverter {
         List<SpaceAdditionalService> additionalServices = dto.getAdditionalServices().stream()
                 .map(serviceDTO -> SpaceAdditionalService.builder()
                         .title(serviceDTO.getTitle())
+                        .price(serviceDTO.getPrice())
                         .space(space)
                         .build())
                 .collect(Collectors.toList());
