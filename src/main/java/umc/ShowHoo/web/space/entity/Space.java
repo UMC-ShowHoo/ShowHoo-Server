@@ -47,7 +47,7 @@ public class Space extends BaseEntity {
     private List<RentalFee> rentalFees;
 
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
-    private List<SpaceAdditionalService> spaceAdditionalServices;
+    private List<SpaceAdditionalService> AdditionalServices;
 
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
     private List<SpacePrefer> spacePrefers;
