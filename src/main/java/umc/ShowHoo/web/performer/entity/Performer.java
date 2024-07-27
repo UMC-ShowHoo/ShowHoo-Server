@@ -21,7 +21,7 @@ public class Performer {
     @OneToMany(mappedBy = "performer",cascade = CascadeType.ALL)
     private List<PerformerProfile> profiles;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
