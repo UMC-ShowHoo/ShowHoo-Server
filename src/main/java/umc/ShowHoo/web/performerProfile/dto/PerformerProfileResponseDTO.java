@@ -1,11 +1,9 @@
 package umc.ShowHoo.web.performerProfile.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class PerformerProfileResponseDTO {
 
@@ -15,5 +13,27 @@ public class PerformerProfileResponseDTO {
     @AllArgsConstructor
     public static class CreateProfileDTO{
         LocalDateTime createdAt;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class ProfileDTO{
+        private Long id;
+        private String team;
+        private String introduction;
+        private List<ProfileImageDTO> profileImages;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class ProfileImageDTO {
+        private Long id;
+        private String profileImageUrl;
     }
 }

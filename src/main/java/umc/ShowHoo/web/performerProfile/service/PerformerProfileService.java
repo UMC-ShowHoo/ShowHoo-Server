@@ -10,6 +10,7 @@ import umc.ShowHoo.aws.s3.AmazonS3Manager;
 import umc.ShowHoo.aws.s3.Uuid;
 import umc.ShowHoo.web.performer.entity.Performer;
 import umc.ShowHoo.web.performerProfile.dto.PerformerProfileRequestDTO;
+import umc.ShowHoo.web.performerProfile.dto.PerformerProfileResponseDTO;
 import umc.ShowHoo.web.performerProfile.entity.PerformerProfile;
 import umc.ShowHoo.web.performerProfile.entity.ProfileImage;
 import umc.ShowHoo.web.performerProfile.repository.PerformerProfileRepository;
@@ -21,6 +22,7 @@ import umc.ShowHoo.web.performerProfile.repository.ProfileImageRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -110,4 +112,36 @@ public class PerformerProfileService {
         log.info("Added new image to profile ID {}: {}", profileId, imageUrl);
     }
 
+    public void deleteProfile(Long performerUserId, Long profileId) {
+        Performer performer = performerRepository.findById(performerUserId)
+                .orElseThrow(() -> new IllegalArgumentException("Performer not found"));
+
+        PerformerProfile existingProfile = performerProfileRepository.findByIdAndPerformer(profileId, performer)
+                .orElseThrow(() -> new IllegalArgumentException("Profile not found or does not belong to the performer"));
+
+        // S3에서 이미지 삭제
+        existingProfile.getProfileImages().forEach(profileImage -> {
+            amazonS3Manager.deleteImage(profileImage.getProfileImageUrl());
+            log.info("Deleted image from S3: {}", profileImage.getProfileImageUrl());
+        });
+
+        // 데이터베이스에서 프로필과 연결된 이미지 삭제
+        profileImageRepository.deleteAll(existingProfile.getProfileImages());
+        log.info("Deleted profile images from DB for profile ID: {}", profileId);
+
+        // 데이터베이스에서 프로필 삭제
+        performerProfileRepository.delete(existingProfile);
+        log.info("Deleted profile from DB: {}", profileId);
+    }
+
+    public List<PerformerProfileResponseDTO.ProfileDTO> getAllProfiles(Long performerUserId) {
+        Performer performer = performerRepository.findById(performerUserId)
+                .orElseThrow(() -> new IllegalArgumentException("Performer not found"));
+
+        List<PerformerProfile> profiles = performerProfileRepository.findByPerformer(performer);
+
+        return profiles.stream()
+                .map(PerformerProfileConverter::toGetProfile)
+                .collect(Collectors.toList());
+    }
 }

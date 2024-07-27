@@ -12,6 +12,7 @@ import umc.ShowHoo.apiPayload.ApiResponse;
 import umc.ShowHoo.aws.s3.Uuid;
 import umc.ShowHoo.aws.s3.UuidRepository;
 import umc.ShowHoo.web.performerProfile.dto.PerformerProfileRequestDTO;
+import umc.ShowHoo.web.performerProfile.dto.PerformerProfileResponseDTO;
 import umc.ShowHoo.web.performerProfile.service.PerformerProfileService;
 
 import java.util.List;
@@ -71,6 +72,26 @@ public class PerformerProfileController {
                                              @ModelAttribute PerformerProfileRequestDTO.AddProfileImageDTO requestDTO) {
         performerProfileService.addProfileImage(performerUserId, profileId, requestDTO);
         return ApiResponse.onSuccess(null);
+    }
+
+    @DeleteMapping("/profile/{performerUserId}/{profileId}")
+    @Operation(summary = "공연자 프로필 삭제 API", description = "공연자 프로필을 삭제하는 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
+    })
+    public ApiResponse<Void> deleteProfile(@PathVariable Long performerUserId, @PathVariable Long profileId) {
+        performerProfileService.deleteProfile(performerUserId, profileId);
+        return ApiResponse.onSuccess(null);
+    }
+
+    @GetMapping("/profile/{performerUserId}")
+    @Operation(summary = "공연자 프로필 조회 API", description = "공연자의 모든 프로필을 조회하는 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
+    })
+    public ApiResponse<List<PerformerProfileResponseDTO.ProfileDTO>> getAllProfiles(@PathVariable Long performerUserId) {
+        List<PerformerProfileResponseDTO.ProfileDTO> profiles = performerProfileService.getAllProfiles(performerUserId);
+        return ApiResponse.onSuccess(profiles);
     }
 
 

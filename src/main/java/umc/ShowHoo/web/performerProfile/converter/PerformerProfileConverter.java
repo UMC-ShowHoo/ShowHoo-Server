@@ -1,6 +1,7 @@
 package umc.ShowHoo.web.performerProfile.converter;
 
 import umc.ShowHoo.web.performerProfile.dto.PerformerProfileRequestDTO;
+import umc.ShowHoo.web.performerProfile.dto.PerformerProfileResponseDTO;
 import umc.ShowHoo.web.performerProfile.entity.PerformerProfile;
 import umc.ShowHoo.web.performerProfile.entity.ProfileImage;
 
@@ -32,6 +33,20 @@ public class PerformerProfileConverter {
         existingProfile.setTeam(dto.getTeam());
         existingProfile.setIntroduction(dto.getIntroduction());
         return existingProfile;
+    }
+
+    public static PerformerProfileResponseDTO.ProfileDTO toGetProfile(PerformerProfile profile) {
+        return PerformerProfileResponseDTO.ProfileDTO.builder()
+                .id(profile.getId())
+                .team(profile.getTeam())
+                .introduction(profile.getIntroduction())
+                .profileImages(profile.getProfileImages().stream()
+                        .map(image -> PerformerProfileResponseDTO.ProfileImageDTO.builder()
+                                .id(image.getId())
+                                .profileImageUrl(image.getProfileImageUrl())
+                                .build())
+                        .collect(Collectors.toList()))
+                .build();
     }
 
 }
