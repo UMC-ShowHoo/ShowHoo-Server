@@ -37,17 +37,4 @@ public class PerformerProfileController {
         return ApiResponse.onSuccess(null);
     }
 
-    //예시
-    private final AmazonS3Manager s3Manager;
-    private final UuidRepository uuidRepository;
-
-    @PostMapping(value = "/example", consumes = "multipart/form-data")
-    public String example(@RequestParam("profileImage") MultipartFile profileImage){
-        String uuid = UUID.randomUUID().toString();
-        Uuid savedUuid = uuidRepository.save(Uuid.builder()
-                .uuid(uuid).build());
-        String pictureUrl = s3Manager.uploadFile(s3Manager.generatePerformerProfileImageKeyName(savedUuid), profileImage);
-        return pictureUrl;
-    }
-
 }
