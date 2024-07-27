@@ -51,4 +51,14 @@ public class PerformerProfileController {
         return ApiResponse.onSuccess(null);
     }
 
+    @DeleteMapping("/profile/profileImage")
+    @Operation(summary = "공연자 프로필 이미지 수정할 때 삭제 API", description = "공연자 프로필 수정할때 프로필 이미지를 삭제하는 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
+    })
+    public ApiResponse<Void> deleteProfileImage(@RequestBody PerformerProfileRequestDTO.DeleteProfileImageDTO requestDTO) {
+        performerProfileService.deleteProfileImageByUrl(requestDTO.getProfileImageUrl());
+        return ApiResponse.onSuccess(null);
+    }
+
 }

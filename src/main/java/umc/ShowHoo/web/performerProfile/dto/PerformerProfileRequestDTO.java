@@ -39,5 +39,13 @@ public class PerformerProfileRequestDTO {
         private String introduction;
     }
 
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DeleteProfileImageDTO {
+        private String profileImageUrl;
+    }
+
 
 }

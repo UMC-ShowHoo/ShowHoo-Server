@@ -15,7 +15,7 @@ public class ProfileImage {
     private Long id;
     private String profileImageUrl;
 
-    @ManyToOne
-    @JoinColumn(name = "performerProfile_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "performer_profile_id")
     private PerformerProfile performerProfile;
 }
