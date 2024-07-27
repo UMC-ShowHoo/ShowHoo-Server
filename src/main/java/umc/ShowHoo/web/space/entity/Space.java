@@ -29,9 +29,13 @@ public class Space extends BaseEntity {
     private String area; // 공연장 면적
     private Integer seatingCapacity; // 좌석 수용인원
     private Integer standingCapacity; // 입석 수용인원
-    private URL soundEquipment; //음향 장비 정보  - 사진을 담을거기 때문에 사진 URL
-    private URL lightingEquipment; //조명 장비 정보 - 사진을 담을거기 때문에 사진 URL
-    private URL stageMachinery; //무대 기계 장치 - 사진을 담을거기 때문에 사진 URL
+    private String soundEquipment; //음향 장비 정보 - 사진
+    private String lightingEquipment; //조명 장비 정보 -사진
+    private String stageMachinery; //무대 장치 -사진
+    private String spaceDrawing; //공연장 도면 -사진
+    private String spaceStaff; //공연장 인력 가이드 -사진
+    private String spaceSeat; //좌석 배치도 -사진
+
     private String notice; // 유의사항
     private Double grade; // 평점
 

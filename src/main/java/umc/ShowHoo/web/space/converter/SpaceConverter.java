@@ -10,6 +10,7 @@ import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.spaceAdditionalService.entity.SpaceAdditionalService;
 import umc.ShowHoo.web.spaceAdditionalService.repository.SpaceAdditionalServiceRepository;
 import umc.ShowHoo.web.spacePhoto.entity.SpacePhoto;
+import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
 
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -31,7 +32,7 @@ public class SpaceConverter {
         this.spaceAdditionalServiceRepository = spaceAdditionalServiceRepository;
     }
 
-    public static Space toEntity(SpaceRequestDTO.SpaceRegisterRequestDTO dto) {
+    public static Space toEntity(SpaceRequestDTO.SpaceRegisterRequestDTO dto, String soundEquipmentUrl, String lightingEquipmentUrl, String stageMachineryUrl, String spaceDrawingUrl, String spaceStaffUrl, String spaceSeatUrl, List<String> photoUrls, SpaceUser spaceUser) {
         Space space = Space.builder()
                 .name(dto.getName())
                 .description(dto.getDescription())
@@ -40,18 +41,21 @@ public class SpaceConverter {
                 .area(dto.getArea())
                 .seatingCapacity(dto.getSeatingCapacity())
                 .standingCapacity(dto.getStandingCapacity())
-                .soundEquipment(dto.getSoundEquipment())
-                .lightingEquipment(dto.getLightingEquipment())
-                .stageMachinery(dto.getStageMachinery())
+                .soundEquipment(soundEquipmentUrl)
+                .lightingEquipment(lightingEquipmentUrl)
+                .stageMachinery(stageMachineryUrl)
+                .spaceDrawing(spaceDrawingUrl)
+                .spaceStaff(spaceStaffUrl)
+                .spaceSeat(spaceSeatUrl)
                 .notice(dto.getNotice())
+                .grade(dto.getGrade())
+                .spaceUser(spaceUser)
                 .build();
 
-        List<SpacePhoto> photos = dto.getPhotos().stream()
-                .map(photoDTO -> SpacePhoto.builder()
-                        .photoUrl(photoDTO.getPhotoUrl())
-                        .space(space)
-                        .build())
+        List<SpacePhoto> photos = photoUrls.stream()
+                .map(url -> SpacePhoto.builder().photoUrl(url).space(space).build())
                 .collect(Collectors.toList());
+        space.setPhotos(photos);
 
         List<RentalFee> rentalFees = dto.getRentalFees().stream()
                 .map(feeDTO -> RentalFee.builder()
@@ -60,6 +64,7 @@ public class SpaceConverter {
                         .space(space)
                         .build())
                 .collect(Collectors.toList());
+        space.setRentalFees(rentalFees);
 
         List<SpaceAdditionalService> additionalServices = dto.getAdditionalServices().stream()
                 .map(serviceDTO -> SpaceAdditionalService.builder()
@@ -68,9 +73,6 @@ public class SpaceConverter {
                         .space(space)
                         .build())
                 .collect(Collectors.toList());
-
-        space.setPhotos(photos);
-        space.setRentalFees(rentalFees);
         space.setAdditionalServices(additionalServices);
 
         return space;
@@ -111,7 +113,7 @@ public class SpaceConverter {
 
     public static SpaceResponseDTO.SpaceSummaryDTO toSpaceDTO(Space space){
         Integer totalCapacity = space.getSeatingCapacity() + space.getStandingCapacity();
-        URL imageURL = space.getPhotos().isEmpty() ? null : space.getPhotos().get(0).getPhotoUrl();
+        String imageURL = space.getPhotos().isEmpty() ? null : space.getPhotos().get(0).getPhotoUrl();
 
         Integer minRentalFee = space.getRentalFees().stream()
                 .min(Comparator.comparingInt(RentalFee::getFee))
@@ -135,5 +137,12 @@ public class SpaceConverter {
                 space.getGrade(),
                 minRentalFee
         );
+    }
+
+    public static Space toCreateSpaceName(SpaceRequestDTO.SpaceNameDTO spaceNameDTO, SpaceUser spaceUser) {
+        return Space.builder()
+                .name(spaceNameDTO.getName())
+                .spaceUser(spaceUser)
+                .build();
     }
 }

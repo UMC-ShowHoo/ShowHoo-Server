@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 import umc.ShowHoo.web.rentalFee.dto.RentalFeeRequestDTO;
 import umc.ShowHoo.web.spaceAdditionalService.dto.SpaceAdditionalServiceRequestDTO;
 import umc.ShowHoo.web.spacePhoto.dto.SpacePhotoRequestDTO;
@@ -27,14 +28,19 @@ public class SpaceRequestDTO {
         private String area;
         private Integer seatingCapacity;
         private Integer standingCapacity;
-        private List<SpaceAdditionalServiceRequestDTO> additionalServices;
-        private URL soundEquipment;
-        private URL lightingEquipment;
-        private URL stageMachinery;
+//        private MultipartFile soundEquipment;
+//        private MultipartFile lightingEquipment;
+//        private MultipartFile stageMachinery;
+//        private MultipartFile spaceDrawing;
+//        private MultipartFile spaceStaff;
+//        private MultipartFile spaceSeat;
         private String notice;
-        private List<SpacePhotoRequestDTO> photos;
+        private Double grade;
+//        private List<MultipartFile> photos;
         private List<RentalFeeRequestDTO> rentalFees;
+        private List<SpaceAdditionalServiceRequestDTO> additionalServices;
     }
+
 
     @Builder
     @Getter
@@ -43,6 +49,23 @@ public class SpaceRequestDTO {
     public static class SpacePriceDTO {
         LocalDate date;
         private List<String> additionalServices;
+    }
+
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SpaceNameDTO {
+        private String name;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SpaceLocationDTO {
+        private String location;
     }
 
 }

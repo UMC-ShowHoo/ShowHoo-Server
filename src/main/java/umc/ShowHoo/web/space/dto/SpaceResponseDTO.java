@@ -73,7 +73,7 @@ public class SpaceResponseDTO {
         Integer totalCapacity;
         String area;
         String additionalService;
-        URL imageURL;
+        String imageURL;
         Double grade;
         Integer minRentalFee;
     }

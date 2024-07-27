@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartFile;
 import umc.ShowHoo.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import umc.ShowHoo.web.space.service.SpaceService;
 import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
 import umc.ShowHoo.web.spaceUser.repository.SpaceUserRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -43,7 +45,16 @@ public class SpaceController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
-    public ApiResponse<SpaceResponseDTO.ResultDTO> createSpace(@PathVariable Long spaceUserId, @RequestBody SpaceRequestDTO.SpaceRegisterRequestDTO spaceRegisterRequestDTO) {
+    public ApiResponse<SpaceResponseDTO.ResultDTO> createSpace(
+            @PathVariable Long spaceUserId,
+            @RequestPart SpaceRequestDTO.SpaceRegisterRequestDTO spaceRegisterRequestDTO,
+            @RequestPart(required = false) MultipartFile soundEquipment,
+            @RequestPart(required = false) MultipartFile lightingEquipment,
+            @RequestPart(required = false) MultipartFile stageMachinery,
+            @RequestPart(required = false) MultipartFile spaceDrawing,
+            @RequestPart(required = false) MultipartFile spaceStaff,
+            @RequestPart(required = false) MultipartFile spaceSeat,
+            @RequestPart(required = false) List<MultipartFile> photos) {
         try {
             // spaceUserId로 SpaceUser 조회
             Optional<SpaceUser> optionalSpaceUser = spaceUserRepository.findById(spaceUserId);
@@ -52,12 +63,8 @@ public class SpaceController {
                 return ApiResponse.onFailure("NOT_FOUND", "SpaceUser not found for given spaceUserId", null);
             }
 
-            // Space 엔티티 생성 및 Member 설정
-            Space space = SpaceConverter.toEntity(spaceRegisterRequestDTO);
-            space.setSpaceUser(spaceUser);
-
             // Space 저장
-            Space savedSpace = spaceService.saveSpace(space);
+            Space savedSpace = spaceService.saveSpace(spaceRegisterRequestDTO, spaceUser, soundEquipment, lightingEquipment, stageMachinery, spaceDrawing, spaceStaff, spaceSeat, photos);
             SpaceResponseDTO.ResultDTO result = SpaceConverter.toSpaceResponseDTO(savedSpace);
 
             return ApiResponse.onSuccess(result);
@@ -109,5 +116,7 @@ public class SpaceController {
         SpaceResponseDTO.SpaceListDTO spaces = spaceService.getAllSpaces();
         return ApiResponse.onSuccess(spaces);
     }
+
+
 
 }
