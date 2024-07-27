@@ -2,9 +2,11 @@ package umc.ShowHoo.web.space.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import umc.ShowHoo.web.common.BaseEntity;
 import umc.ShowHoo.web.rentalFee.entity.RentalFee;
 import umc.ShowHoo.web.spaceAdditionalService.entity.SpaceAdditionalService;
 import umc.ShowHoo.web.spacePhoto.entity.SpacePhoto;
+import umc.ShowHoo.web.spacePrefer.entity.SpacePrefer;
 import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
 
 import java.net.URL;
@@ -16,7 +18,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Space {
+public class Space extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -45,5 +47,9 @@ public class Space {
     private List<RentalFee> rentalFees;
 
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
-    private List<SpaceAdditionalService> AdditionalServices;
+    private List<SpaceAdditionalService> spaceAdditionalServices;
+
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
+    private List<SpacePrefer> spacePrefers;
+
 }

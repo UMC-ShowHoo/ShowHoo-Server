@@ -17,7 +17,6 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class AmazonS3Manager {
-
     private final AmazonS3 amazonS3;
 
     private final AmazonConfig amazonConfig;
@@ -48,5 +47,4 @@ public class AmazonS3Manager {
             log.error("Error deleting file from s3");
         }
     }
-
 }

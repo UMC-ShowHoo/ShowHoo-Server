@@ -1,5 +1,4 @@
 package umc.ShowHoo.aws.s3;
-
 import jakarta.persistence.*;
 import lombok.*;
 
