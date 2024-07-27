@@ -28,23 +28,9 @@ public class PerformerProfileConverter {
         return performerProfile;
     }
 
-    public static PerformerProfile toUpdateProfile(PerformerProfileRequestDTO.UpdateProfileDTO dto, PerformerProfile existingProfile) {
+    public static PerformerProfile toUpdateProfileText(PerformerProfileRequestDTO.UpdateProfileTextDTO dto, PerformerProfile existingProfile) {
         existingProfile.setTeam(dto.getTeam());
         existingProfile.setIntroduction(dto.getIntroduction());
-
-        // 기존 이미지 목록은 비워줍니다. 새 이미지로 대체할 것이기 때문입니다.
-        existingProfile.getProfileImages().clear();
-
-        List<ProfileImage> profileImages = (dto.getPerformerProfileImages() != null ? dto.getPerformerProfileImages() : new ArrayList<>())
-                .stream()
-                .map(image -> ProfileImage.builder()
-                        .profileImageUrl("") // 나중에 S3에 업로드 후 URL을 설정
-                        .performerProfile(existingProfile)
-                        .build())
-                .collect(Collectors.toList());
-
-        existingProfile.setProfileImages(profileImages);
-
         return existingProfile;
     }
 

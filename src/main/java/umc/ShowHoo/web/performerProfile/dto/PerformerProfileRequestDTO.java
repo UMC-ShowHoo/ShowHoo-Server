@@ -34,10 +34,10 @@ public class PerformerProfileRequestDTO {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class UpdateProfileDTO {
+    public static class UpdateProfileTextDTO {
         private String team;
         private String introduction;
-        private List<MultipartFile> performerProfileImages;  // 프로필 사진 파일들
     }
+
 
 }
