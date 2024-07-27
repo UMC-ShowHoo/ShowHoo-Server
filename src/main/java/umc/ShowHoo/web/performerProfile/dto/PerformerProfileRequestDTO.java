@@ -47,5 +47,12 @@ public class PerformerProfileRequestDTO {
         private String profileImageUrl;
     }
 
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class AddProfileImageDTO {
+        private MultipartFile profileImage;
+    }
+
 
 }

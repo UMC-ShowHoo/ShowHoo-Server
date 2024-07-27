@@ -85,4 +85,29 @@ public class PerformerProfileService {
         profileImageRepository.delete(profileImage);
         log.info("Deleted image from DB: {}", profileImage.getId());
     }
+
+    public void addProfileImage(Long performerUserId, Long profileId, PerformerProfileRequestDTO.AddProfileImageDTO requestDTO) {
+        Performer performer = performerRepository.findById(performerUserId)
+                .orElseThrow(() -> new IllegalArgumentException("Performer not found"));
+
+        PerformerProfile existingProfile = performerProfileRepository.findByIdAndPerformer(profileId, performer)
+                .orElseThrow(() -> new IllegalArgumentException("Profile not found or does not belong to the performer"));
+
+        // UUID 생성
+        String uuid = UUID.randomUUID().toString();
+        Uuid savedUuid = uuidRepository.save(Uuid.builder().uuid(uuid).build());
+
+        // s3 업로드 후 url 가져옴
+        String imageUrl = amazonS3Manager.uploadFile(amazonS3Manager.generatePerformerProfileImageKeyName(savedUuid), requestDTO.getProfileImage());
+
+        // db에 url 저장
+        ProfileImage profileImage = ProfileImage.builder()
+                .profileImageUrl(imageUrl)
+                .performerProfile(existingProfile)
+                .build();
+
+        profileImageRepository.save(profileImage);
+        log.info("Added new image to profile ID {}: {}", profileId, imageUrl);
+    }
+
 }
