@@ -37,4 +37,20 @@ public class PerformerProfileController {
         return ApiResponse.onSuccess(null);
     }
 
+    @PutMapping(value = "/profile/{performerUserId}/{profileId}", consumes = "multipart/form-data")
+    @Operation(summary = "공연자 프로필 수정 API", description = "공연자 프로필 정보를 수정하는 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
+    })
+    public ApiResponse<Void> updateProfile(
+            @PathVariable("performerUserId") Long performerUserId,
+            @PathVariable("profileId") Long profileId,
+            @RequestPart("profileDTO") PerformerProfileRequestDTO.UpdateProfileDTO profileDTO,
+            @RequestPart("performerProfileImages") List<MultipartFile> performerProfileImages) {
+
+        profileDTO.setPerformerProfileImages(performerProfileImages);
+        performerProfileService.updateProfile(performerUserId, profileId, profileDTO);
+        return ApiResponse.onSuccess(null);
+    }
+
 }

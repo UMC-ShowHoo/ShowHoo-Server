@@ -51,4 +51,31 @@ public class PerformerProfileService {
 
         return performerProfileRepository.save(performerProfile);
     }
+
+    public void updateProfile(Long performerUserId, Long profileId, PerformerProfileRequestDTO.UpdateProfileDTO dto) {
+        Performer performer = performerRepository.findById(performerUserId)
+                .orElseThrow(() -> new IllegalArgumentException("Performer not found"));
+
+        PerformerProfile existingProfile = performerProfileRepository.findByIdAndPerformer(profileId, performer)
+                .orElseThrow(() -> new IllegalArgumentException("Profile not found or does not belong to the performer"));
+
+        PerformerProfile updatedProfile = PerformerProfileConverter.toUpdateProfile(dto, existingProfile);
+
+        // 사진 파일들을 S3에 업로드하고 URL을 설정합니다.
+        for (MultipartFile image : dto.getPerformerProfileImages()) {
+            String uuid = UUID.randomUUID().toString();
+            Uuid savedUuid = uuidRepository.save(Uuid.builder().uuid(uuid).build());
+            String keyName = amazonS3Manager.generatePerformerProfileImageKeyName(savedUuid);
+            String imageUrl = amazonS3Manager.uploadFile(keyName, image);
+            ProfileImage profileImage = ProfileImage.builder()
+                    .profileImageUrl(imageUrl)
+                    .performerProfile(updatedProfile)
+                    .build();
+            updatedProfile.getProfileImages().add(profileImage);
+        }
+
+        performerProfileRepository.save(updatedProfile);
+    }
+
+
 }
