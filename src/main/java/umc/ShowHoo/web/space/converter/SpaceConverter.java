@@ -87,6 +87,7 @@ public class SpaceConverter {
 
     public static SpaceResponseDTO.SpaceDescriptionDTO toSpaceDescriptionDTO(Space space) {
         return SpaceResponseDTO.SpaceDescriptionDTO.builder()
+                .id(space.getId())
                 .name(space.getName())
                 .description(space.getDescription())
                 .rentalHours(space.getRentalHours())
@@ -100,12 +101,14 @@ public class SpaceConverter {
 
     public static SpaceResponseDTO.SpaceNoticeDTO toSpaceNoticeDTO(Space space) {
         return SpaceResponseDTO.SpaceNoticeDTO.builder()
+                .id(space.getId())
                 .notice(space.getNotice())
                 .build();
     }
 
     public static SpaceResponseDTO.SpaceFileDTO toSpaceFileDTO(Space space) {
         return SpaceResponseDTO.SpaceFileDTO.builder()
+                .id(space.getId())
                 .soundEquipment(space.getSoundEquipment())
                 .lightingEquipment(space.getLightingEquipment())
                 .stageMachinery(space.getStageMachinery())

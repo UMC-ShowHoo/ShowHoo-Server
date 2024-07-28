@@ -34,7 +34,7 @@ public class SpaceController {
     private final SpaceUserRepository spaceUserRepository;
     private final RentalFeeService rentalFeeService;
 
-    @PostMapping("/spaces/{spaceUserId}")
+    @PostMapping(value = "/spaces/{spaceUserId}", consumes = "multipart/form-data")
     @Operation(summary = "공연장 등록 API", description = "공연장 등록할 때 필요한 API입니다.")
     @Parameter(
             in = ParameterIn.HEADER,

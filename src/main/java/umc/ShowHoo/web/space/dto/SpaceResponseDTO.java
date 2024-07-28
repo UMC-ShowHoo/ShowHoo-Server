@@ -25,6 +25,7 @@ public class SpaceResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SpaceDescriptionDTO{
+        Long id;
         String name;
         String description;
         String rentalHours;
@@ -40,6 +41,7 @@ public class SpaceResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SpaceNoticeDTO{
+        Long id;
         String notice;
     }
 
@@ -84,6 +86,7 @@ public class SpaceResponseDTO {
     @AllArgsConstructor
     @Builder
     public static class SpaceFileDTO {
+        Long id;
         String soundEquipment; //음향 장비 정보 - 사진
         String lightingEquipment; //조명 장비 정보 -사진
         String stageMachinery; //무대 장치 -사진
