@@ -100,6 +100,16 @@ public class SpaceController {
 
     }
 
+    @GetMapping("/spaces/{spaceUserId}/file")
+    @Operation(summary = "공연장 세부정보 시설정보 API", description = "공연장 세부정보를 조회할 때 시설정보에 필요한 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
+    })
+    public ApiResponse<SpaceResponseDTO.SpaceFileDTO> getSpaceFile(@PathVariable Long spaceUserId) {
+        SpaceResponseDTO.SpaceFileDTO spaceFileDTO = spaceService.getSpaceFile(spaceUserId);
+        return ApiResponse.onSuccess(spaceFileDTO);
+    }
+
     @PostMapping("/spaces/{spaceUserId}/price")
     @Operation(summary = "공연장 세부정보 가격 API", description = "공연장 세부정보 조회할 때 예약 날짜와 추가서비스를 받는 API입니다. 요일마다, 추가서비스를 추가할때마다 가격이 달라서 날짜를 선택하고 추가서비스를 선택한 후 대관비가 응답으로 나옵니다.")
     @ApiResponses({

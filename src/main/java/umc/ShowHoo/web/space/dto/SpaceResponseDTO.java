@@ -78,4 +78,17 @@ public class SpaceResponseDTO {
         Integer minRentalFee;
     }
 
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class SpaceFileDTO {
+        String soundEquipment; //음향 장비 정보 - 사진
+        String lightingEquipment; //조명 장비 정보 -사진
+        String stageMachinery; //무대 장치 -사진
+        String spaceDrawing; //공연장 도면 -사진
+        String spaceStaff; //공연장 인력 가이드 -사진
+        String spaceSeat; //좌석 배치도 -사진
+    }
 }

@@ -86,6 +86,11 @@ public class SpaceService {
         return SpaceConverter.toSpaceNoticeDTO(space);
     }
 
+    public SpaceResponseDTO.SpaceFileDTO getSpaceFile(Long spaceUserId) {
+        Space space = spaceRepository.findById(spaceUserId)
+                .orElseThrow(() -> new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND));
+        return SpaceConverter.toSpaceFileDTO(space);
+    }
 
     @Transactional
     public SpaceResponseDTO.SpaceListDTO getAllSpaces() {
@@ -99,5 +104,6 @@ public class SpaceService {
         Space space = SpaceConverter.toCreateSpaceName(spaceNameDTO, spaceUser);
         return spaceRepository.save(space);
     }
+
 }
 

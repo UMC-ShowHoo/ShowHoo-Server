@@ -104,6 +104,16 @@ public class SpaceConverter {
                 .build();
     }
 
+    public static SpaceResponseDTO.SpaceFileDTO toSpaceFileDTO(Space space) {
+        return SpaceResponseDTO.SpaceFileDTO.builder()
+                .soundEquipment(space.getSoundEquipment())
+                .lightingEquipment(space.getLightingEquipment())
+                .stageMachinery(space.getStageMachinery())
+                .spaceDrawing(space.getSpaceDrawing())
+                .spaceStaff(space.getSpaceStaff())
+                .spaceSeat(space.getSpaceSeat())
+                .build();
+    }
     public static SpaceResponseDTO.SpaceListDTO toSpaceListDTO(List<Space> spaces) {
         List<SpaceResponseDTO.SpaceSummaryDTO> spaceSummaryDTOs = spaces.stream()
                 .map(SpaceConverter::toSpaceDTO)
@@ -145,4 +155,5 @@ public class SpaceConverter {
                 .spaceUser(spaceUser)
                 .build();
     }
+
 }
