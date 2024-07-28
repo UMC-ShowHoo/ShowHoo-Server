@@ -25,6 +25,10 @@ public enum ErrorStatus implements BaseErrorCode {
 
     AUDIENCE_NOT_FOUND(HttpStatus.NOT_FOUND, "AUDIENCE001", "Audience not found"),
 
+    PERFORMER_NOT_FOUND(HttpStatus.NOT_FOUND, "PERFORMER001", "Performer not found"),
+
+    SHOW_NOT_FOUND(HttpStatus.NOT_FOUND,"SHOW001","Show not found")
+
     ;
 
     private final HttpStatus httpStatus;

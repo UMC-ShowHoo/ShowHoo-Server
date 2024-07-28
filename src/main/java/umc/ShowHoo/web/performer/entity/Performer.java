@@ -2,6 +2,7 @@ package umc.ShowHoo.web.performer.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import umc.ShowHoo.web.Show.entity.Shows;
 import umc.ShowHoo.web.performerProfile.entity.PerformerProfile;
 
 import java.util.List;
@@ -19,4 +20,7 @@ public class Performer {
 
     @OneToMany(mappedBy = "performer",cascade = CascadeType.ALL)
     private List<PerformerProfile> profiles;
+
+    @OneToMany(mappedBy = "performer", cascade = CascadeType.ALL)
+    private List<Shows> showsList;
 }
