@@ -1,8 +1,8 @@
-package umc.ShowHoo.web.Show.converter;
+package umc.ShowHoo.web.Shows.converter;
 
-import umc.ShowHoo.web.Show.dto.ShowsRequestDTO;
-import umc.ShowHoo.web.Show.dto.ShowsResponseDTO;
-import umc.ShowHoo.web.Show.entity.Shows;
+import umc.ShowHoo.web.Shows.dto.ShowsRequestDTO;
+import umc.ShowHoo.web.Shows.dto.ShowsResponseDTO;
+import umc.ShowHoo.web.Shows.entity.Shows;
 
 public class ShowsConverter {
 

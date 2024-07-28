@@ -4,12 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import umc.ShowHoo.web.audience.entity.Audience;
-import umc.ShowHoo.web.space.entity.Space;
-import umc.ShowHoo.web.spacePhoto.entity.SpacePhoto;
+import umc.ShowHoo.web.performer.entity.Performer;
+
 import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
 
 import java.net.URL;
-import java.util.List;
 
 @Entity
 @Setter
@@ -33,5 +32,8 @@ public class Member {
 
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
     private Audience audience;
+
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
+    private Performer performer;
 
 }

@@ -1,16 +1,16 @@
-package umc.ShowHoo.web.Show.controller;
+package umc.ShowHoo.web.Shows.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import umc.ShowHoo.apiPayload.ApiResponse;
-import umc.ShowHoo.web.Show.converter.ShowsConverter;
-import umc.ShowHoo.web.Show.dto.ShowsRequestDTO;
-import umc.ShowHoo.web.Show.dto.ShowsResponseDTO;
-import umc.ShowHoo.web.Show.entity.Shows;
-import umc.ShowHoo.web.Show.repository.ShowsRepository;
-import umc.ShowHoo.web.Show.service.ShowsService;
+import umc.ShowHoo.web.Shows.converter.ShowsConverter;
+import umc.ShowHoo.web.Shows.dto.ShowsRequestDTO;
+import umc.ShowHoo.web.Shows.dto.ShowsResponseDTO;
+import umc.ShowHoo.web.Shows.entity.Shows;
+import umc.ShowHoo.web.Shows.repository.ShowsRepository;
+import umc.ShowHoo.web.Shows.service.ShowsService;
 
 @RestController
 @RequiredArgsConstructor
