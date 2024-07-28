@@ -62,7 +62,7 @@ public class PerformerProfileController {
         return ApiResponse.onSuccess(null);
     }
 
-    @PostMapping("/profile/{performerUserId}/{profileId}/profileImage")
+    @PostMapping(value = "/profile/{performerUserId}/{profileId}/profileImage" ,consumes = "multipart/form-data")
     @Operation(summary = "공연자 프로필 이미지 수정할 때 이미지 추가 API", description = "공연자 프로필 수정할 때 프로필 이미지를 추가하는 API입니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
