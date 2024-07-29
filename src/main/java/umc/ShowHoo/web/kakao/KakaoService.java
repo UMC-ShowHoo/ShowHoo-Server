@@ -165,11 +165,11 @@ public class KakaoService {
             throw new RuntimeException(e);
         }
 
-        Member kakaoUser = memberRepository.findById(uid).orElse(null);
+        Member kakaoUser = memberRepository.findByUid(uid).orElse(null);
 
         if (kakaoUser == null) {
             kakaoUser = new Member();
-            kakaoUser.setId(uid);
+            kakaoUser.setUid(uid);
             kakaoUser.setName(name);
 //            kakaoUser.setEmail(email);
             kakaoUser.setProfileimage(profileImageUrl);
