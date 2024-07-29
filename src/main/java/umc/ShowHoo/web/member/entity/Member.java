@@ -5,12 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 import umc.ShowHoo.web.audience.entity.Audience;
 import umc.ShowHoo.web.performer.entity.Performer;
-import umc.ShowHoo.web.space.entity.Space;
-import umc.ShowHoo.web.spacePhoto.entity.SpacePhoto;
+
 import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
 
 import java.net.URL;
-import java.util.List;
 
 @Entity
 @Setter
@@ -19,6 +17,9 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true)
+    private Long uid;
 
     private String name;
 

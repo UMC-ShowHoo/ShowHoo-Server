@@ -16,9 +16,13 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import umc.ShowHoo.jwt.AuthTokens;
 import umc.ShowHoo.jwt.AuthTokensGenerator;
+import umc.ShowHoo.web.audience.entity.Audience;
+import umc.ShowHoo.web.audience.repository.AudienceRepository;
 import umc.ShowHoo.web.login.dto.LoginResponseDTO;
 import umc.ShowHoo.web.member.entity.Member;
 import umc.ShowHoo.web.member.repository.MemberRepository;
+import umc.ShowHoo.web.performer.entity.Performer;
+import umc.ShowHoo.web.performer.repository.PerformerRepository;
 import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
 import umc.ShowHoo.web.spaceUser.repository.SpaceUserRepository;
 
@@ -34,6 +38,8 @@ public class KakaoService {
     private final MemberRepository memberRepository;
     private final AuthTokensGenerator authTokensGenerator;
     private final SpaceUserRepository spaceUserRepository;
+    private final PerformerRepository performerRepository;
+    private final AudienceRepository audienceRepository;
 
     @Value("${kakao.client.id}")
     private String clientId;
@@ -165,11 +171,11 @@ public class KakaoService {
             throw new RuntimeException(e);
         }
 
-        Member kakaoUser = memberRepository.findById(uid).orElse(null);
+        Member kakaoUser = memberRepository.findByUid(uid).orElse(null);
 
         if (kakaoUser == null) {
             kakaoUser = new Member();
-            kakaoUser.setId(uid);
+            kakaoUser.setUid(uid);
             kakaoUser.setName(name);
 //            kakaoUser.setEmail(email);
             kakaoUser.setProfileimage(profileImageUrl);
@@ -184,6 +190,20 @@ public class KakaoService {
             kakaoUser.setSpaceUser(spaceUser);
 
             spaceUserRepository.save(spaceUser);
+
+            // member 엔티티 만드는 동시에 performer 엔티티도 생성
+            Performer performer = Performer.builder()
+                    .member(savedMember)
+                    .build();
+            performerRepository.save(performer);
+
+            // member 엔티티 만드는 동시에 audience 엔티티도 생성
+            Audience audience = Audience.builder()
+                    .member(savedMember)
+                    .build();
+            audienceRepository.save(audience);
+
+
         }else {
             // 사용자 정보가 이미 존재하면 액세스 토큰 업데이트
             kakaoUser.setAccessToken(accessToken);
@@ -191,6 +211,46 @@ public class KakaoService {
         }
 
         AuthTokens token = authTokensGenerator.generate(uid.toString());
-        return new LoginResponseDTO(uid, name, token);
+        return new LoginResponseDTO(uid, name, token, accessToken);
+    }
+
+    //4. 로그아웃
+    public void kakaoDisconnect(String accessToken) throws JsonProcessingException {
+        // HTTP 헤더 생성
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + accessToken);
+        headers.add("Content-Type", "application/x-www-form-urlencoded");
+
+        // HTTP 요청 보내기
+        HttpEntity<String> kakaoLogoutRequest = new HttpEntity<>(headers);
+        RestTemplate rt = new RestTemplate();
+
+        try {
+            ResponseEntity<String> response = rt.exchange(
+                    "https://kapi.kakao.com/v1/user/logout",
+                    HttpMethod.POST,
+                    kakaoLogoutRequest,
+                    String.class
+            );
+
+            // responseBody에 있는 정보를 꺼냄
+            String res = response.getBody();
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(res);
+
+            Long id = jsonNode.get("id").asLong();
+            System.out.println("반환된 id : " + id);
+
+        } catch (HttpClientErrorException e) {
+            // 401 Unauthorized 에러 처리
+            if (e.getStatusCode().value() == 401) {
+                System.out.println("Unauthorized: Invalid or expired token.");
+                System.out.println("Response body: " + e.getResponseBodyAsString());
+            } else {
+                System.out.println("Error: " + e.getStatusCode().value() + " " + e.getStatusText());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

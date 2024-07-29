@@ -10,6 +10,7 @@ import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.spaceAdditionalService.entity.SpaceAdditionalService;
 import umc.ShowHoo.web.spaceAdditionalService.repository.SpaceAdditionalServiceRepository;
 import umc.ShowHoo.web.spacePhoto.entity.SpacePhoto;
+import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
 
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -17,8 +18,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import java.util.Random;
+
 @Component
 public class SpaceConverter {
+    private static final Random RANDOM = new Random();
+
 
     private static SpaceAdditionalServiceRepository spaceAdditionalServiceRepository;
 
@@ -27,7 +32,7 @@ public class SpaceConverter {
         this.spaceAdditionalServiceRepository = spaceAdditionalServiceRepository;
     }
 
-    public static Space toEntity(SpaceRequestDTO dto) {
+    public static Space toEntity(SpaceRequestDTO.SpaceRegisterRequestDTO dto, String soundEquipmentUrl, String lightingEquipmentUrl, String stageMachineryUrl, String spaceDrawingUrl, String spaceStaffUrl, String spaceSeatUrl, List<String> photoUrls, SpaceUser spaceUser) {
         Space space = Space.builder()
                 .name(dto.getName())
                 .description(dto.getDescription())
@@ -36,18 +41,21 @@ public class SpaceConverter {
                 .area(dto.getArea())
                 .seatingCapacity(dto.getSeatingCapacity())
                 .standingCapacity(dto.getStandingCapacity())
-                .soundEquipment(dto.getSoundEquipment())
-                .lightingEquipment(dto.getLightingEquipment())
-                .stageMachinery(dto.getStageMachinery())
+                .soundEquipment(soundEquipmentUrl)
+                .lightingEquipment(lightingEquipmentUrl)
+                .stageMachinery(stageMachineryUrl)
+                .spaceDrawing(spaceDrawingUrl)
+                .spaceStaff(spaceStaffUrl)
+                .spaceSeat(spaceSeatUrl)
                 .notice(dto.getNotice())
+                .grade(dto.getGrade())
+                .spaceUser(spaceUser)
                 .build();
 
-        List<SpacePhoto> photos = dto.getPhotos().stream()
-                .map(photoDTO -> SpacePhoto.builder()
-                        .photoUrl(photoDTO.getPhotoUrl())
-                        .space(space)
-                        .build())
+        List<SpacePhoto> photos = photoUrls.stream()
+                .map(url -> SpacePhoto.builder().photoUrl(url).space(space).build())
                 .collect(Collectors.toList());
+        space.setPhotos(photos);
 
         List<RentalFee> rentalFees = dto.getRentalFees().stream()
                 .map(feeDTO -> RentalFee.builder()
@@ -56,9 +64,16 @@ public class SpaceConverter {
                         .space(space)
                         .build())
                 .collect(Collectors.toList());
-
-        space.setPhotos(photos);
         space.setRentalFees(rentalFees);
+
+        List<SpaceAdditionalService> additionalServices = dto.getAdditionalServices().stream()
+                .map(serviceDTO -> SpaceAdditionalService.builder()
+                        .title(serviceDTO.getTitle())
+                        .price(serviceDTO.getPrice())
+                        .space(space)
+                        .build())
+                .collect(Collectors.toList());
+        space.setAdditionalServices(additionalServices);
 
         return space;
     }
@@ -72,6 +87,7 @@ public class SpaceConverter {
 
     public static SpaceResponseDTO.SpaceDescriptionDTO toSpaceDescriptionDTO(Space space) {
         return SpaceResponseDTO.SpaceDescriptionDTO.builder()
+                .id(space.getId())
                 .name(space.getName())
                 .description(space.getDescription())
                 .rentalHours(space.getRentalHours())
@@ -85,10 +101,22 @@ public class SpaceConverter {
 
     public static SpaceResponseDTO.SpaceNoticeDTO toSpaceNoticeDTO(Space space) {
         return SpaceResponseDTO.SpaceNoticeDTO.builder()
+                .id(space.getId())
                 .notice(space.getNotice())
                 .build();
     }
 
+    public static SpaceResponseDTO.SpaceFileDTO toSpaceFileDTO(Space space) {
+        return SpaceResponseDTO.SpaceFileDTO.builder()
+                .id(space.getId())
+                .soundEquipment(space.getSoundEquipment())
+                .lightingEquipment(space.getLightingEquipment())
+                .stageMachinery(space.getStageMachinery())
+                .spaceDrawing(space.getSpaceDrawing())
+                .spaceStaff(space.getSpaceStaff())
+                .spaceSeat(space.getSpaceSeat())
+                .build();
+    }
     public static SpaceResponseDTO.SpaceListDTO toSpaceListDTO(List<Space> spaces) {
         List<SpaceResponseDTO.SpaceSummaryDTO> spaceSummaryDTOs = spaces.stream()
                 .map(SpaceConverter::toSpaceDTO)
@@ -98,7 +126,7 @@ public class SpaceConverter {
 
     public static SpaceResponseDTO.SpaceSummaryDTO toSpaceDTO(Space space){
         Integer totalCapacity = space.getSeatingCapacity() + space.getStandingCapacity();
-        URL imageURL = space.getPhotos().isEmpty() ? null : space.getPhotos().get(0).getPhotoUrl();
+        String imageURL = space.getPhotos().isEmpty() ? null : space.getPhotos().get(0).getPhotoUrl();
 
         Integer minRentalFee = space.getRentalFees().stream()
                 .min(Comparator.comparingInt(RentalFee::getFee))
@@ -106,10 +134,11 @@ public class SpaceConverter {
                 .orElse(null);
 
         String additionalService = null;
-        SpaceAdditionalService selectedService = spaceAdditionalServiceRepository
-                .findBySpaceAndIsSelected(space, true)
-                .orElse(null);
-        if (selectedService != null) { additionalService = selectedService.getTitle(); }
+        if (!space.getAdditionalServices().isEmpty()) {
+            int randomIndex = RANDOM.nextInt(space.getAdditionalServices().size());
+            SpaceAdditionalService selectedService = space.getAdditionalServices().get(randomIndex);
+            additionalService = selectedService.getTitle();
+        }
 
         return new SpaceResponseDTO.SpaceSummaryDTO(
                 space.getName(),
@@ -122,4 +151,12 @@ public class SpaceConverter {
                 minRentalFee
         );
     }
+
+    public static Space toCreateSpaceName(SpaceRequestDTO.SpaceNameDTO spaceNameDTO, SpaceUser spaceUser) {
+        return Space.builder()
+                .name(spaceNameDTO.getName())
+                .spaceUser(spaceUser)
+                .build();
+    }
+
 }
