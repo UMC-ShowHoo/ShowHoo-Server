@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import umc.ShowHoo.web.book.entity.BookStatus;
 
+import java.net.URL;
+import java.util.List;
+
 public class BookResponseDTO {
 
     @Getter
@@ -17,5 +20,63 @@ public class BookResponseDTO {
         BookStatus status;
         String alert;
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class getBookListDTO {
+        List<getBookDTO> getBookList;
+        Integer listSize;
+        Integer totalPages;
+        Long totalElements;
+        Boolean isFirst;
+        Boolean isLast;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class getBookDTO{
+        //공연 예매확인 조회
+        //공연 정보(ID, 포스터, 이름, 장소 및 시간, 공연자 등)
+        Long showsId;
+        URL poster;
+        String name;
+        String date;
+        String time;
+
+        BookStatus status;
+        Boolean isCancellable; //취소 가능한지 여부
+    }
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class getWatchedListDTO {
+        List<getWatchedDTO> getWatchedList;
+        Integer listSize;
+        Integer totalPages;
+        Long totalElements;
+        Boolean isFirst;
+        Boolean isLast;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class getWatchedDTO{
+        //공연 관람내역 조회
+        Long showsId;
+        URL poster;
+        String name;
+        String date;
+        String time;
+
+        BookStatus status;
+    }
+
 
 }

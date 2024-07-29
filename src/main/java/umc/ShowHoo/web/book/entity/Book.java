@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import umc.ShowHoo.web.audience.entity.Audience;
+import umc.ShowHoo.web.common.BaseEntity;
 
 @Entity
 @Getter
@@ -13,7 +14,7 @@ import umc.ShowHoo.web.audience.entity.Audience;
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Book {
+public class Book extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

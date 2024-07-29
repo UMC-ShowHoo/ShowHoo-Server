@@ -24,5 +24,5 @@ public class Audience {
     Member member;
 
     @OneToMany(mappedBy = "audience", cascade = CascadeType.ALL)
-    List<Book> books;
+    List<Book> bookList = new ArrayList<>();
 }
