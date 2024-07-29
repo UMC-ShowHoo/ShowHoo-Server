@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.type.internal.ImmutableNamedBasicTypeImpl;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class SpaceResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SpaceDescriptionDTO{
+        Long id;
         String name;
         String description;
         String rentalHours;
@@ -39,6 +41,7 @@ public class SpaceResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SpaceNoticeDTO{
+        Long id;
         String notice;
     }
 
@@ -47,9 +50,10 @@ public class SpaceResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class SpaceDateDTO {
-        String date;
-
+    public static class SpacePriceDTO {
+        private Integer basePrice;
+        private Integer additionalServicePrice;
+        private Integer totalPrice;
     }
 
     @Getter
@@ -71,9 +75,23 @@ public class SpaceResponseDTO {
         Integer totalCapacity;
         String area;
         String additionalService;
-        URL imageURL;
+        String imageURL;
         Double grade;
         Integer minRentalFee;
     }
 
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class SpaceFileDTO {
+        Long id;
+        String soundEquipment; //음향 장비 정보 - 사진
+        String lightingEquipment; //조명 장비 정보 -사진
+        String stageMachinery; //무대 장치 -사진
+        String spaceDrawing; //공연장 도면 -사진
+        String spaceStaff; //공연장 인력 가이드 -사진
+        String spaceSeat; //좌석 배치도 -사진
+    }
 }

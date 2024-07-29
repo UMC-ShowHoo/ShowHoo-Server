@@ -7,5 +7,6 @@ import umc.ShowHoo.web.spaceAdditionalService.entity.SpaceAdditionalService;
 import java.util.Optional;
 
 public interface SpaceAdditionalServiceRepository extends JpaRepository<SpaceAdditionalService, Long> {
-    Optional<SpaceAdditionalService> findBySpaceAndIsSelected(Space space, Boolean isSelected);
+//    Optional<SpaceAdditionalService> findBySpaceAndIsSelected(Space space, Boolean isSelected);
+        SpaceAdditionalService findBySpaceIdAndTitle(Long spaceId, String title);
 }
