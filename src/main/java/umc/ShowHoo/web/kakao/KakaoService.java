@@ -16,9 +16,13 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import umc.ShowHoo.jwt.AuthTokens;
 import umc.ShowHoo.jwt.AuthTokensGenerator;
+import umc.ShowHoo.web.audience.entity.Audience;
+import umc.ShowHoo.web.audience.repository.AudienceRepository;
 import umc.ShowHoo.web.login.dto.LoginResponseDTO;
 import umc.ShowHoo.web.member.entity.Member;
 import umc.ShowHoo.web.member.repository.MemberRepository;
+import umc.ShowHoo.web.performer.entity.Performer;
+import umc.ShowHoo.web.performer.repository.PerformerRepository;
 import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
 import umc.ShowHoo.web.spaceUser.repository.SpaceUserRepository;
 
@@ -34,6 +38,8 @@ public class KakaoService {
     private final MemberRepository memberRepository;
     private final AuthTokensGenerator authTokensGenerator;
     private final SpaceUserRepository spaceUserRepository;
+    private final PerformerRepository performerRepository;
+    private final AudienceRepository audienceRepository;
 
     @Value("${kakao.client.id}")
     private String clientId;
@@ -184,6 +190,20 @@ public class KakaoService {
             kakaoUser.setSpaceUser(spaceUser);
 
             spaceUserRepository.save(spaceUser);
+
+            // member 엔티티 만드는 동시에 performer 엔티티도 생성
+            Performer performer = Performer.builder()
+                    .member(savedMember)
+                    .build();
+            performerRepository.save(performer);
+
+            // member 엔티티 만드는 동시에 audience 엔티티도 생성
+            Audience audience = Audience.builder()
+                    .member(savedMember)
+                    .build();
+            audienceRepository.save(audience);
+
+
         }else {
             // 사용자 정보가 이미 존재하면 액세스 토큰 업데이트
             kakaoUser.setAccessToken(accessToken);
