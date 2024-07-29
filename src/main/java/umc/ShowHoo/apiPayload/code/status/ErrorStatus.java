@@ -28,6 +28,9 @@ public enum ErrorStatus implements BaseErrorCode {
     //PERFORMER
     PERFORMER_NOT_FOUND(HttpStatus.NOT_FOUND, "PERFORMER001", "Performer not found"),
 
+    //SHOW
+    SHOW_NOT_FOUND(HttpStatus.NOT_FOUND,"SHOW001","Show not found"),
+
     //SPACE PREFER
     SPACE_PREFER_NOT_FOUND(HttpStatus.NOT_FOUND, "SPACE_PREFER001", "SpacePrefer not found"),
 
