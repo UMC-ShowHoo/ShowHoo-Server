@@ -1,14 +1,16 @@
 package umc.ShowHoo.web.spacePrefer.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import umc.ShowHoo.web.performer.entity.Performer;
 import umc.ShowHoo.web.space.entity.Space;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class SpacePrefer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

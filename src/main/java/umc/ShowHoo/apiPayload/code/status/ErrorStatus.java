@@ -19,11 +19,18 @@ public enum ErrorStatus implements BaseErrorCode {
     //Exception 핸들링 테스트
     TEMP_EXCEPTION(HttpStatus.BAD_REQUEST, "TEMP4001", "에러 핸들링 테스트"),
 
-    //추가
+    //SPACE
     SPACE_NOT_FOUND(HttpStatus.NOT_FOUND, "SPACE001", "Space not found"),
 
-
+    //AUDIENCE
     AUDIENCE_NOT_FOUND(HttpStatus.NOT_FOUND, "AUDIENCE001", "Audience not found"),
+
+    //PERFORMER
+    PERFORMER_NOT_FOUND(HttpStatus.NOT_FOUND, "PERFORMER001", "Performer not found"),
+
+    //SPACE PREFER
+    SPACE_PREFER_NOT_FOUND(HttpStatus.NOT_FOUND, "SPACE_PREFER001", "SpacePrefer not found"),
+
 
     ;
 
