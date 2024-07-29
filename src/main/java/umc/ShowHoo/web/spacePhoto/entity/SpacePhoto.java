@@ -17,7 +17,7 @@ public class SpacePhoto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private URL photoUrl;
+    private String photoUrl;
 
     @ManyToOne
     @JoinColumn(name = "space_id")

@@ -25,6 +25,10 @@ public class AmazonS3Manager {
         return amazonConfig.getReviewPath() + '/' + uuid.getUuid();
     }
 
+    public String generatePerformerProfileImageKeyName(Uuid uuid){
+        return amazonConfig.getPerformerProfile() + '/' + uuid.getUuid();
+    }
+
     public String uploadFile(String keyName, MultipartFile file){
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(file.getContentType());
