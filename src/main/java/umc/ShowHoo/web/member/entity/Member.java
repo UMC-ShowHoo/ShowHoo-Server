@@ -20,6 +20,9 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
+    private Long uid;
+
     private String name;
 
     private URL profileimage;

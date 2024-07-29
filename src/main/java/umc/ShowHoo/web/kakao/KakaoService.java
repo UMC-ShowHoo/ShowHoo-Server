@@ -171,11 +171,11 @@ public class KakaoService {
             throw new RuntimeException(e);
         }
 
-        Member kakaoUser = memberRepository.findById(uid).orElse(null);
+        Member kakaoUser = memberRepository.findByUid(uid).orElse(null);
 
         if (kakaoUser == null) {
             kakaoUser = new Member();
-            kakaoUser.setId(uid);
+            kakaoUser.setUid(uid);
             kakaoUser.setName(name);
 //            kakaoUser.setEmail(email);
             kakaoUser.setProfileimage(profileImageUrl);
@@ -211,6 +211,46 @@ public class KakaoService {
         }
 
         AuthTokens token = authTokensGenerator.generate(uid.toString());
-        return new LoginResponseDTO(uid, name, token);
+        return new LoginResponseDTO(uid, name, token, accessToken);
+    }
+
+    //4. 로그아웃
+    public void kakaoDisconnect(String accessToken) throws JsonProcessingException {
+        // HTTP 헤더 생성
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + accessToken);
+        headers.add("Content-Type", "application/x-www-form-urlencoded");
+
+        // HTTP 요청 보내기
+        HttpEntity<String> kakaoLogoutRequest = new HttpEntity<>(headers);
+        RestTemplate rt = new RestTemplate();
+
+        try {
+            ResponseEntity<String> response = rt.exchange(
+                    "https://kapi.kakao.com/v1/user/logout",
+                    HttpMethod.POST,
+                    kakaoLogoutRequest,
+                    String.class
+            );
+
+            // responseBody에 있는 정보를 꺼냄
+            String res = response.getBody();
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(res);
+
+            Long id = jsonNode.get("id").asLong();
+            System.out.println("반환된 id : " + id);
+
+        } catch (HttpClientErrorException e) {
+            // 401 Unauthorized 에러 처리
+            if (e.getStatusCode().value() == 401) {
+                System.out.println("Unauthorized: Invalid or expired token.");
+                System.out.println("Response body: " + e.getResponseBodyAsString());
+            } else {
+                System.out.println("Error: " + e.getStatusCode().value() + " " + e.getStatusText());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
