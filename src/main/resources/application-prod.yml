@@ -23,13 +23,9 @@ cloud:
   aws:
     s3:
       bucket: {bucketname}
-      stack.auto: false
-      region.static: {region}
-      credentials:
-        accessKey: {accesskey}
-        secretKey: {secretkey}
       path:
         review: reviews
+        performerProfile : PerformerProfile
     region:
       static: {region}
     stack:
