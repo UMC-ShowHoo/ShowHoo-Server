@@ -7,7 +7,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.net.URL;
 
 @Entity
 @Getter @Setter
@@ -19,7 +18,7 @@ public class Shows {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String requirement;
-    private URL poster; //포스터 사진
+    private String poster; //포스터 - 사진
     private String name; //공연 이름
     private String description;//공연 소개
     private String date; //공연 날짜
@@ -32,6 +31,8 @@ public class Shows {
     private String bank; //은행명
     private String accountHolder; //예금주
     private String accountNum; //계좌번호
+
+
 
     @ManyToOne @JoinColumn(name = "performer_id")
     private Performer performer;

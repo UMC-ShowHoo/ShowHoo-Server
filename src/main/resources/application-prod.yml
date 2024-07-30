@@ -30,6 +30,7 @@ cloud:
         secretKey: {secretkey}
       path:
         review: reviews
+        performerProfile: {performerProfile}
     region:
       static: {region}
     stack:

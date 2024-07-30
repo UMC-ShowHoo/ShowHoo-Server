@@ -37,4 +37,13 @@ public class ShowsResponseDTO {
         String requirement;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ShowPosterDTO{
+        Long id;
+        String poster; //공연 포스터
+    }
+
 }
