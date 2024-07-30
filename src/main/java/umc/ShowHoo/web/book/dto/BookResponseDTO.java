@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import umc.ShowHoo.web.book.entity.BookDetail;
 import umc.ShowHoo.web.book.entity.BookStatus;
 
 import java.net.URL;
@@ -46,37 +47,11 @@ public class BookResponseDTO {
         String name;
         String date;
         String time;
-
+        String place;
+        String performer;
         BookStatus status;
+        BookDetail detail;
         Boolean isCancellable; //취소 가능한지 여부
     }
-    @Getter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class getWatchedListDTO {
-        List<getWatchedDTO> getWatchedList;
-        Integer listSize;
-        Integer totalPages;
-        Long totalElements;
-        Boolean isFirst;
-        Boolean isLast;
-    }
-
-    @Getter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class getWatchedDTO{
-        //공연 관람내역 조회
-        Long showsId;
-        URL poster;
-        String name;
-        String date;
-        String time;
-
-        BookStatus status;
-    }
-
 
 }

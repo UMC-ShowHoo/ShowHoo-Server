@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import umc.ShowHoo.web.book.entity.Book;
 import umc.ShowHoo.web.member.entity.Member;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity

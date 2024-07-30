@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import umc.ShowHoo.web.Shows.entity.Shows;
 import umc.ShowHoo.web.audience.entity.Audience;
 import umc.ShowHoo.web.common.BaseEntity;
 
@@ -20,10 +21,15 @@ public class Book extends BaseEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(15) DEFAULT 'CONFIRMING'")
+    @Column(columnDefinition = "VARCHAR(15) DEFAULT 'BOOK'")
     private BookStatus status;
 
+    @Enumerated(EnumType.STRING)
+    private BookDetail detail;
+
     //공연 정보 : ManyToOne
+    @ManyToOne    @JoinColumn(name = "shows_id")
+    private Shows shows;
 
     //예매자 정보
     @ManyToOne(fetch = FetchType.LAZY)

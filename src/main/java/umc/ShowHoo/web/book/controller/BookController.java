@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import umc.ShowHoo.apiPayload.ApiResponse;
 import umc.ShowHoo.web.book.converter.BookConverter;
@@ -15,6 +17,7 @@ import umc.ShowHoo.web.book.dto.BookRequestDTO;
 import umc.ShowHoo.web.book.dto.BookResponseDTO;
 import umc.ShowHoo.web.book.entity.Book;
 import umc.ShowHoo.web.book.service.BookCommandService;
+import umc.ShowHoo.web.book.service.BookQueryService;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,6 +25,8 @@ import umc.ShowHoo.web.book.service.BookCommandService;
 public class BookController {
 
     private final BookCommandService bookCommandService;
+
+    private final BookQueryService bookQueryService;
 
     //공연 예매 API
     //공연 정보 엔티티 생성 시 포함시켜서 수정할 것.
@@ -53,7 +58,8 @@ public class BookController {
             @Parameter(name = "page", description = "페이지 번호")
     })
     public ApiResponse<BookResponseDTO.getBookListDTO> getTicketList(@PathVariable(name = "audienceId") Long audienceId, @RequestParam(name = "page") Integer page){
-        return null;
+        Page<Book> bookList = bookQueryService.getTickets(audienceId, page);
+        return ApiResponse.onSuccess(BookConverter.toGetBookListDTO(bookList));
     }
 
     //관람 내역 조회 API
@@ -67,8 +73,9 @@ public class BookController {
             @Parameter(name = "audienceId", description = "예매자의 id, pathVariable"),
             @Parameter(name = "page", description = "페이지 번호")
     })
-    public ApiResponse<BookResponseDTO.getWatchedListDTO> getWatchedList(@PathVariable(name = "audienceId") Long audienceId, @RequestParam(name = "page") Integer page){
-        return null;
+    public ApiResponse<BookResponseDTO.getBookListDTO> getWatchedList(@PathVariable(name = "audienceId") Long audienceId, @RequestParam(name = "page") Integer page){
+        Page<Book> bookList = bookQueryService.getWatchedTickets(audienceId, page);
+        return ApiResponse.onSuccess(BookConverter.toGetBookListDTO(bookList));
     }
 
     //마이페이지 다음 예매 내역 조회 API
