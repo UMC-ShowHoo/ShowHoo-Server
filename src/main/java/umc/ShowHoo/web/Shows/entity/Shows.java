@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import umc.ShowHoo.web.rentalFile.entity.RentalFile;
+
 import java.net.URL;
 
 @Entity
@@ -19,7 +21,7 @@ public class Shows {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String requirement;
-    private URL poster; //포스터 사진
+    private String poster; //포스터 사진 -multipart
     private String name; //공연 이름
     private String description;//공연 소개
     private String date; //공연 날짜
@@ -35,5 +37,7 @@ public class Shows {
 
     @ManyToOne @JoinColumn(name = "performer_id")
     private Performer performer;
-    
+
+    @OneToOne(mappedBy = "shows")
+    private RentalFile rentalFile;
 }
