@@ -57,5 +57,22 @@ public class SpaceApplyController {
     }
 
 
+    @Operation(summary = "대관 내역 취소 API", description = "공연자 대관 내역 확인하는 페이지에서 취소할 때 필요한 API입니다.")
+    @Parameter(
+            in = ParameterIn.HEADER,
+            name = "Authorization", required = true,
+            schema = @Schema(type = "string"),
+            description = "Bearer [Access 토큰]"
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
+    })
+    @DeleteMapping("spaceApply/delete/{spaceApplyId}")
+    public ApiResponse<Void> deleteSpaceApply(@PathVariable Long spaceApplyId) {
+        spaceApplyService.deleteSpaceApply(spaceApplyId);
+        return ApiResponse.onSuccess(null);
+    }
+
+
 
 }

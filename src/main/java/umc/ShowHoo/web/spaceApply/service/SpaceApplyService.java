@@ -61,4 +61,11 @@ public class SpaceApplyService {
                 .map(spaceApplyConverter::toGetSpaceApply)
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public void deleteSpaceApply(Long spaceApplyId) {
+        SpaceApply spaceApply = spaceApplyRepository.findById(spaceApplyId)
+                .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_APPLY_NOT_FOUND));
+        spaceApplyRepository.delete(spaceApply);
+    }
 }
