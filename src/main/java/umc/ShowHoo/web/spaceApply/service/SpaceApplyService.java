@@ -12,9 +12,13 @@ import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.space.repository.SpaceRepository;
 import umc.ShowHoo.web.spaceApply.converter.SpaceApplyConverter;
 import umc.ShowHoo.web.spaceApply.dto.SpaceApplyRequestDTO;
+import umc.ShowHoo.web.spaceApply.dto.SpaceApplyResponseDTO;
 import umc.ShowHoo.web.spaceApply.entity.SpaceApply;
 import umc.ShowHoo.web.spaceApply.exception.handler.SpaceApplyHandler;
 import umc.ShowHoo.web.spaceApply.repository.SpaceApplyRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,5 +52,13 @@ public class SpaceApplyService {
         }
 
         return spaceApply;
+    }
+
+    @Transactional
+    public List<SpaceApplyResponseDTO.SpaceApplyDetailDTO> getSpaceAppliesByPerformerId(Long performerId) {
+        List<SpaceApply> spaceApplies = spaceApplyRepository.findByPerformerId(performerId);
+        return spaceApplies.stream()
+                .map(spaceApplyConverter::toGetSpaceApply)
+                .collect(Collectors.toList());
     }
 }
