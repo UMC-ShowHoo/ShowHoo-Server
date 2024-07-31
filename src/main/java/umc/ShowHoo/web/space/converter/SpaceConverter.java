@@ -86,6 +86,10 @@ public class SpaceConverter {
     }
 
     public static SpaceResponseDTO.SpaceDescriptionDTO toSpaceDescriptionDTO(Space space) {
+        List<SpaceResponseDTO.SpaceAdditionalServiceDTO> additionalServices = space.getAdditionalServices().stream()
+                .map(service -> new SpaceResponseDTO.SpaceAdditionalServiceDTO(service.getId(), service.getTitle(), service.getPrice()))
+                .collect(Collectors.toList());
+
         return SpaceResponseDTO.SpaceDescriptionDTO.builder()
                 .id(space.getId())
                 .name(space.getName())
@@ -95,7 +99,7 @@ public class SpaceConverter {
                 .area(space.getArea())
                 .seatingCapacity(space.getSeatingCapacity())
                 .standingCapacity(space.getStandingCapacity())
-//                .additionalServices(space.getAdditionalServices())
+                .additionalServices(additionalServices)
                 .build();
     }
 
