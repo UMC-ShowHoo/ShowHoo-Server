@@ -19,6 +19,8 @@ import umc.ShowHoo.web.book.entity.Book;
 import umc.ShowHoo.web.book.service.BookCommandService;
 import umc.ShowHoo.web.book.service.BookQueryService;
 
+import java.util.Optional;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/book")
@@ -79,7 +81,7 @@ public class BookController {
     }
 
     //마이페이지 다음 예매 내역 조회 API
-    @GetMapping("/{audienceId}/mypage")
+    @GetMapping("/{audienceId}/next")
     @Operation(summary = "마이페이지/다음 예매 내역 조회 API", description = "관람자의 예매 내역 중 가장 공연 일자가 빠른 예매 내역을 조회 API")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
@@ -89,7 +91,8 @@ public class BookController {
             @Parameter(name = "audienceId", description = "예매자의 id, pathVariable"),
     })
     public ApiResponse<BookResponseDTO.getBookDTO> getMyPage(@PathVariable(name = "audienceId") Long audienceId){
-        return null;
+        Book nextBook = bookQueryService.getNextBook(audienceId);
+        return ApiResponse.onSuccess(BookConverter.toGetBookDTO(nextBook));
     }
 
 }

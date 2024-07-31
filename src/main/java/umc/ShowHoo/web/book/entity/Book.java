@@ -22,10 +22,11 @@ public class Book extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(15) DEFAULT 'BOOK'")
-    private BookStatus status;
+    private BookStatus status = BookStatus.BOOK;
 
     @Enumerated(EnumType.STRING)
-    private BookDetail detail;
+    @Column(columnDefinition = "VARCHAR(15) DEFAULT 'CONFIRMING'")
+    private BookDetail detail = BookDetail.CONFIRMING;
 
     //공연 정보 : ManyToOne
     @ManyToOne    @JoinColumn(name = "shows_id")

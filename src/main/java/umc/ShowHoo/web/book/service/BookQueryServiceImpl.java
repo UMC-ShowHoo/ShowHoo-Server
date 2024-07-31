@@ -10,8 +10,11 @@ import umc.ShowHoo.apiPayload.exception.handler.AudienceHandler;
 import umc.ShowHoo.web.audience.entity.Audience;
 import umc.ShowHoo.web.audience.repository.AudienceRepository;
 import umc.ShowHoo.web.book.entity.Book;
+import umc.ShowHoo.web.book.entity.BookDetail;
 import umc.ShowHoo.web.book.entity.BookStatus;
 import umc.ShowHoo.web.book.repository.BookRepository;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +41,15 @@ public class BookQueryServiceImpl implements BookQueryService{
     //detail >> CONFIRMED 중 하나
     @Override
     public Book getNextBook(Long audienceId){
-        return null;
+        Audience audience = audienceRepository.findById(audienceId)
+                .orElseThrow(()->new AudienceHandler(ErrorStatus.AUDIENCE_NOT_FOUND));
+        List<Book> confirmedList = bookRepository.findAllByAudienceAndDetailOrderByShowsDateAsc(audience, BookDetail.CONFIRMED);
+        if(confirmedList.size() > 1){
+            return confirmedList.get(0);
+        } else if (confirmedList.size() == 1){
+            return confirmedList.get(0);
+        } else {
+            return null;
+        }
     }
 }

@@ -38,6 +38,12 @@ public class BookConverter {
     }
 
     public static BookResponseDTO.getBookDTO toGetBookDTO(Book book){
+        if(book == null){
+            return BookResponseDTO.getBookDTO.builder()
+                    .name("다음 공연이 없습니다.")
+                    .build();
+        }
+
         return BookResponseDTO.getBookDTO.builder()
                 .showsId(book.getShows().getId())
                 .poster(book.getShows().getPoster())
