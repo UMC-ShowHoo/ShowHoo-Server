@@ -12,7 +12,7 @@ spring:
     open-in-view: false
     show-sql: true
     hibernate:
-      ddl-auto: create # 첫 배포 이후 validate 으로 수정
+      ddl-auto: update # 첫 배포 이후 validate 으로 수정
 
   servlet:
     multipart:
@@ -23,13 +23,9 @@ cloud:
   aws:
     s3:
       bucket: {bucketname}
-      stack.auto: false
-      region.static: {region}
-      credentials:
-        accessKey: {accesskey}
-        secretKey: {secretkey}
       path:
         review: reviews
+        performerProfile : PerformerProfile
     region:
       static: {region}
     stack:
