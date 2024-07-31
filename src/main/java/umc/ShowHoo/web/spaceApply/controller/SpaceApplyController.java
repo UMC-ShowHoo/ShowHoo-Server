@@ -40,6 +40,16 @@ public class SpaceApplyController {
         return ApiResponse.onSuccess(null);
     }
 
+    @Operation(summary = "대관 내역 API", description = "공연자 유저의 대관 내역을 확인할 수 있는 API입니다. status가 0이면 승인예정, 1이면 승인완료, -1일 때 승인거절입니다. 날짜를 확인한 후 과거 날짜이면 지난 공연이라고 표시하면 됩니다.")
+    @Parameter(
+            in = ParameterIn.HEADER,
+            name = "Authorization", required = true,
+            schema = @Schema(type = "string"),
+            description = "Bearer [Access 토큰]"
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
+    })
     @GetMapping("spaces/spaceApply/{performerId}")
     public ApiResponse<List<SpaceApplyResponseDTO.SpaceApplyDetailDTO>> getSpaceAppliesByPerformerId(@PathVariable Long performerId) {
         List<SpaceApplyResponseDTO.SpaceApplyDetailDTO> spaceApplyDetailDTOS = spaceApplyService.getSpaceAppliesByPerformerId(performerId);
