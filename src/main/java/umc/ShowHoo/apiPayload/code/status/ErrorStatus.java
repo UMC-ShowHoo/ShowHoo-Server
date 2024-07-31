@@ -34,6 +34,9 @@ public enum ErrorStatus implements BaseErrorCode {
     //SPACE PREFER
     SPACE_PREFER_NOT_FOUND(HttpStatus.NOT_FOUND, "SPACE_PREFER001", "SpacePrefer not found"),
 
+    //SPACE_APPLY
+    SPACE_APPLY_NOT_FOUND(HttpStatus.NOT_FOUND, "SPACE_APPLY001", "SpaceApply not found"),
+
 
     ;
 
