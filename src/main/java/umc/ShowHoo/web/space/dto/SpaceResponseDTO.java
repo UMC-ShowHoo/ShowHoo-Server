@@ -33,7 +33,17 @@ public class SpaceResponseDTO {
         String area;
         Integer seatingCapacity;
         Integer standingCapacity;
-        String additionalServices;
+        List<SpaceAdditionalServiceDTO> additionalServices;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SpaceAdditionalServiceDTO {
+        private Long id;
+        private String title;
+        private String price;
     }
 
     @Builder
