@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.net.URL;
-
 public class ShowsResponseDTO {
 
     @Builder
@@ -15,7 +13,7 @@ public class ShowsResponseDTO {
     @AllArgsConstructor
     public static class ShowinfoDTO{
         Long shows_id;
-        URL poster;
+        String poster;
         String name;
         String description;
         String date;
