@@ -32,4 +32,7 @@ public class SpaceReview {
 
     @OneToMany(mappedBy = "spaceReview", cascade = CascadeType.ALL)
     private List<SpaceReviewAnswer> spaceReviewAnswers;
+
+    @OneToMany(mappedBy = "spaceReview", cascade = CascadeType.ALL)
+    private List<SpaceReviewImage> spaceReviewImages;
 }
