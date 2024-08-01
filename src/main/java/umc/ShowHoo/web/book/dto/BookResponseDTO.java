@@ -66,4 +66,15 @@ public class BookResponseDTO {
         //바로 삭제하지 않고 상태를 우선 취소로 바꿈
     }
 
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class changeStatusResponseDTO{
+        Long BookId;
+        BookStatus status;
+        BookDetail detail;
+        String alert;
+    }
+
 }
