@@ -6,6 +6,7 @@ import umc.ShowHoo.web.audience.entity.Audience;
 import umc.ShowHoo.web.book.dto.BookRequestDTO;
 import umc.ShowHoo.web.book.dto.BookResponseDTO;
 import umc.ShowHoo.web.book.entity.Book;
+import umc.ShowHoo.web.cancelBook.entity.CancelBook;
 
 import java.util.List;
 
@@ -21,12 +22,31 @@ public class BookConverter {
                 .build();
     }
 
+    public static CancelBook toCancelBook(Book book, BookRequestDTO.deleteBookDTO request){
+        return CancelBook.builder()
+                .name(request.getName())
+                .bankName(request.getBankName())
+                .account(request.getAccount())
+                .reason(request.getReason())
+                .book(book)
+                .performer(book.getShows().getPerformer())
+                .build();
+    }
+
     public static BookResponseDTO.postBookDTO toPostBookDTO(Book book){
         return BookResponseDTO.postBookDTO.builder()
                 .book_id(book.getId())
                 .showsId(book.getShows().getId())
                 .audienceId(book.getAudience().getId())
                 .alert("예매가 완료되었습니다!")
+                .build();
+    }
+
+    public static BookResponseDTO.deleteResponseDTO toDeleteBookDTO(CancelBook cancelBook){
+        return BookResponseDTO.deleteResponseDTO.builder()
+                .bookId(cancelBook.getBook().getId())
+                .cancelBookId(cancelBook.getId())
+                .alert("예매가 취소되었습니다.")
                 .build();
     }
 

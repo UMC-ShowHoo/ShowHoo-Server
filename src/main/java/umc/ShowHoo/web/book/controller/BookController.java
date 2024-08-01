@@ -18,6 +18,7 @@ import umc.ShowHoo.web.book.dto.BookResponseDTO;
 import umc.ShowHoo.web.book.entity.Book;
 import umc.ShowHoo.web.book.service.BookCommandService;
 import umc.ShowHoo.web.book.service.BookQueryService;
+import umc.ShowHoo.web.cancelBook.entity.CancelBook;
 
 import java.util.Optional;
 
@@ -116,7 +117,14 @@ public class BookController {
             @Parameter(name = "reason", description = "취소 사유"),
     })
     public ApiResponse<BookResponseDTO.deleteResponseDTO> requestCancel(@PathVariable(name = "bookId") Long bookId ,@RequestBody BookRequestDTO.deleteBookDTO request){
-        return null;
+        CancelBook cancelBook = bookCommandService.requestCancel(bookId, request);
+
+        if(cancelBook == null){
+            return ApiResponse.onSuccess(BookResponseDTO.deleteResponseDTO.builder()
+                    .alert("이미 취소 요청되었습니다.")
+                    .build());
+        }
+        return ApiResponse.onSuccess(BookConverter.toDeleteBookDTO(cancelBook));
     }
 
 }

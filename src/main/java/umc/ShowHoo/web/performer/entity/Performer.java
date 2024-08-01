@@ -3,6 +3,7 @@ package umc.ShowHoo.web.performer.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import umc.ShowHoo.web.Shows.entity.Shows;
+import umc.ShowHoo.web.cancelBook.entity.CancelBook;
 import umc.ShowHoo.web.member.entity.Member;
 import umc.ShowHoo.web.performerProfile.entity.PerformerProfile;
 import umc.ShowHoo.web.spaceApply.entity.SpaceApply;
@@ -35,4 +36,7 @@ public class Performer {
 
     @OneToMany(mappedBy = "performer", cascade = CascadeType.ALL)
     private List<SpaceApply> spaceApplies;
+
+    @OneToMany(mappedBy = "performer", cascade = CascadeType.ALL)
+    private List<CancelBook> cancelBooks;
 }

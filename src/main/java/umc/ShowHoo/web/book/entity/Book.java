@@ -14,6 +14,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @DynamicUpdate
 @DynamicInsert
@@ -51,5 +52,6 @@ public class Book extends BaseEntity {
 
     //취소 정보
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    @Builder.Default
     List<CancelBook> cancelBooks = new ArrayList<>();
 }
