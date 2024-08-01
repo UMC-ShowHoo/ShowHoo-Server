@@ -29,7 +29,7 @@ public class LoginController {
     }
 
 
-    @Value("http://ec2-3-34-248-63.ap-northeast-2.compute.amazonaws.com:8081/login/oauth2/code/kakao")
+    @Value("${security.oauth2.client.registration.kakao.redirect-uri}")
     private String redirectUri;
 
     @Value("${kakao.client.id}")
