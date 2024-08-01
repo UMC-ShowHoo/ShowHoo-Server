@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
 import umc.ShowHoo.apiPayload.exception.handler.AudienceHandler;
+import umc.ShowHoo.web.Shows.entity.Shows;
+import umc.ShowHoo.web.Shows.handler.ShowsHandler;
+import umc.ShowHoo.web.Shows.repository.ShowsRepository;
 import umc.ShowHoo.web.audience.entity.Audience;
 import umc.ShowHoo.web.audience.repository.AudienceRepository;
 import umc.ShowHoo.web.book.converter.BookConverter;
@@ -22,10 +25,15 @@ public class BookCommandServiceImpl implements BookCommandService {
 
     private final AudienceRepository audienceRepository;
 
+    private final ShowsRepository showsRepository;
+
     public Book postBook(BookRequestDTO.postDTO request) {
         Audience audience = audienceRepository.findById(request.getAudienceId())
                 .orElseThrow(()-> new AudienceHandler(ErrorStatus.AUDIENCE_NOT_FOUND));
 
-        return bookRepository.save(BookConverter.toBook(audience));
+        Shows shows = showsRepository.findById(request.getShowsId())
+                .orElseThrow(()->new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
+
+        return bookRepository.save(BookConverter.toBook(audience, shows, request));
     }
 }
