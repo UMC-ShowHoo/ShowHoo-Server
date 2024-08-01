@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import umc.ShowHoo.web.Shows.entity.Shows;
 import umc.ShowHoo.web.audience.entity.Audience;
 import umc.ShowHoo.web.book.entity.Book;
 import umc.ShowHoo.web.book.entity.BookDetail;
@@ -21,4 +22,5 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("SELECT b FROM Book b JOIN b.shows s WHERE b.audience = :audience AND b.detail = :detail ORDER BY s.date ASC")
     List<Book> findAllByAudienceAndDetailOrderByShowsDateAsc(@Param("audience") Audience audience, @Param("detail") BookDetail detail);
 
+    List<Book> findAllByAudienceAndShows(Audience audience, Shows shows);
 }

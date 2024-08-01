@@ -20,11 +20,19 @@ public class Book extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;
+
+    private String phoneNum;
+
+    private Integer ticketNum;
+
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     @Column(columnDefinition = "VARCHAR(15) DEFAULT 'BOOK'")
     private BookStatus status = BookStatus.BOOK;
 
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     @Column(columnDefinition = "VARCHAR(15) DEFAULT 'CONFIRMING'")
     private BookDetail detail = BookDetail.CONFIRMING;
 
