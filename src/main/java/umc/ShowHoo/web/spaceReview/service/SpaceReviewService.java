@@ -17,6 +17,7 @@ import umc.ShowHoo.web.spaceApply.exception.handler.SpaceApplyHandler;
 import umc.ShowHoo.web.spaceApply.repository.SpaceApplyRepository;
 import umc.ShowHoo.web.spaceReview.converter.SpaceReviewConverter;
 import umc.ShowHoo.web.spaceReview.dto.SpaceReviewRequestDTO;
+import umc.ShowHoo.web.spaceReview.dto.SpaceReviewResponseDTO;
 import umc.ShowHoo.web.spaceReview.entity.SpaceReview;
 import umc.ShowHoo.web.spaceReview.entity.SpaceReviewImage;
 import umc.ShowHoo.web.spaceReview.exception.handler.SpaceReviewHandler;
@@ -25,6 +26,7 @@ import umc.ShowHoo.web.spaceReview.repository.SpaceReviewRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -66,5 +68,20 @@ public class SpaceReviewService {
         spaceReview.setSpaceReviewImages(reviewImagesList);
         spaceReviewRepository.save(spaceReview);
 
+    }
+
+    public void deleteSpaceReview(Long reviewId) {
+        SpaceReview spaceReview = spaceReviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("Review not found"));
+
+        spaceReviewRepository.delete(spaceReview);
+    }
+
+    public List<SpaceReviewResponseDTO.ReviewPerformerDTO> getReviewsByPerformerId(Long performerId) {
+        List<SpaceReview> reviews = spaceReviewRepository.findByPerformerId(performerId);
+
+        return reviews.stream()
+                .map(spaceReviewConverter::toGetPerformerReview)
+                .collect(Collectors.toList());
     }
 }
