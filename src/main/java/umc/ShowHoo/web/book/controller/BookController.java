@@ -47,6 +47,11 @@ public class BookController {
     })
     public ApiResponse<BookResponseDTO.postBookDTO> bookTicket(@RequestBody @Valid BookRequestDTO.postDTO request){
         Book book = bookCommandService.postBook(request);
+        if (book == null) {
+            return ApiResponse.onSuccess(BookResponseDTO.postBookDTO.builder()
+                    .alert("예매할 수 있는 티켓 매수를 초과하였습니다.")
+                    .build());
+        }
         return ApiResponse.onSuccess(BookConverter.toPostBookDTO(book));
     }
 

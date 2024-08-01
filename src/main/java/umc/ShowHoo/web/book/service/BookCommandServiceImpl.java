@@ -16,6 +16,8 @@ import umc.ShowHoo.web.book.dto.BookRequestDTO;
 import umc.ShowHoo.web.book.entity.Book;
 import umc.ShowHoo.web.book.repository.BookRepository;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -33,6 +35,21 @@ public class BookCommandServiceImpl implements BookCommandService {
 
         Shows shows = showsRepository.findById(request.getShowsId())
                 .orElseThrow(()->new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
+
+        //동일한 audience & show에 대한 예매 내역이 존재하는지 확인
+        List<Book> bookList = bookRepository.findAllByAudienceAndShows(audience, shows);
+
+        //(기존 예매 내역의 ticketNum의 합산 + request의 ticketNum) > PerMaxTicket일 경우, "예매 가능 매수 초과" 메세지 전달
+        if (!bookList.isEmpty()) {
+            Integer num = bookList.stream()
+                    .mapToInt(Book::getTicketNum)
+                    .sum();
+
+            if( num + request.getTicketNum() > shows.getPerMaxticket()){
+                return null;
+            }
+
+        }
 
         return bookRepository.save(BookConverter.toBook(audience, shows, request));
     }

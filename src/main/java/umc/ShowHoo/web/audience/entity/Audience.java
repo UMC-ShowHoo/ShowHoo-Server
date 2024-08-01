@@ -24,5 +24,6 @@ public class Audience {
     Member member;
 
     @OneToMany(mappedBy = "audience", cascade = CascadeType.ALL)
+    @Builder.Default
     List<Book> bookList = new ArrayList<>();
 }
