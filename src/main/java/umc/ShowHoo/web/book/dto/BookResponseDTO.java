@@ -18,7 +18,8 @@ public class BookResponseDTO {
     @AllArgsConstructor
     public static class postBookDTO {
         Long book_id;
-        BookStatus status;
+        Long showsId;
+        Long audienceId;
         String alert;
     }
 

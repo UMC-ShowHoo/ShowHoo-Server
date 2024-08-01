@@ -40,11 +40,18 @@ public class BookController {
     })
     @Parameters({
             @Parameter(name = "audienceId", description = "예매자의 id, NOT NULL"),
+            @Parameter(name = "showsId", description = "예매 할 공연의 id, NOT NULL"),
+            @Parameter(name = "ticketNum", description = "예매 할 티켓의 매수, 최소 1개"),
             @Parameter(name = "name", description = "예매자의 이름, NOT NULL"),
             @Parameter(name = "phoneNum", description = "예매자의 전화번호, NOT NULL")
     })
     public ApiResponse<BookResponseDTO.postBookDTO> bookTicket(@RequestBody @Valid BookRequestDTO.postDTO request){
         Book book = bookCommandService.postBook(request);
+        if (book == null) {
+            return ApiResponse.onSuccess(BookResponseDTO.postBookDTO.builder()
+                    .alert("예매할 수 있는 티켓 매수를 초과하였습니다.")
+                    .build());
+        }
         return ApiResponse.onSuccess(BookConverter.toPostBookDTO(book));
     }
 

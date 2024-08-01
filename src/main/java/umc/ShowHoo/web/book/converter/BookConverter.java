@@ -1,7 +1,9 @@
 package umc.ShowHoo.web.book.converter;
 
 import org.springframework.data.domain.Page;
+import umc.ShowHoo.web.Shows.entity.Shows;
 import umc.ShowHoo.web.audience.entity.Audience;
+import umc.ShowHoo.web.book.dto.BookRequestDTO;
 import umc.ShowHoo.web.book.dto.BookResponseDTO;
 import umc.ShowHoo.web.book.entity.Book;
 
@@ -9,16 +11,21 @@ import java.util.List;
 
 public class BookConverter {
 
-    public static Book toBook(Audience audience){
+    public static Book toBook(Audience audience, Shows shows, BookRequestDTO.postDTO request){
         return Book.builder()
                 .audience(audience)
+                .shows(shows)
+                .name(request.getName())
+                .phoneNum(request.getPhoneNum())
+                .ticketNum(request.getTicketNum())
                 .build();
     }
 
     public static BookResponseDTO.postBookDTO toPostBookDTO(Book book){
         return BookResponseDTO.postBookDTO.builder()
                 .book_id(book.getId())
-                .status(book.getStatus())
+                .showsId(book.getShows().getId())
+                .audienceId(book.getAudience().getId())
                 .alert("예매가 완료되었습니다!")
                 .build();
     }
