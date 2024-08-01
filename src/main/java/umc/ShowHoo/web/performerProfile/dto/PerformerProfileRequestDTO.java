@@ -18,7 +18,7 @@ public class PerformerProfileRequestDTO {
         private String team;
         private String introduction;
 
-        private List<PerformerProfileImageDTO> performerProfileImages = new ArrayList<>();
+        private final List<PerformerProfileImageDTO> performerProfileImages = new ArrayList<>();
     }
 
     @Builder

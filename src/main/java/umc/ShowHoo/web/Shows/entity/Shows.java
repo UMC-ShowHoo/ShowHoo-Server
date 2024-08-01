@@ -9,8 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import umc.ShowHoo.web.rentalFile.entity.RentalFile;
 
-import java.net.URL;
-
 @Entity
 @Getter @Setter
 @Builder
@@ -34,6 +32,8 @@ public class Shows {
     private String bank; //은행명
     private String accountHolder; //예금주
     private String accountNum; //계좌번호
+
+
 
     @ManyToOne @JoinColumn(name = "performer_id")
     private Performer performer;

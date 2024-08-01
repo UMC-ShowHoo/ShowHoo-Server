@@ -13,8 +13,7 @@ import java.net.URL;
 @AllArgsConstructor
 public class ShowsRequestDTO {
     private Long performerId;
-    private String requirement;
-    private URL poster;
+    private String poster;
     private String name;
     private String description;
     private String date;

@@ -9,15 +9,23 @@ public class RentalFileResponseDTO {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class SaveRentalFileDTO{
+    public static class PerformerSaveDTO{
+        Long id;
+        String setList;
+        String rentalTime;
+        String addOrder;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SpaceUserSaveDTO{
         Long id;
         String setListForm;
         String rentalTimeForm;
         String addOrderForm;
-
-        String setList;
-        String rentalTime;
-        String addOrder;
     }
 
 }

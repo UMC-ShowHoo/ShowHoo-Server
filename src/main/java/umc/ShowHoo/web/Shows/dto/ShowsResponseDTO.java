@@ -15,7 +15,7 @@ public class ShowsResponseDTO {
     @AllArgsConstructor
     public static class ShowinfoDTO{
         Long shows_id;
-        URL poster;
+        String poster;
         String name;
         String description;
         String date;
@@ -35,6 +35,15 @@ public class ShowsResponseDTO {
     @AllArgsConstructor
     public static class ShowRequirementDTO{
         String requirement;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ShowPosterDTO{
+        Long id;
+        String poster; //공연 포스터
     }
 
 }
