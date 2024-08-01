@@ -13,6 +13,7 @@ public class SpaceReviewImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String imageUrl;
 
     @ManyToOne
     @JoinColumn(name = "space_review_id")

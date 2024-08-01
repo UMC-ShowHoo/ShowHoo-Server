@@ -19,7 +19,7 @@ public class SpaceReview {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int grade; // 리뷰 평점
+    private double grade; // 리뷰 평점
     private String content; // 리뷰 내용
 
     @ManyToOne
