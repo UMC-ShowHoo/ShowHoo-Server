@@ -34,4 +34,11 @@ public class SpaceReviewAnswerService {
 
         spaceReviewAnswerRepository.save(spaceReviewAnswer);
     }
+
+    public void deleteSpaceReviewAnswer(Long reviewAnswerId) {
+        SpaceReviewAnswer spaceReviewAnswer = spaceReviewAnswerRepository.findById(reviewAnswerId)
+                .orElseThrow(() -> new IllegalArgumentException("Review answer not found"));
+
+        spaceReviewAnswerRepository.delete(spaceReviewAnswer);
+    }
 }
