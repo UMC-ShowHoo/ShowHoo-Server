@@ -25,6 +25,9 @@ public enum ErrorStatus implements BaseErrorCode {
     //AUDIENCE
     AUDIENCE_NOT_FOUND(HttpStatus.NOT_FOUND, "AUDIENCE001", "Audience not found"),
 
+    //BOOK
+    BOOK_NOT_FOUND(HttpStatus.NOT_FOUND, "BOOK001", "Book not found"),
+
     //PERFORMER
     PERFORMER_NOT_FOUND(HttpStatus.NOT_FOUND, "PERFORMER001", "Performer not found"),
 
