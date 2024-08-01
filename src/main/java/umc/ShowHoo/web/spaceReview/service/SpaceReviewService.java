@@ -55,6 +55,8 @@ public class SpaceReviewService {
         SpaceReview spaceReview = spaceReviewConverter.toCreateSpaceReview(reviewRegisterDTO, space, performer);
         spaceReviewRepository.save(spaceReview);
 
+
+        if (reviewImages != null && !reviewImages.isEmpty()) {
         List<SpaceReviewImage> reviewImagesList = new ArrayList<>();
         for (MultipartFile image : reviewImages) {
             String uuid = UUID.randomUUID().toString();
@@ -67,6 +69,8 @@ public class SpaceReviewService {
         }
         spaceReview.setSpaceReviewImages(reviewImagesList);
         spaceReviewRepository.save(spaceReview);
+
+        }
 
     }
 
