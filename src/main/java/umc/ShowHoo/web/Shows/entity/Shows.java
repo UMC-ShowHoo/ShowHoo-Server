@@ -2,11 +2,15 @@ package umc.ShowHoo.web.Shows.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import umc.ShowHoo.web.book.entity.Book;
 import umc.ShowHoo.web.performer.entity.Performer;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -36,5 +40,7 @@ public class Shows {
 
     @ManyToOne @JoinColumn(name = "performer_id")
     private Performer performer;
-    
+
+    @OneToMany(mappedBy = "shows", cascade = CascadeType.ALL)
+    List<Book> bookList = new ArrayList<>();
 }

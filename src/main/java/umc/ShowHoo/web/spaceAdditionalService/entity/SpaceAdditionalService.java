@@ -21,4 +21,5 @@ public class SpaceAdditionalService {
     @ManyToOne
     @JoinColumn(name = "space_id")
     private Space space;
+
 }
