@@ -58,6 +58,16 @@ public class SpaceReviewController {
     }
 
 
+    @Operation(summary = "공연자 마이페이지 리뷰 조회 API", description = "공연자가 마이페이지에서 리뷰 조회에 필요한 API입니다.")
+    @Parameter(
+            in = ParameterIn.HEADER,
+            name = "Authorization", required = true,
+            schema = @Schema(type = "string"),
+            description = "Bearer [Access 토큰]"
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
+    })
     @GetMapping("review/performer/{performerId}")
     public ApiResponse<List<SpaceReviewResponseDTO.ReviewPerformerDTO>> getReviewsByPerformerId(@PathVariable Long performerId){
         List<SpaceReviewResponseDTO.ReviewPerformerDTO> reviews = spaceReviewService.getReviewsByPerformerId(performerId);
