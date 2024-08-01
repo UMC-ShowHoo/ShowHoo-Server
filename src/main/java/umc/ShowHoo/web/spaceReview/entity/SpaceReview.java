@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import umc.ShowHoo.web.performer.entity.Performer;
 import umc.ShowHoo.web.space.entity.Space;
+import umc.ShowHoo.web.spaceReviewAnswer.entity.SpaceReviewAnswer;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,4 +29,7 @@ public class SpaceReview {
     @ManyToOne
     @JoinColumn(name = "performer_id")
     private Performer performer;
+
+    @OneToMany(mappedBy = "spaceReview", cascade = CascadeType.ALL)
+    private List<SpaceReviewAnswer> spaceReviewAnswers;
 }
