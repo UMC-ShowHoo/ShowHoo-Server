@@ -5,6 +5,7 @@ import lombok.*;
 import umc.ShowHoo.web.Shows.entity.Shows;
 import umc.ShowHoo.web.member.entity.Member;
 import umc.ShowHoo.web.performerProfile.entity.PerformerProfile;
+import umc.ShowHoo.web.spaceApply.entity.SpaceApply;
 import umc.ShowHoo.web.spacePrefer.entity.SpacePrefer;
 import java.util.List;
 
@@ -31,4 +32,7 @@ public class Performer {
 
     @OneToMany(mappedBy = "performer", cascade = CascadeType.ALL)
     private List<Shows> showsList;
+
+    @OneToMany(mappedBy = "performer", cascade = CascadeType.ALL)
+    private List<SpaceApply> spaceApplies;
 }

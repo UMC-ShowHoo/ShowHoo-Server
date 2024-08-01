@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import umc.ShowHoo.web.Shows.entity.Shows;
 import umc.ShowHoo.web.audience.entity.Audience;
+import umc.ShowHoo.web.common.BaseEntity;
 
 @Entity
 @Getter
@@ -13,16 +15,30 @@ import umc.ShowHoo.web.audience.entity.Audience;
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Book {
+public class Book extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;
+
+    private String phoneNum;
+
+    private Integer ticketNum;
+
     @Enumerated(EnumType.STRING)
+    @Builder.Default
+    @Column(columnDefinition = "VARCHAR(15) DEFAULT 'BOOK'")
+    private BookStatus status = BookStatus.BOOK;
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
     @Column(columnDefinition = "VARCHAR(15) DEFAULT 'CONFIRMING'")
-    private BookStatus status;
+    private BookDetail detail = BookDetail.CONFIRMING;
 
     //공연 정보 : ManyToOne
+    @ManyToOne    @JoinColumn(name = "shows_id")
+    private Shows shows;
 
     //예매자 정보
     @ManyToOne(fetch = FetchType.LAZY)

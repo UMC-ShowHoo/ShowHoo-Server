@@ -1,5 +1,6 @@
 package umc.ShowHoo.web.book.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
@@ -11,8 +12,11 @@ public class BookRequestDTO {
         String name;
         @NotNull
         String phoneNum;
+        @Min(1)
+        Integer ticketNum;
         @NotNull
         Long audienceId;
-        //Long showId;
+        @NotNull
+        Long showsId;
     }
 }
