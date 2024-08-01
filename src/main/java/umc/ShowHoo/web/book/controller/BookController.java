@@ -137,8 +137,21 @@ public class BookController {
     @Parameters({
             @Parameter(name = "bookId", description = "변경하고자 하는 예매 내역의 id, pathVariable"),
     })
-    public ApiResponse<BookResponseDTO.changeStatusResponseDTO> requestConfirmed(@PathVariable(name = "bookId") Long BookId){
-        return null;
+    public ApiResponse<BookResponseDTO.changeStatusResponseDTO> requestConfirmed(@PathVariable(name = "bookId") Long bookId){
+        Book book = bookCommandService.requestConfirm(bookId);
+
+        if(book == null){
+            return ApiResponse.onSuccess(BookResponseDTO.changeStatusResponseDTO.builder()
+                    .alert("변경하고자 하는 예매 내역이 현재 '승인 예정' 상태가 아닙니다.")
+                    .build());
+        }
+
+        return ApiResponse.onSuccess(BookResponseDTO.changeStatusResponseDTO.builder()
+                .bookId(book.getId())
+                .status(book.getStatus())
+                .detail(book.getDetail())
+                .alert("예매가 승인되었습니다.")
+                .build());
     }
 
     //예매 취소 확인(CANCEL/CANCELLED)
@@ -150,8 +163,21 @@ public class BookController {
     @Parameters({
             @Parameter(name = "bookId", description = "변경하고자 하는 예매 내역의 id, pathVariable"),
     })
-    public ApiResponse<BookResponseDTO.changeStatusResponseDTO> requestCanceled(@PathVariable(name = "bookId") Long BookId){
-        return null;
+    public ApiResponse<BookResponseDTO.changeStatusResponseDTO> requestCanceled(@PathVariable(name = "bookId") Long bookId){
+        Book book = bookCommandService.requestCanceled(bookId);
+
+        if(book == null){
+            return ApiResponse.onSuccess(BookResponseDTO.changeStatusResponseDTO.builder()
+                    .alert("변경하고자 하는 예매 내역이 현재 '취소 대기' 상태가 아닙니다.")
+                    .build());
+        }
+
+        return ApiResponse.onSuccess(BookResponseDTO.changeStatusResponseDTO.builder()
+                .bookId(book.getId())
+                .status(book.getStatus())
+                .detail(book.getDetail())
+                .alert("취소되었습니다.")
+                .build());
     }
 
     //관람 완료(WATCHED/WATCHED)
@@ -163,8 +189,21 @@ public class BookController {
     @Parameters({
             @Parameter(name = "bookId", description = "변경하고자 하는 예매 내역의 id, pathVariable"),
     })
-    public ApiResponse<BookResponseDTO.changeStatusResponseDTO> requestWatched(@PathVariable(name = "bookId") Long BookId){
-        return null;
+    public ApiResponse<BookResponseDTO.changeStatusResponseDTO> requestWatched(@PathVariable(name = "bookId") Long bookId){
+        Book book = bookCommandService.requestWatched(bookId);
+
+        if(book == null){
+            return ApiResponse.onSuccess(BookResponseDTO.changeStatusResponseDTO.builder()
+                    .alert("변경하고자 하는 예매 내역이 현재 '예매 완료' 상태가 아닙니다.")
+                    .build());
+        }
+
+        return ApiResponse.onSuccess(BookResponseDTO.changeStatusResponseDTO.builder()
+                .bookId(book.getId())
+                .status(book.getStatus())
+                .detail(book.getDetail())
+                .alert("공연이 종료되었습니다.")
+                .build());
     }
 
 }

@@ -71,7 +71,7 @@ public class BookResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class changeStatusResponseDTO{
-        Long BookId;
+        Long bookId;
         BookStatus status;
         BookDetail detail;
         String alert;
