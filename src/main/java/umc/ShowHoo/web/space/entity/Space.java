@@ -8,6 +8,7 @@ import umc.ShowHoo.web.spaceAdditionalService.entity.SpaceAdditionalService;
 import umc.ShowHoo.web.spaceApply.entity.SpaceApply;
 import umc.ShowHoo.web.spacePhoto.entity.SpacePhoto;
 import umc.ShowHoo.web.spacePrefer.entity.SpacePrefer;
+import umc.ShowHoo.web.spaceReview.entity.SpaceReview;
 import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
 
 import java.net.URL;
@@ -59,6 +60,9 @@ public class Space extends BaseEntity {
 
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
     private List<SpaceApply> spaceApplies;
+
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
+    private List<SpaceReview> spaceReviews;
 
 
 }
