@@ -6,7 +6,11 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import umc.ShowHoo.web.Shows.entity.Shows;
 import umc.ShowHoo.web.audience.entity.Audience;
+import umc.ShowHoo.web.cancelBook.entity.CancelBook;
 import umc.ShowHoo.web.common.BaseEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -44,4 +48,8 @@ public class Book extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "audience_id")
     private Audience audience;
+
+    //취소 정보
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    List<CancelBook> cancelBooks = new ArrayList<>();
 }
