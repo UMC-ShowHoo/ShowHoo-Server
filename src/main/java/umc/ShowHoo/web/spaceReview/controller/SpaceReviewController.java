@@ -68,9 +68,20 @@ public class SpaceReviewController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
-    @GetMapping("review/performer/{performerId}")
+    @GetMapping("/review/performer/{performerId}")
     public ApiResponse<List<SpaceReviewResponseDTO.ReviewPerformerDTO>> getReviewsByPerformerId(@PathVariable Long performerId){
         List<SpaceReviewResponseDTO.ReviewPerformerDTO> reviews = spaceReviewService.getReviewsByPerformerId(performerId);
+        return ApiResponse.onSuccess(reviews);
+    }
+
+
+    @Operation(summary = "공연장 세부정보 리뷰 API", description = "공연장 세부정보 리뷰 조회할 때 필요한 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
+    })
+    @GetMapping("/review/space/{spaceId}")
+    public ApiResponse<List<SpaceReviewResponseDTO.ReviewSpaceDTO>> getReviewsBySpaceId(@PathVariable Long spaceId){
+        List<SpaceReviewResponseDTO.ReviewSpaceDTO> reviews = spaceReviewService.getReviewsBySpaceId(spaceId);
         return ApiResponse.onSuccess(reviews);
     }
 

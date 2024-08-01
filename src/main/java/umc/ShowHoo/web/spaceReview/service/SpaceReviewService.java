@@ -88,4 +88,12 @@ public class SpaceReviewService {
                 .map(spaceReviewConverter::toGetPerformerReview)
                 .collect(Collectors.toList());
     }
+
+    public List<SpaceReviewResponseDTO.ReviewSpaceDTO> getReviewsBySpaceId(Long spaceId) {
+        List<SpaceReview> reviews = spaceReviewRepository.findBySpaceId(spaceId);
+
+        return reviews.stream()
+                .map(spaceReviewConverter::toGetSpaceReview)
+                .collect(Collectors.toList());
+    }
 }

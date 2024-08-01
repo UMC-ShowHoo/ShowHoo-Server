@@ -10,4 +10,6 @@ import java.util.List;
 public interface SpaceReviewRepository extends JpaRepository<SpaceReview, Long> {
 
     List<SpaceReview> findByPerformerId(Long performerId);
+
+    List<SpaceReview> findBySpaceId(Long spaceId);
 }

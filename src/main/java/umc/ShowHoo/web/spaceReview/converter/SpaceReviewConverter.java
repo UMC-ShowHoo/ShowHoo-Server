@@ -43,4 +43,17 @@ public class SpaceReviewConverter {
                 answers
         );
     }
+
+    public SpaceReviewResponseDTO.ReviewSpaceDTO toGetSpaceReview(SpaceReview spaceReview) {
+        List<SpaceReviewResponseDTO.SpaceReviewAnswerDto> answers = spaceReview.getSpaceReviewAnswers().stream()
+                .map(answer -> new SpaceReviewResponseDTO.SpaceReviewAnswerDto(answer.getId(), answer.getContent()))
+                .collect(Collectors.toList());
+
+        return new SpaceReviewResponseDTO.ReviewSpaceDTO(
+                spaceReview.getId(),
+                spaceReview.getGrade(),
+                spaceReview.getContent(),
+                answers
+        );
+    }
 }

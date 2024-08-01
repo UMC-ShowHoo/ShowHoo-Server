@@ -24,6 +24,17 @@ public class SpaceReviewResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class ReviewSpaceDTO{
+        private Long id;
+        private double grade;
+        private String content;
+        private List<SpaceReviewAnswerDto> answers;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class SpaceReviewAnswerDto{
         private Long id;
         private String content;
