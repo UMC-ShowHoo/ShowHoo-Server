@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
 import umc.ShowHoo.aws.s3.AmazonS3Manager;
+import umc.ShowHoo.web.holiday.entity.Holiday;
+import umc.ShowHoo.web.holiday.repository.HolidayRepository;
 import umc.ShowHoo.web.peakSeasonRentalFee.entity.PeakSeasonRentalFee;
 import umc.ShowHoo.web.peakSeasonRentalFee.repository.PeakSeasonRentalFeeRepository;
 import umc.ShowHoo.web.rentalFee.entity.RentalFee;
@@ -34,6 +36,7 @@ import java.util.stream.Collectors;
 public class SpaceService {
     private final SpaceRepository spaceRepository;
     private final SpacePhotoRepository spacePhotoRepository;
+    private final HolidayRepository holidayRepository;
     private final RentalFeeRepository rentalFeeRepository;
     private final PeakSeasonRentalFeeRepository peakSeasonRentalFeeRepository;
     private final SpaceAdditionalServiceRepository spaceAdditionalServiceRepository;
@@ -67,6 +70,13 @@ public class SpaceService {
                     .map(url -> SpacePhoto.builder().photoUrl(url).space(savedSpace).build())
                     .collect(Collectors.toList());
             spacePhotoRepository.saveAll(photos);
+        }
+
+        if (dto.getHolidays() != null) {
+            List<Holiday> holidays = dto.getHolidays().stream()
+                    .map(date -> Holiday.builder().date(date).space(savedSpace).build())
+                    .collect(Collectors.toList());
+            holidayRepository.saveAll(holidays);
         }
 
         if (space.getAdditionalServices() != null) {

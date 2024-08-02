@@ -34,6 +34,7 @@ public class SpaceRequestDTO {
         private String bankAccount;
         private String bankOwner;
         private List<String> photoUrls;
+        private List<LocalDate> holidays;
         private List<RentalFeeRequestDTO> rentalFees;
         private List<PeakSeasonRentalFeeRequestDTO> peakSeasonRentalFees;
         private List<SpaceAdditionalServiceRequestDTO> additionalServices;

@@ -2,6 +2,7 @@ package umc.ShowHoo.web.space.converter;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import umc.ShowHoo.web.holiday.entity.Holiday;
 import umc.ShowHoo.web.peakSeasonRentalFee.entity.PeakSeasonRentalFee;
 import umc.ShowHoo.web.rentalFee.entity.DayOfWeek;
 import umc.ShowHoo.web.rentalFee.entity.RentalFee;
@@ -51,6 +52,13 @@ public class SpaceConverter {
                     .map(url -> SpacePhoto.builder().photoUrl(url).space(space).build())
                     .collect(Collectors.toList());
             space.setPhotos(photos);
+        }
+
+        if (dto.getHolidays() != null) {
+            List<Holiday> holidays = dto.getHolidays().stream()
+                    .map(date -> Holiday.builder().date(date).space(space).build())
+                    .collect(Collectors.toList());
+            space.setHolidays(holidays);
         }
 
         List<RentalFee> rentalFees = dto.getRentalFees().stream()
