@@ -3,6 +3,7 @@ package umc.ShowHoo.web.space.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import umc.ShowHoo.web.common.BaseEntity;
+import umc.ShowHoo.web.holiday.entity.Holiday;
 import umc.ShowHoo.web.peakSeasonRentalFee.entity.PeakSeasonRentalFee;
 import umc.ShowHoo.web.rentalFee.entity.RentalFee;
 import umc.ShowHoo.web.spaceAdditionalService.entity.SpaceAdditionalService;
@@ -58,6 +59,9 @@ public class Space extends BaseEntity {
 
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
     private List<PeakSeasonRentalFee> peakSeasonRentalFees;
+
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
+    private List<Holiday> holidays;
 
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
     private List<SpaceAdditionalService> AdditionalServices;
