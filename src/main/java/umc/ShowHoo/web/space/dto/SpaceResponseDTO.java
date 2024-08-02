@@ -1,10 +1,6 @@
 package umc.ShowHoo.web.space.dto;
 
 import lombok.*;
-import org.hibernate.type.internal.ImmutableNamedBasicTypeImpl;
-
-import java.net.URL;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
