@@ -9,12 +9,16 @@ public class RentalFileConverter {
 
 //    public static RentalFile toEntity((RentalFileRequestDTO.PerformerPostDTO pdto, RentalFileRequestDTO.SpaceUserPostDTO sdto)
 
-    public static RentalFile toEntity(String setListForm, String rentalTimeForm, String addOrderForm,
-                                      String setList, String rentalTime, String addOrder){
+    public static RentalFile toFormEntity(String setListForm, String rentalTimeForm, String addOrderForm){
         return RentalFile.builder()
                 .setListForm(setListForm)
                 .rentalTimeForm(rentalTimeForm)
                 .addOrderForm(addOrderForm)
+                .build();
+    }
+
+    public static RentalFile toFileEntity(String setList, String rentalTime, String addOrder){
+        return RentalFile.builder()
                 .setList(setList)
                 .rentalTime(rentalTime)
                 .addOrder(addOrder)

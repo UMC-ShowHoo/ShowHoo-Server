@@ -1,8 +1,6 @@
 package umc.ShowHoo.web.rentalFile.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import umc.ShowHoo.web.Shows.entity.Shows;
 import umc.ShowHoo.web.space.entity.Space;
@@ -14,6 +12,7 @@ import umc.ShowHoo.web.space.entity.Space;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class RentalFile {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     //공연장이 올리는 파일
     private String setListForm; //셋리스트 양식

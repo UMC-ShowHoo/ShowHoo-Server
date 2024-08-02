@@ -25,6 +25,9 @@ public enum ErrorStatus implements BaseErrorCode {
     //AUDIENCE
     AUDIENCE_NOT_FOUND(HttpStatus.NOT_FOUND, "AUDIENCE001", "Audience not found"),
 
+    //BOOK
+    BOOK_NOT_FOUND(HttpStatus.NOT_FOUND, "BOOK001", "Book not found"),
+
     //PERFORMER
     PERFORMER_NOT_FOUND(HttpStatus.NOT_FOUND, "PERFORMER001", "Performer not found"),
 
@@ -37,6 +40,12 @@ public enum ErrorStatus implements BaseErrorCode {
     //SPACE_APPLY
     SPACE_APPLY_NOT_FOUND(HttpStatus.NOT_FOUND, "SPACE_APPLY001", "SpaceApply not found"),
 
+    //SPACE_REVIEW
+    SPACE_REVIEW_PERMISSION_NOT_FOUND(HttpStatus.NOT_FOUND, "SPACE_REVIEW001", "SpaceReviewPermission not found"),
+
+    RENTALFILE_FORM_NOT_FOUND(HttpStatus.NOT_FOUND,"RENTALFILE_FORM001","RentalFile form not found"),
+
+    RENTALFILE_NOT_FOUND(HttpStatus.NOT_FOUND,"RENTALFILE001","RentalFile not found")
 
     ;
 
