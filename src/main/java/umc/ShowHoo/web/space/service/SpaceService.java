@@ -2,6 +2,9 @@ package umc.ShowHoo.web.space.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
@@ -33,6 +36,7 @@ public class SpaceService {
     private final SpaceAdditionalServiceRepository spaceAdditionalServiceRepository;
     private final AmazonS3Manager amazonS3Manager;
 
+    @Autowired
     private SpaceConverter spaceConverter;
 
     @Transactional
@@ -93,11 +97,33 @@ public class SpaceService {
     }
 
     @Transactional
-    public SpaceResponseDTO.SpaceListDTO getAllSpaces() {
-        List<Space> spaces = spaceRepository.findAll();
+    public SpaceResponseDTO.SpaceListDTO getTopSpacesWithPreference(Long performerId) {
+        Pageable pageable = PageRequest.of(0, 8);
+        List<Space> spacePreferList = spaceRepository.findTopBySpacePreferOrderByCountDesc(pageable);
+        List<Space> gradeList = spaceRepository.findTopByOrderByGradeDesc(pageable);
 
-        return SpaceConverter.toSpaceListDTO(spaces);
+        return spaceConverter.toTopSpaceListDTO(spacePreferList, gradeList, performerId);
+    }
 
+    @Transactional
+    public SpaceResponseDTO.SpaceFilteredListDTO searchSpaces(SpaceRequestDTO.SpaceSearchRequestDTO searchRequest, Long performerId) {
+        Pageable pageable = PageRequest.of(searchRequest.getPage(), searchRequest.getSize());
+        String namePattern = searchRequest.getName() != null ? "%" + searchRequest.getName() + "%" : null;
+        String locationPattern = searchRequest.getLocation() != null ? "%" + searchRequest.getLocation() + "%" : null;
+
+        List<Space> spaces = spaceRepository.searchSpaces(
+                namePattern,
+                locationPattern,
+                searchRequest.getDate(),
+                searchRequest.getType(),
+                searchRequest.getMinPrice(),
+                searchRequest.getMaxPrice(),
+                searchRequest.getMinCapacity(),
+                searchRequest.getMaxCapacity(),
+                pageable
+        );
+
+        return spaceConverter.toSpaceListDTO(spaces, performerId);
     }
 
     public Space saveSpaceName(SpaceRequestDTO.SpaceNameDTO spaceNameDTO, SpaceUser spaceUser) {

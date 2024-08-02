@@ -67,7 +67,16 @@ public class SpaceResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SpaceListDTO {
-        private List<SpaceSummaryDTO> spaces;
+        private List<SpaceSummaryDTO> spacePreferList;
+        private List<SpaceSummaryDTO> gradeList;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SpaceFilteredListDTO {
+        private List<SpaceSummaryDTO> spaceList;
     }
 
 
@@ -84,6 +93,7 @@ public class SpaceResponseDTO {
         String imageURL;
         Double grade;
         Integer minRentalFee;
+        Boolean isPreferred;
     }
 
     @Getter
