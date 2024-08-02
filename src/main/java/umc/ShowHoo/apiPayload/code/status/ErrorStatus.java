@@ -46,6 +46,10 @@ public enum ErrorStatus implements BaseErrorCode {
     //SPACE_REVIEW
     SPACE_REVIEW_PERMISSION_NOT_FOUND(HttpStatus.NOT_FOUND, "SPACE_REVIEW001", "SpaceReviewPermission not found"),
 
+    RENTALFILE_FORM_NOT_FOUND(HttpStatus.NOT_FOUND,"RENTALFILE_FORM001","RentalFile form not found"),
+
+    RENTALFILE_NOT_FOUND(HttpStatus.NOT_FOUND,"RENTALFILE001","RentalFile not found")
+
     ;
 
     private final HttpStatus httpStatus;

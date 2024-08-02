@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
 @Builder
 @Getter
 @NoArgsConstructor
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class ShowsRequestDTO {
     private Long performerId;
     private String requirement;
+    private String poster;
     private String name;
     private String description;
     private String date;

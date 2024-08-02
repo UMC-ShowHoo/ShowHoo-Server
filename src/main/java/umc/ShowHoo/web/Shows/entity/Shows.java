@@ -7,11 +7,13 @@ import umc.ShowHoo.web.performer.entity.Performer;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.Entity;
+import java.util.List;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import umc.ShowHoo.web.showsPrefer.entity.ShowsPrefer;
 
+import umc.ShowHoo.web.rentalFile.entity.RentalFile;
 
 @Entity
 @Getter @Setter
@@ -41,6 +43,9 @@ public class Shows {
 
     @ManyToOne @JoinColumn(name = "performer_id")
     private Performer performer;
+
+    @OneToOne(mappedBy = "shows")
+    private RentalFile rentalFile;
 
     @OneToMany(mappedBy = "shows", cascade = CascadeType.ALL)
     private List<Book> bookList;
