@@ -11,22 +11,22 @@ import java.util.stream.Collectors;
 
 public class PerformerProfileConverter {
     public static PerformerProfile toCreateProfile(PerformerProfileRequestDTO.CreateProfileDTO dto) {
-        PerformerProfile performerProfile = PerformerProfile.builder()
+//        List<ProfileImage> profileImages = (dto.getPerformerProfileImages() != null ? dto.getPerformerProfileImages() : new ArrayList<>())
+//                .stream()
+//                .map(imageDTO -> ProfileImage.builder()
+//                        .profileImageUrl(null)  // URL은 후에 설정
+//                        .performerProfile(performerProfile)
+//                        .build())
+//                .collect(Collectors.toList());
+//
+//        performerProfile.setProfileImages(profileImages);
+
+        return PerformerProfile.builder()
                 .team(dto.getTeam())
+                .name(dto.getName())
+                .phoneNumber(dto.getPhoneNumber())
                 .introduction(dto.getIntroduction())
                 .build();
-
-        List<ProfileImage> profileImages = (dto.getPerformerProfileImages() != null ? dto.getPerformerProfileImages() : new ArrayList<>())
-                .stream()
-                .map(imageDTO -> ProfileImage.builder()
-                        .profileImageUrl(null)  // URL은 후에 설정
-                        .performerProfile(performerProfile)
-                        .build())
-                .collect(Collectors.toList());
-
-        performerProfile.setProfileImages(profileImages);
-
-        return performerProfile;
     }
 
     public static PerformerProfile toUpdateProfileText(PerformerProfileRequestDTO.UpdateProfileTextDTO dto, PerformerProfile existingProfile) {

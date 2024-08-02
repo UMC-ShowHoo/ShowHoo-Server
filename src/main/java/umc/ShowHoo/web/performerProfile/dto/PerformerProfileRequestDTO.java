@@ -14,11 +14,13 @@ public class PerformerProfileRequestDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CreateProfileDTO{
-        //소속, 소개, 프로필 사진
+        //소속, 소개, 프로필 사진, 이름, 전번 추가
         private String team;
+        private String name;
         private String introduction;
+        private String phoneNumber;
 
-        private final List<PerformerProfileImageDTO> performerProfileImages = new ArrayList<>();
+//        private final List<PerformerProfileImageDTO> performerProfileImages = new ArrayList<>();
     }
 
     @Builder
