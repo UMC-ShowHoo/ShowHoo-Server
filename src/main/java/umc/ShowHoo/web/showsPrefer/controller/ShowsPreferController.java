@@ -41,4 +41,14 @@ public class ShowsPreferController {
                 .alert(msg)
                 .build());
     }
+
+    @GetMapping("/{audienceId}")
+    @Operation(summary = "관람자 별 공연 찜리스트 조회 API", description = "관람자가 찜리스트에 등록한 공연을 조회하는 API, 페이지 번호 필요")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUDIENCE001", description = "Audience not found", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+    })
+    public ApiResponse<ShowsPreferResponseDTO.getPreferListDTO> getPreferList(@PathVariable(name = "audienceId") Long id, @RequestParam(name = "page") Integer page){
+        return null;
+    }
 }
