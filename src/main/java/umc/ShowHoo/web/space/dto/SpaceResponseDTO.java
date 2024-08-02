@@ -1,10 +1,6 @@
 package umc.ShowHoo.web.space.dto;
 
 import lombok.*;
-import org.hibernate.type.internal.ImmutableNamedBasicTypeImpl;
-
-import java.net.URL;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -71,7 +67,16 @@ public class SpaceResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SpaceListDTO {
-        private List<SpaceSummaryDTO> spaces;
+        private List<SpaceSummaryDTO> spacePreferList;
+        private List<SpaceSummaryDTO> gradeList;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SpaceFilteredListDTO {
+        private List<SpaceSummaryDTO> spaceList;
     }
 
 
@@ -88,6 +93,7 @@ public class SpaceResponseDTO {
         String imageURL;
         Double grade;
         Integer minRentalFee;
+        Boolean isPreferred;
     }
 
     @Getter

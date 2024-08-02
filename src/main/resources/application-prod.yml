@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${url}
-    username: ${username}
-    password: ${password}
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
   thymeleaf:
     cache: false
 
@@ -12,7 +12,7 @@ spring:
     open-in-view: false
     show-sql: true
     hibernate:
-      ddl-auto: update # 첫 배포 이후 validate 으로 수정
+      ddl-auto: create # 첫 배포 이후 validate 으로 수정
 
   servlet:
     multipart:
@@ -22,27 +22,27 @@ spring:
 cloud:
   aws:
     s3:
-      bucket: {bucketname}
+      bucket: ${S3_BUCKET}
       path:
         review: reviews
-        performerProfile : PerformerProfile
+        performerProfile: PerformerProfile
     region:
-      static: {region}
+      static: ${S3_REGION}
     stack:
       auto: false
     credentials:
-      accessKey: {accesskey}
-      secretKey: {secretkey}
+      accessKey: ${S3_ACCESS_KEY}
+      secretKey: ${S3_SECRET_KEY}
 
 security:
   oauth2:
     client:
       registration:
         kakao:
-          client-id: {kakao_client_id}
-          client-secret: {kakao_client_secret}
+          client-id: ${KAKAO_CLIENT_ID}
+          client-secret: ${KAKAO_CLIENT_SECRET}
           authorization-grant-type: authorization_code
-          redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+          redirect-uri: http://${EC2_HOST}:8080/login/oauth2/code/kakao
           client-authentication-method: client_secret_post
       provider:
         kakao:

@@ -16,7 +16,11 @@ public class PerformerProfile {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;
+
     private String team;
+
+    private String phoneNumber;
 
     private String introduction;
 

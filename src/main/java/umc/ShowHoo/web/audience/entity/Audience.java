@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import umc.ShowHoo.web.book.entity.Book;
 import umc.ShowHoo.web.member.entity.Member;
+import umc.ShowHoo.web.showsPrefer.entity.ShowsPrefer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +18,16 @@ public class Audience {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @OneToOne
     @JoinColumn(name = "member_id")
-    Member member;
+    private Member member;
 
     @OneToMany(mappedBy = "audience", cascade = CascadeType.ALL)
-    List<Book> bookList = new ArrayList<>();
+    @Builder.Default
+    private List<Book> bookList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "audience", cascade = CascadeType.ALL)
+    private List<ShowsPrefer> preferList;
 }

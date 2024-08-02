@@ -31,12 +31,19 @@ public enum ErrorStatus implements BaseErrorCode {
     //SHOW
     SHOW_NOT_FOUND(HttpStatus.NOT_FOUND,"SHOW001","Show not found"),
 
+    //SHOWS PREFER
+    SHOWS_PREFER_NOT_FOUND(HttpStatus.NOT_FOUND,"SHOWS_PREFER001", "ShowsPrefer not found"),
+
     //SPACE PREFER
     SPACE_PREFER_NOT_FOUND(HttpStatus.NOT_FOUND, "SPACE_PREFER001", "SpacePrefer not found"),
 
     //SPACE_APPLY
     SPACE_APPLY_NOT_FOUND(HttpStatus.NOT_FOUND, "SPACE_APPLY001", "SpaceApply not found"),
 
+
+    RENTALFILE_FORM_NOT_FOUND(HttpStatus.NOT_FOUND,"RENTALFILE_FORM001","RentalFile form not found"),
+
+    RENTALFILE_NOT_FOUND(HttpStatus.NOT_FOUND,"RENTALFILE001","RentalFile not found")
 
     ;
 

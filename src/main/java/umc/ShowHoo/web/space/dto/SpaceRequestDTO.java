@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 import umc.ShowHoo.web.rentalFee.dto.RentalFeeRequestDTO;
 import umc.ShowHoo.web.spaceAdditionalService.dto.SpaceAdditionalServiceRequestDTO;
+import umc.ShowHoo.web.space.entity.SpaceType;
 import umc.ShowHoo.web.spacePhoto.dto.SpacePhotoRequestDTO;
 
-import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -66,6 +66,22 @@ public class SpaceRequestDTO {
     @AllArgsConstructor
     public static class SpaceLocationDTO {
         private String location;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SpaceSearchRequestDTO {
+        private String name;
+        private String location;
+        private LocalDate date;
+        private SpaceType type;
+        private Integer minPrice;
+        private Integer maxPrice;
+        private Integer minCapacity;
+        private Integer maxCapacity;
+        private int page = 0;
+        private int size = 12;
     }
 
 }

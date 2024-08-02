@@ -32,7 +32,7 @@ public class PerformerProfileController {
     public ApiResponse<Void> createProfile(
             @PathVariable("performerUserId") Long performerUserId,
             @RequestPart("profileDTO") PerformerProfileRequestDTO.CreateProfileDTO profileDTO,
-            @RequestPart("performerProfileImages") List<MultipartFile> profileImages){
+            @RequestPart(required = false) List<MultipartFile> profileImages){
 
         performerProfileService.createProfile(performerUserId, profileDTO, profileImages);
         return ApiResponse.onSuccess(null);

@@ -42,11 +42,13 @@ public class PerformerProfileService {
         PerformerProfile performerProfile = PerformerProfileConverter.toCreateProfile(profileDTO);
         performerProfile.setPerformer(performer);
 
+
+        if (profileImages != null && !profileImages.isEmpty()) {
+
         List<ProfileImage> profileImageList = new ArrayList<>();
         for (MultipartFile image : profileImages) {
             String uuid = UUID.randomUUID().toString();
             Uuid savedUuid = uuidRepository.save(Uuid.builder().uuid(uuid).build());
-
             String keyName = amazonS3Manager.generatePerformerProfileImageKeyName(savedUuid);
             String imageUrl = amazonS3Manager.uploadFile(keyName, image);
 
@@ -57,6 +59,8 @@ public class PerformerProfileService {
             profileImageList.add(profileImage);
         }
         performerProfile.setProfileImages(profileImageList);
+
+        }
 
         return performerProfileRepository.save(performerProfile);
     }

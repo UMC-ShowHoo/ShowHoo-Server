@@ -18,7 +18,8 @@ public class BookResponseDTO {
     @AllArgsConstructor
     public static class postBookDTO {
         Long book_id;
-        BookStatus status;
+        Long showsId;
+        Long audienceId;
         String alert;
     }
 
@@ -43,7 +44,7 @@ public class BookResponseDTO {
         //공연 예매확인 조회
         //공연 정보(ID, 포스터, 이름, 장소 및 시간, 공연자 등)
         Long showsId;
-        URL poster;
+        String poster;
         String name;
         String date;
         String time;
@@ -52,6 +53,28 @@ public class BookResponseDTO {
         BookStatus status;
         BookDetail detail;
         Boolean isCancellable; //취소 가능한지 여부
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class deleteResponseDTO{
+        String alert;
+        Long bookId;
+        Long cancelBookId;
+        //바로 삭제하지 않고 상태를 우선 취소로 바꿈
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class changeStatusResponseDTO{
+        Long bookId;
+        BookStatus status;
+        BookDetail detail;
+        String alert;
     }
 
 }

@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.net.URL;
 
 @Builder
 @Getter
@@ -14,7 +13,7 @@ import java.net.URL;
 public class ShowsRequestDTO {
     private Long performerId;
     private String requirement;
-    private URL poster;
+    private String poster;
     private String name;
     private String description;
     private String date;

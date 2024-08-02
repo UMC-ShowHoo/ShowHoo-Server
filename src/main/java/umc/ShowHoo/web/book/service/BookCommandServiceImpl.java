@@ -1,7 +1,6 @@
 package umc.ShowHoo.web.book.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
@@ -27,5 +26,43 @@ public class BookCommandServiceImpl implements BookCommandService {
                 .orElseThrow(()-> new AudienceHandler(ErrorStatus.AUDIENCE_NOT_FOUND));
 
         return bookRepository.save(BookConverter.toBook(audience));
+    }
+
+    public Book requestConfirm(Long bookId){
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(()->new BookHandler(ErrorStatus.BOOK_NOT_FOUND));
+
+        if(book.getDetail() != BookDetail.CONFIRMING){
+            return null;
+        }
+
+        book.setDetail(BookDetail.CONFIRMED);
+        return bookRepository.save(book);
+    }
+
+    public Book requestCanceled(Long bookId){
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(()->new BookHandler(ErrorStatus.BOOK_NOT_FOUND));
+
+        if(book.getDetail() != BookDetail.CANCELLING){
+            return null;
+        }
+
+        book.setStatus(BookStatus.CANCEL);
+        book.setDetail(BookDetail.CANCELED);
+        return bookRepository.save(book);
+    }
+
+    public Book requestWatched(Long bookId){
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(()->new BookHandler(ErrorStatus.BOOK_NOT_FOUND));
+
+        if(book.getDetail() != BookDetail.CONFIRMED){
+            return null;
+        }
+
+        book.setStatus(BookStatus.WATCHED);
+        book.setDetail(BookDetail.WATCHED);
+        return bookRepository.save(book);
     }
 }
