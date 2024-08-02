@@ -18,6 +18,7 @@ import umc.ShowHoo.web.book.dto.BookResponseDTO;
 import umc.ShowHoo.web.book.entity.Book;
 import umc.ShowHoo.web.book.service.BookCommandService;
 import umc.ShowHoo.web.book.service.BookQueryService;
+import umc.ShowHoo.web.cancelBook.entity.CancelBook;
 
 import java.util.Optional;
 
@@ -100,6 +101,30 @@ public class BookController {
     public ApiResponse<BookResponseDTO.getBookDTO> getMyPage(@PathVariable(name = "audienceId") Long audienceId){
         Book nextBook = bookQueryService.getNextBook(audienceId);
         return ApiResponse.onSuccess(BookConverter.toGetBookDTO(nextBook));
+    }
+
+    //예매 취소 요청 API
+    @PutMapping("/{bookId}/cancel")
+    @Operation(summary = "예매 취소 요청 API", description = "예매 내역 취소 요청을 보내는 API, 예약 정보의 status 변경과 동시에 공연자에게 취소 정보 전달")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+    })
+    @Parameters({
+            @Parameter(name = "bookId", description = "예매 내역의 id, pathVariable"),
+            @Parameter(name = "name", description = "예매자의 이름"),
+            @Parameter(name = "bankName", description = "환불 받고자 하는 은행의 이름"),
+            @Parameter(name = "account", description = "환불 받고자 하는 계좌의 번호"),
+            @Parameter(name = "reason", description = "취소 사유"),
+    })
+    public ApiResponse<BookResponseDTO.deleteResponseDTO> requestCancel(@PathVariable(name = "bookId") Long bookId ,@RequestBody BookRequestDTO.deleteBookDTO request){
+        CancelBook cancelBook = bookCommandService.requestCancel(bookId, request);
+
+        if(cancelBook == null){
+            return ApiResponse.onSuccess(BookResponseDTO.deleteResponseDTO.builder()
+                    .alert("이미 취소 요청되었습니다.")
+                    .build());
+        }
+        return ApiResponse.onSuccess(BookConverter.toDeleteBookDTO(cancelBook));
     }
 
 }

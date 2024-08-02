@@ -27,13 +27,14 @@ jobs:
           cd ./src/main/resources
           sed -i 's|${DB_URL}|'"${{ secrets.DB_URL }}"'|g' application-prod.yml
           sed -i 's|${DB_USER}|'"${{ secrets.DB_USER }}"'|g' application-prod.yml
-          sed -i 's|${DB_PASSWORD}|'"${{ secrets.DB_PASSWORD }}"'|g' application-prod.yml
+          sed -i 's|${DB_PW}|'"${{ secrets.DB_PW }}"'|g' application-prod.yml
           sed -i 's|${S3_BUCKET}|'"${{ secrets.S3_BUCKET }}"'|g' application-prod.yml
           sed -i 's|${S3_REGION}|'"${{ secrets.S3_REGION }}"'|g' application-prod.yml
           sed -i 's|${S3_ACCESS_KEY}|'"${{ secrets.S3_ACCESS_KEY }}"'|g' application-prod.yml
           sed -i 's|${S3_SECRET_KEY}|'"${{ secrets.S3_SECRET_KEY }}"'|g' application-prod.yml
           sed -i 's|${KAKAO_CLIENT_ID}|'"${{ secrets.KAKAO_CLIENT_ID }}"'|g' application-prod.yml
           sed -i 's|${KAKAO_CLIENT_SECRET}|'"${{ secrets.KAKAO_CLIENT_SECRET }}"'|g' application-prod.yml
+          sed -i 's|${EC2_HOST}|'"${{ secrets.EC2_HOST }}"'|g' application-prod.yml
 
       - name: Grant permission
         run: chmod +x ./gradlew
@@ -63,11 +64,12 @@ jobs:
             sudo docker run -e SPRING_PROFILES_ACTIVE=prod \
                             -e DB_URL=${{ secrets.DB_URL }} \
                             -e DB_USER=${{ secrets.DB_USER }} \
-                            -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+                            -e DB_PASSWORD=${{ secrets.DB_PW }} \
                             -e S3_BUCKET=${{ secrets.S3_BUCKET }} \
                             -e S3_REGION=${{ secrets.S3_REGION }} \
                             -e S3_ACCESS_KEY=${{ secrets.S3_ACCESS_KEY }} \
                             -e S3_SECRET_KEY=${{ secrets.S3_SECRET_KEY }} \
                             -e KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }} \
                             -e KAKAO_CLIENT_SECRET=${{ secrets.KAKAO_CLIENT_SECRET }} \
+                            -e EC2_HOST=${{ secrets.EC2_HOST }} \
                             --name showhoo-server -p 8081:8081 -d ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}

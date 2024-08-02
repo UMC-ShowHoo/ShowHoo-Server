@@ -55,4 +55,15 @@ public class BookResponseDTO {
         Boolean isCancellable; //취소 가능한지 여부
     }
 
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class deleteResponseDTO{
+        String alert;
+        Long bookId;
+        Long cancelBookId;
+        //바로 삭제하지 않고 상태를 우선 취소로 바꿈
+    }
+
 }

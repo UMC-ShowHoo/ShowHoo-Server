@@ -19,4 +19,16 @@ public class BookRequestDTO {
         @NotNull
         Long showsId;
     }
+
+    @Getter
+    public static class deleteBookDTO{
+        @NotNull
+        String name;
+        @NotNull
+        String bankName;
+        @NotNull
+        String account;
+        @NotNull
+        String reason;
+    }
 }
