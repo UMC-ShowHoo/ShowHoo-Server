@@ -5,12 +5,15 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import umc.ShowHoo.apiPayload.ApiResponse;
+import umc.ShowHoo.web.showsPrefer.converter.ShowsPreferConverter;
 import umc.ShowHoo.web.showsPrefer.dto.ShowsPreferRequestDTO;
 import umc.ShowHoo.web.showsPrefer.dto.ShowsPreferResponseDTO;
 import umc.ShowHoo.web.showsPrefer.entity.ShowsPrefer;
 import umc.ShowHoo.web.showsPrefer.service.ShowsPreferCommandService;
+import umc.ShowHoo.web.showsPrefer.service.ShowsPreferQueryService;
 
 @RestController
 @RequestMapping("/shows-prefer")
@@ -18,6 +21,8 @@ import umc.ShowHoo.web.showsPrefer.service.ShowsPreferCommandService;
 public class ShowsPreferController {
 
     private final ShowsPreferCommandService showsPreferCommandService;
+
+    private final ShowsPreferQueryService showsPreferQueryService;
 
     @PostMapping
     @Operation(summary = "공연 찜 등록 API", description = "관람자가 공연에 대해 찜 등록을 할 때 필요한 API")
@@ -49,6 +54,7 @@ public class ShowsPreferController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUDIENCE001", description = "Audience not found", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
     })
     public ApiResponse<ShowsPreferResponseDTO.getPreferListDTO> getPreferList(@PathVariable(name = "audienceId") Long id, @RequestParam(name = "page") Integer page){
-        return null;
+        Page<ShowsPrefer> list = showsPreferQueryService.getPreferList(id, page);
+        return ApiResponse.onSuccess(ShowsPreferConverter.toGetPreferListDTO(list));
     }
 }

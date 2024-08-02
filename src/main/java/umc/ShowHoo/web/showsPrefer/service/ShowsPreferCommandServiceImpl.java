@@ -28,6 +28,7 @@ public class ShowsPreferCommandServiceImpl implements ShowsPreferCommandService{
 
     private final ShowsPreferRepository showsPreferRepository;
 
+    @Override
     public ShowsPreferResponseDTO.createDTO createShowsPrefer(ShowsPreferRequestDTO.createDTO request){
         Shows shows = showsRepository.findById(request.getShowsId())
                 .orElseThrow(()->new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
@@ -48,6 +49,7 @@ public class ShowsPreferCommandServiceImpl implements ShowsPreferCommandService{
         }
     }
 
+    @Override
     public String deleteShowsPrefer(Long id){
         ShowsPrefer showsPrefer = showsPreferRepository.findById(id)
                 .orElseThrow(()->new ShowsPreferHandler(ErrorStatus.SHOWS_PREFER_NOT_FOUND));
