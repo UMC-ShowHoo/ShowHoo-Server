@@ -9,4 +9,10 @@ public interface BookCommandService {
     Book postBook(BookRequestDTO.postDTO request);
 
     CancelBook requestCancel(Long bookId, BookRequestDTO.deleteBookDTO request);
+
+    Book requestConfirm(Long bookId);
+
+    Book requestCanceled(Long bookId);
+
+    Book requestWatched(Long bookId);
 }
