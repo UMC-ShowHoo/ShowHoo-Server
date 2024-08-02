@@ -30,7 +30,9 @@ public class PerformerProfileConverter {
     }
 
     public static PerformerProfile toUpdateProfileText(PerformerProfileRequestDTO.UpdateProfileTextDTO dto, PerformerProfile existingProfile) {
+        existingProfile.setName(dto.getName());
         existingProfile.setTeam(dto.getTeam());
+        existingProfile.setPhoneNumber(dto.getPhoneNumber());
         existingProfile.setIntroduction(dto.getIntroduction());
         return existingProfile;
     }

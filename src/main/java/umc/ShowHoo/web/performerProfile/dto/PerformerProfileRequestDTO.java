@@ -37,7 +37,9 @@ public class PerformerProfileRequestDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class UpdateProfileTextDTO {
+        private String name;
         private String team;
+        private String phoneNumber;
         private String introduction;
     }
 
