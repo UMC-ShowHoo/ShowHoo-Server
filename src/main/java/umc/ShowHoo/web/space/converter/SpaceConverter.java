@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class SpaceConverter {
     private final SpaceRepository spaceRepository;
 
-    public static Space toEntity(SpaceRequestDTO.SpaceRegisterRequestDTO dto, String soundEquipmentUrl, String lightingEquipmentUrl, String stageMachineryUrl, String spaceDrawingUrl, String spaceStaffUrl, String spaceSeatUrl, List<String> photoUrls, SpaceUser spaceUser) {
+    public static Space toEntity(SpaceRequestDTO.SpaceRegisterRequestDTO dto, String soundEquipmentUrl, String lightingEquipmentUrl, String stageMachineryUrl, String spaceDrawingUrl, String spaceStaffUrl, String spaceSeatUrl, SpaceUser spaceUser) {
         Space space = Space.builder()
                 .name(dto.getName())
                 .description(dto.getDescription())
@@ -39,14 +39,15 @@ public class SpaceConverter {
                 .spaceStaff(spaceStaffUrl)
                 .spaceSeat(spaceSeatUrl)
                 .notice(dto.getNotice())
-                .grade(dto.getGrade())
                 .spaceUser(spaceUser)
                 .build();
 
-        List<SpacePhoto> photos = photoUrls.stream()
-                .map(url -> SpacePhoto.builder().photoUrl(url).space(space).build())
-                .collect(Collectors.toList());
-        space.setPhotos(photos);
+        if (dto.getPhotoUrls() != null) {
+            List<SpacePhoto> photos = dto.getPhotoUrls().stream()
+                    .map(url -> SpacePhoto.builder().photoUrl(url).space(space).build())
+                    .collect(Collectors.toList());
+            space.setPhotos(photos);
+        }
 
         List<RentalFee> rentalFees = dto.getRentalFees().stream()
                 .map(feeDTO -> RentalFee.builder()

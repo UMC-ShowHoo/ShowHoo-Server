@@ -36,7 +36,7 @@ public class SpaceController {
     private final SpaceUserRepository spaceUserRepository;
     private final RentalFeeService rentalFeeService;
 
-    @PostMapping(value = "/spaces/{spaceUserId}")
+    @PostMapping(value = "/spaces/{spaceUserId}", consumes = "multipart/form-data")
     @Operation(summary = "공연장 등록 API", description = "공연장 등록할 때 필요한 API입니다.")
     @Parameter(
             in = ParameterIn.HEADER,
@@ -55,8 +55,7 @@ public class SpaceController {
             @RequestPart(required = false) MultipartFile stageMachinery,
             @RequestPart(required = false) MultipartFile spaceDrawing,
             @RequestPart(required = false) MultipartFile spaceStaff,
-            @RequestPart(required = false) MultipartFile spaceSeat,
-            @RequestPart(required = false) List<MultipartFile> photos) {
+            @RequestPart(required = false) MultipartFile spaceSeat) {
         try {
             // spaceUserId로 SpaceUser 조회
             Optional<SpaceUser> optionalSpaceUser = spaceUserRepository.findById(spaceUserId);
@@ -66,7 +65,7 @@ public class SpaceController {
             }
 
             // Space 저장
-            Space savedSpace = spaceService.saveSpace(spaceRegisterRequestDTO, spaceUser, soundEquipment, lightingEquipment, stageMachinery, spaceDrawing, spaceStaff, spaceSeat, photos);
+            Space savedSpace = spaceService.saveSpace(spaceRegisterRequestDTO, spaceUser, soundEquipment, lightingEquipment, stageMachinery, spaceDrawing, spaceStaff, spaceSeat);
             SpaceResponseDTO.ResultDTO result = SpaceConverter.toSpaceResponseDTO(savedSpace);
 
             return ApiResponse.onSuccess(result);

@@ -28,15 +28,8 @@ public class SpaceRequestDTO {
         private String area;
         private Integer seatingCapacity;
         private Integer standingCapacity;
-//        private MultipartFile soundEquipment;
-//        private MultipartFile lightingEquipment;
-//        private MultipartFile stageMachinery;
-//        private MultipartFile spaceDrawing;
-//        private MultipartFile spaceStaff;
-//        private MultipartFile spaceSeat;
         private String notice;
-        private Double grade;
-//        private List<MultipartFile> photos;
+        private List<String> photoUrls;
         private List<RentalFeeRequestDTO> rentalFees;
         private List<SpaceAdditionalServiceRequestDTO> additionalServices;
     }

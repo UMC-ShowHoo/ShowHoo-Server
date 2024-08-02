@@ -40,7 +40,7 @@ public class SpaceService {
     private SpaceConverter spaceConverter;
 
     @Transactional
-    public Space saveSpace(SpaceRequestDTO.SpaceRegisterRequestDTO dto, SpaceUser spaceUser, MultipartFile soundEquipment, MultipartFile lightingEquipment, MultipartFile stageMachinery, MultipartFile spaceDrawing, MultipartFile spaceStaff, MultipartFile spaceSeat, List<MultipartFile> photos) {
+    public Space saveSpace(SpaceRequestDTO.SpaceRegisterRequestDTO dto, SpaceUser spaceUser, MultipartFile soundEquipment, MultipartFile lightingEquipment, MultipartFile stageMachinery, MultipartFile spaceDrawing, MultipartFile spaceStaff, MultipartFile spaceSeat) {
         String soundEquipmentUrl = soundEquipment != null ? amazonS3Manager.uploadFile("spaceRegister/" + UUID.randomUUID().toString(), soundEquipment) : null;
         String lightingEquipmentUrl = lightingEquipment != null ? amazonS3Manager.uploadFile("spaceRegister/" + UUID.randomUUID().toString(), lightingEquipment) : null;
         String stageMachineryUrl = stageMachinery != null ? amazonS3Manager.uploadFile("spaceRegister/" + UUID.randomUUID().toString(), stageMachinery) : null;
@@ -48,22 +48,21 @@ public class SpaceService {
         String spaceStaffUrl = spaceStaff != null ? amazonS3Manager.uploadFile("spaceRegister/" + UUID.randomUUID().toString(), spaceStaff) : null;
         String spaceSeatUrl = spaceSeat != null ? amazonS3Manager.uploadFile("spaceRegister/" + UUID.randomUUID().toString(), spaceSeat) : null;
 
-        List<String> photoUrls = photos != null ? photos.stream().map(photo -> amazonS3Manager.uploadFile("photos/" + UUID.randomUUID().toString(), photo)).collect(Collectors.toList()) : List.of();
 
-        Space space = SpaceConverter.toEntity(dto, soundEquipmentUrl, lightingEquipmentUrl, stageMachineryUrl, spaceDrawingUrl, spaceStaffUrl, spaceSeatUrl, photoUrls, spaceUser);
+        Space space = SpaceConverter.toEntity(dto, soundEquipmentUrl, lightingEquipmentUrl, stageMachineryUrl, spaceDrawingUrl, spaceStaffUrl, spaceSeatUrl, spaceUser);
         Space savedSpace = spaceRepository.save(space);
+
+        if (dto.getPhotoUrls() != null) {
+            List<SpacePhoto> photos = dto.getPhotoUrls().stream()
+                    .map(url -> SpacePhoto.builder().photoUrl(url).space(savedSpace).build())
+                    .collect(Collectors.toList());
+            spacePhotoRepository.saveAll(photos);
+        }
 
         if (space.getAdditionalServices() != null) {
             for (SpaceAdditionalService service : space.getAdditionalServices()) {
                 service.setSpace(savedSpace);
                 spaceAdditionalServiceRepository.save(service);
-            }
-        }
-
-        if (space.getPhotos() != null) {
-            for (SpacePhoto photo : space.getPhotos()) {
-                photo.setSpace(savedSpace);
-                spacePhotoRepository.save(photo);
             }
         }
 
