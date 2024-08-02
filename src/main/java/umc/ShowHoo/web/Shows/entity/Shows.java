@@ -4,10 +4,14 @@ import jakarta.persistence.*;
 import lombok.*;
 import umc.ShowHoo.web.book.entity.Book;
 import umc.ShowHoo.web.performer.entity.Performer;
-
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+
 @Entity
 @Getter @Setter
 @Builder
@@ -18,7 +22,7 @@ public class Shows {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String requirement;
-    private URL poster; //포스터 사진
+    private String poster; //포스터 사진
     private String name; //공연 이름
     private String description;//공연 소개
     private String date; //공연 날짜
@@ -32,9 +36,11 @@ public class Shows {
     private String accountHolder; //예금주
     private String accountNum; //계좌번호
 
+
+
     @ManyToOne @JoinColumn(name = "performer_id")
     private Performer performer;
 
     @OneToMany(mappedBy = "shows", cascade = CascadeType.ALL)
-    List<Book> bookList = new ArrayList<>();
+    private List<Book> bookList;
 }

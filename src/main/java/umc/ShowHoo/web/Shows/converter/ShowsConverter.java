@@ -6,14 +6,14 @@ import umc.ShowHoo.web.Shows.entity.Shows;
 
 public class ShowsConverter {
 
-    public static Shows toEntity(ShowsRequestDTO dto){
+    public static Shows toEntity(ShowsRequestDTO dto,String poster){
         return Shows.builder()
                 .requirement(dto.getRequirement())
                 .name(dto.getName())
                 .showAge(dto.getShowAge())
                 .date(dto.getDate())
                 .description(dto.getDescription())
-                .poster(dto.getPoster())
+                .poster(poster)
                 .runningTime(dto.getRunningTime())
                 .time(dto.getTime())
                 .perMaxticket(dto.getPerMaxticket())
@@ -32,7 +32,6 @@ public class ShowsConverter {
                 .showAge(shows.getShowAge())
                 .date(shows.getDate())
                 .description(shows.getDescription())
-                .poster(shows.getPoster())
                 .runningTime(shows.getRunningTime())
                 .time(shows.getTime())
                 .ticketPrice(shows.getTicketPrice())
@@ -42,6 +41,12 @@ public class ShowsConverter {
                 .accountNum(shows.getAccountNum())
                 .build();
         }
+
+    public static ShowsResponseDTO.ShowPosterDTO toshowPosterDTO(Shows shows){
+        return ShowsResponseDTO.ShowPosterDTO.builder()
+                .poster(shows.getPoster())
+                .build();
+    }
 
         public static ShowsResponseDTO.ShowRequirementDTO torequirementDTO(Shows shows){
         return ShowsResponseDTO.ShowRequirementDTO.builder()

@@ -44,7 +44,7 @@ public class BookResponseDTO {
         //공연 예매확인 조회
         //공연 정보(ID, 포스터, 이름, 장소 및 시간, 공연자 등)
         Long showsId;
-        URL poster;
+        String poster;
         String name;
         String date;
         String time;
