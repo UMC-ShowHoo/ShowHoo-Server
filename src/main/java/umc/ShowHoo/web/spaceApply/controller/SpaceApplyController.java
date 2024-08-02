@@ -73,7 +73,7 @@ public class SpaceApplyController {
         return ApiResponse.onSuccess(null);
     }
 
-    @Operation(summary = " 대관 상태 변경", description = "공연장이 사용 불가한 날짜 선택 및 변경 시 때 필요한 API입니다")
+    @Operation(summary = " 대관 수락", description = "공연장이 공연자를 수락할 때 필요한 API. status가 승인 예정은 0, 승인 완료는 1")
     @Parameter(
             in = ParameterIn.HEADER,
             name = "Authorization", required = true,
@@ -83,12 +83,33 @@ public class SpaceApplyController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
     })
-    @PatchMapping("{spaces/{spaceId}/spaceApply/{spaceApplyId}/{status}")
-    public ApiResponse<Void> setStatusSpaceApply(
-            @PathVariable Long spaceId , @PathVariable Long spaceApplyId, @PathVariable int status) {
+    @PatchMapping("{spaces/{spaceId}/spaceApply/{spaceApplyId}")
+    public ApiResponse<Void> confirmSpaceApply(
+            @PathVariable Long spaceId , @PathVariable Long spaceApplyId, @RequestBody int status) {
         spaceApplyService.setSpaceApply(spaceId, spaceApplyId, status);
         return ApiResponse.onSuccess(null);
     }
+
+    @Operation(summary = "대관 거절", description = "공연장이 공연자를 거절할 때 필요한 API, status가 승인 예쩡은 0, 승인 거절은 -1")
+    @Parameter(
+            in = ParameterIn.HEADER,
+            name = "Authorization", required = true,
+            schema = @Schema(type = "String"),
+            description = "Bearer [Access 토큰]"
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
+    })
+    @PatchMapping("{spaces/{spaceId}/spaceApply/{spaceApplyId}")
+    public ApiResponse<Void> rejectSpaceApply(
+            @PathVariable Long spaceId, @PathVariable Long spaceApplyId, @RequestBody int status) {
+        spaceApplyService.setSpaceApply(spaceId, spaceApplyId, status);
+        spaceApplyService.deleteSpaceApply(spaceApplyId);
+        return ApiResponse.onSuccess(null);
+    }
+
+
+
 
 
 

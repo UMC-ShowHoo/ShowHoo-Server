@@ -75,29 +75,16 @@ public class SpaceApplyService {
     }
 
 
-    public void setSpaceApply(Long spaceId, Long spaceApplyId, int status) {
+    public void setSpaceApply(Long spaceUserId, Long spaceApplyId, int status) {
+        Space space = spaceRepository.findById(spaceUserId)
+                .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_NOT_FOUND));
+
         SpaceApply spaceApply = spaceApplyRepository.findById(spaceApplyId)
                 .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_NOT_FOUND));
         spaceApply.setStatus(status);
     }
 
-    public SpaceApply rejectOrConfirmSpaceApply(Long spaceUserId, Long performerId, int status) {
-        Performer performer = performerRepository.findById(performerId)
-                .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_APPLY_NOT_FOUND));
 
-        Space space = spaceRepository.findById(spaceUserId)
-                .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_NOT_FOUND));
-
-        //find specific SpaceApply related to the performer
-        SpaceApply spaceApply = spaceApplyRepository.findBySpaceAndPerformerId(spaceUserId, performerId)
-                .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_APPLY_NOT_FOUND));
-
-        spaceApply.setStatus(status);   //Rejected or Approved
-
-        spaceApplyRepository.save(spaceApply);
-
-        return spaceApply;
-    }
 
 
 }
