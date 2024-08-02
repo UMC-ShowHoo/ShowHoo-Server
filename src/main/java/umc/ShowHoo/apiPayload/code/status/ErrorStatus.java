@@ -34,6 +34,9 @@ public enum ErrorStatus implements BaseErrorCode {
     //SHOW
     SHOW_NOT_FOUND(HttpStatus.NOT_FOUND,"SHOW001","Show not found"),
 
+    //SHOWS PREFER
+    SHOWS_PREFER_NOT_FOUND(HttpStatus.NOT_FOUND,"SHOWS_PREFER001", "ShowsPrefer not found"),
+
     //SPACE PREFER
     SPACE_PREFER_NOT_FOUND(HttpStatus.NOT_FOUND, "SPACE_PREFER001", "SpacePrefer not found"),
 
