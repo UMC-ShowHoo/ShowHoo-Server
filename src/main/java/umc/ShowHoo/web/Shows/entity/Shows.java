@@ -4,11 +4,15 @@ import jakarta.persistence.*;
 import lombok.*;
 import umc.ShowHoo.web.book.entity.Book;
 import umc.ShowHoo.web.performer.entity.Performer;
+import java.util.ArrayList;
+import java.util.List;
 import jakarta.persistence.Entity;
 import java.util.List;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import umc.ShowHoo.web.showsPrefer.entity.ShowsPrefer;
+
 import umc.ShowHoo.web.rentalFile.entity.RentalFile;
 
 @Entity
@@ -21,7 +25,7 @@ public class Shows {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String requirement;
-    private String poster; //포스터 - 사진
+    private String poster; //포스터 사진
     private String name; //공연 이름
     private String description;//공연 소개
     private String date; //공연 날짜
@@ -45,4 +49,7 @@ public class Shows {
 
     @OneToMany(mappedBy = "shows", cascade = CascadeType.ALL)
     private List<Book> bookList;
+
+    @OneToMany(mappedBy = "shows", cascade = CascadeType.ALL)
+    private List<ShowsPrefer> preferList;
 }

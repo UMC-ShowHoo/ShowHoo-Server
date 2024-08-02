@@ -1,36 +1,27 @@
 package umc.ShowHoo.web.space.converter;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import umc.ShowHoo.web.rentalFee.entity.DayOfWeek;
 import umc.ShowHoo.web.rentalFee.entity.RentalFee;
 import umc.ShowHoo.web.space.dto.SpaceRequestDTO;
 import umc.ShowHoo.web.space.dto.SpaceResponseDTO;
 import umc.ShowHoo.web.space.entity.Space;
+import umc.ShowHoo.web.space.repository.SpaceRepository;
 import umc.ShowHoo.web.spaceAdditionalService.entity.SpaceAdditionalService;
 import umc.ShowHoo.web.spaceAdditionalService.repository.SpaceAdditionalServiceRepository;
 import umc.ShowHoo.web.spacePhoto.entity.SpacePhoto;
 import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
 
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import java.util.Random;
-
 @Component
+@RequiredArgsConstructor
 public class SpaceConverter {
-    private static final Random RANDOM = new Random();
-
-
-    private static SpaceAdditionalServiceRepository spaceAdditionalServiceRepository;
-
-    @Autowired
-    public SpaceConverter(SpaceAdditionalServiceRepository spaceAdditionalServiceRepository) {
-        this.spaceAdditionalServiceRepository = spaceAdditionalServiceRepository;
-    }
+    private final SpaceRepository spaceRepository;
 
     public static Space toEntity(SpaceRequestDTO.SpaceRegisterRequestDTO dto, String soundEquipmentUrl, String lightingEquipmentUrl, String stageMachineryUrl, String spaceDrawingUrl, String spaceStaffUrl, String spaceSeatUrl, List<String> photoUrls, SpaceUser spaceUser) {
         Space space = Space.builder()
@@ -121,28 +112,35 @@ public class SpaceConverter {
                 .spaceSeat(space.getSpaceSeat())
                 .build();
     }
-    public static SpaceResponseDTO.SpaceListDTO toSpaceListDTO(List<Space> spaces) {
-        List<SpaceResponseDTO.SpaceSummaryDTO> spaceSummaryDTOs = spaces.stream()
-                .map(SpaceConverter::toSpaceDTO)
+
+    public SpaceResponseDTO.SpaceListDTO toTopSpaceListDTO(List<Space> spacePreferList, List<Space> gradeList, Long performerId) {
+        List<SpaceResponseDTO.SpaceSummaryDTO> spacePreferDTOList = spacePreferList.stream()
+                .map(space -> toSpaceDTOWithPreference(space, performerId))
                 .collect(Collectors.toList());
-        return new SpaceResponseDTO.SpaceListDTO(spaceSummaryDTOs);
+
+        List<SpaceResponseDTO.SpaceSummaryDTO> gradeDTOList = gradeList.stream()
+                .map(space -> toSpaceDTOWithPreference(space, performerId))
+                .collect(Collectors.toList());
+
+        return new SpaceResponseDTO.SpaceListDTO(spacePreferDTOList, gradeDTOList);
     }
 
-    public static SpaceResponseDTO.SpaceSummaryDTO toSpaceDTO(Space space){
+    public SpaceResponseDTO.SpaceFilteredListDTO toSpaceListDTO(List<Space> spaces, Long performerId) {
+        List<SpaceResponseDTO.SpaceSummaryDTO> spaceSummaryDTOs = spaces.stream()
+                .map(space -> toSpaceDTOWithPreference(space, performerId))
+                .collect(Collectors.toList());
+        return new SpaceResponseDTO.SpaceFilteredListDTO(spaceSummaryDTOs);
+    }
+
+    public SpaceResponseDTO.SpaceSummaryDTO toSpaceDTO(Space space){
         Integer totalCapacity = space.getSeatingCapacity() + space.getStandingCapacity();
         String imageURL = space.getPhotos().isEmpty() ? null : space.getPhotos().get(0).getPhotoUrl();
+        String additionalService = space.getPhotos().isEmpty() ? null : space.getAdditionalServices().get(0).getTitle();
 
         Integer minRentalFee = space.getRentalFees().stream()
                 .min(Comparator.comparingInt(RentalFee::getFee))
                 .map(RentalFee::getFee)
                 .orElse(null);
-
-        String additionalService = null;
-        if (!space.getAdditionalServices().isEmpty()) {
-            int randomIndex = RANDOM.nextInt(space.getAdditionalServices().size());
-            SpaceAdditionalService selectedService = space.getAdditionalServices().get(randomIndex);
-            additionalService = selectedService.getTitle();
-        }
 
         return new SpaceResponseDTO.SpaceSummaryDTO(
                 space.getName(),
@@ -152,7 +150,8 @@ public class SpaceConverter {
                 additionalService,
                 imageURL,
                 space.getGrade(),
-                minRentalFee
+                minRentalFee,
+                null
         );
     }
 
@@ -163,4 +162,11 @@ public class SpaceConverter {
                 .build();
     }
 
+
+    public SpaceResponseDTO.SpaceSummaryDTO toSpaceDTOWithPreference(Space space, Long performerId) {
+        SpaceResponseDTO.SpaceSummaryDTO dto = toSpaceDTO(space);
+        Boolean isPreferred = spaceRepository.isSpacePreferredByUser(space.getId(), performerId);
+        dto.setIsPreferred(isPreferred);
+        return dto;
+    }
 }

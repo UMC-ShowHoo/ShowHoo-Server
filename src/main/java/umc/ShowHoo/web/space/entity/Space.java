@@ -11,6 +11,7 @@ import umc.ShowHoo.web.spacePhoto.entity.SpacePhoto;
 import umc.ShowHoo.web.spacePrefer.entity.SpacePrefer;
 import umc.ShowHoo.web.spaceReview.entity.SpaceReview;
 import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
+
 import java.util.List;
 
 @Entity
@@ -39,6 +40,8 @@ public class Space extends BaseEntity {
 
     private String notice; // 유의사항
     private Double grade; // 평점
+    @Enumerated(EnumType.STRING)
+    private SpaceType spaceType; // 공연장 종류
 
     @ManyToOne
     @JoinColumn(name = "space_user_id")
