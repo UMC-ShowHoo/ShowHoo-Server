@@ -62,45 +62,51 @@ public class SpaceService {
         String spaceSeatUrl = spaceSeat != null ? amazonS3Manager.uploadFile("spaceRegister/" + UUID.randomUUID().toString(), spaceSeat) : null;
 
 
-        Space space = SpaceConverter.toEntity(dto, soundEquipmentUrl, lightingEquipmentUrl, stageMachineryUrl, spaceDrawingUrl, spaceStaffUrl, spaceSeatUrl, spaceUser);
-        Space savedSpace = spaceRepository.save(space);
+        Space space = SpaceConverter.toEntity(dto, soundEquipmentUrl, lightingEquipmentUrl,
+                stageMachineryUrl, spaceDrawingUrl,
+                spaceStaffUrl, spaceSeatUrl, spaceUser);
 
-        if (dto.getPhotoUrls() != null) {
-            List<SpacePhoto> photos = dto.getPhotoUrls().stream()
-                    .map(url -> SpacePhoto.builder().photoUrl(url).space(savedSpace).build())
-                    .collect(Collectors.toList());
-            spacePhotoRepository.saveAll(photos);
-        }
+        return spaceRepository.save(space);
 
-        if (dto.getHolidays() != null) {
-            List<Holiday> holidays = dto.getHolidays().stream()
-                    .map(date -> Holiday.builder().date(date).space(savedSpace).build())
-                    .collect(Collectors.toList());
-            holidayRepository.saveAll(holidays);
-        }
+//        Space space = SpaceConverter.toEntity(dto, soundEquipmentUrl, lightingEquipmentUrl, stageMachineryUrl, spaceDrawingUrl, spaceStaffUrl, spaceSeatUrl, spaceUser);
+//        Space savedSpace = spaceRepository.save(space);
 
-        if (space.getAdditionalServices() != null) {
-            for (SpaceAdditionalService service : space.getAdditionalServices()) {
-                service.setSpace(savedSpace);
-                spaceAdditionalServiceRepository.save(service);
-            }
-        }
-
-        if (space.getRentalFees() != null) {
-            for (RentalFee rentalFee : space.getRentalFees()) {
-                rentalFee.setSpace(savedSpace);
-                rentalFeeRepository.save(rentalFee);
-            }
-        }
-
-        if (space.getPeakSeasonRentalFees() != null){
-            for (PeakSeasonRentalFee peakSeasonRentalFee : space.getPeakSeasonRentalFees()){
-                peakSeasonRentalFee.setSpace(savedSpace);
-                peakSeasonRentalFeeRepository.save(peakSeasonRentalFee);
-            }
-        }
-
-        return savedSpace;
+//        if (dto.getPhotoUrls() != null) {
+//            List<SpacePhoto> photos = dto.getPhotoUrls().stream()
+//                    .map(url -> SpacePhoto.builder().photoUrl(url).space(savedSpace).build())
+//                    .collect(Collectors.toList());
+//            spacePhotoRepository.saveAll(photos);
+//        }
+//
+//        if (dto.getHolidays() != null) {
+//            List<Holiday> holidays = dto.getHolidays().stream()
+//                    .map(date -> Holiday.builder().date(date).space(savedSpace).build())
+//                    .collect(Collectors.toList());
+//            holidayRepository.saveAll(holidays);
+//        }
+//
+//        if (space.getAdditionalServices() != null) {
+//            for (SpaceAdditionalService service : space.getAdditionalServices()) {
+//                service.setSpace(savedSpace);
+//                spaceAdditionalServiceRepository.save(service);
+//            }
+//        }
+//
+//        if (space.getRentalFees() != null) {
+//            for (RentalFee rentalFee : space.getRentalFees()) {
+//                rentalFee.setSpace(savedSpace);
+//                rentalFeeRepository.save(rentalFee);
+//            }
+//        }
+//
+//        if (space.getPeakSeasonRentalFees() != null){
+//            for (PeakSeasonRentalFee peakSeasonRentalFee : space.getPeakSeasonRentalFees()){
+//                peakSeasonRentalFee.setSpace(savedSpace);
+//                peakSeasonRentalFeeRepository.save(peakSeasonRentalFee);
+//            }
+//        }
+//
+//        return savedSpace;
     }
 
     @Transactional
