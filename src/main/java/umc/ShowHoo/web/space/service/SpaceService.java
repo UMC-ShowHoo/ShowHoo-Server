@@ -73,7 +73,7 @@ public class SpaceService {
         return savedSpace;
     }
 
-
+    @Transactional
     public SpaceResponseDTO.SpaceDescriptionDTO getSpaceDescriptionBySpaceUserId(Long spaceUserId) {
         Space space = spaceRepository.findById(spaceUserId)
                 .orElseThrow(() -> new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND));

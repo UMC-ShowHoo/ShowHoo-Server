@@ -2,6 +2,7 @@ package umc.ShowHoo.web.rentalFile.controller;
 
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,9 @@ public class RentalFileController {
             @RequestPart(required = false)MultipartFile rentalTime,
             @RequestPart(required = false)MultipartFile addOrder){
         Optional<Shows> optionalShows =showsRepository.findById((showId));
-
+        Shows shows=optionalShows.orElse(null);
+        if (shows==null){
+            return
+        }
     }
 }
