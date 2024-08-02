@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
 import umc.ShowHoo.aws.s3.AmazonS3Manager;
+import umc.ShowHoo.web.peakSeasonRentalFee.entity.PeakSeasonRentalFee;
+import umc.ShowHoo.web.peakSeasonRentalFee.repository.PeakSeasonRentalFeeRepository;
 import umc.ShowHoo.web.rentalFee.entity.RentalFee;
 import umc.ShowHoo.web.rentalFee.repository.RentalFeeRepository;
 import umc.ShowHoo.web.space.converter.SpaceConverter;
@@ -33,6 +35,7 @@ public class SpaceService {
     private final SpaceRepository spaceRepository;
     private final SpacePhotoRepository spacePhotoRepository;
     private final RentalFeeRepository rentalFeeRepository;
+    private final PeakSeasonRentalFeeRepository peakSeasonRentalFeeRepository;
     private final SpaceAdditionalServiceRepository spaceAdditionalServiceRepository;
     private final AmazonS3Manager amazonS3Manager;
 
@@ -40,7 +43,14 @@ public class SpaceService {
     private SpaceConverter spaceConverter;
 
     @Transactional
-    public Space saveSpace(SpaceRequestDTO.SpaceRegisterRequestDTO dto, SpaceUser spaceUser, MultipartFile soundEquipment, MultipartFile lightingEquipment, MultipartFile stageMachinery, MultipartFile spaceDrawing, MultipartFile spaceStaff, MultipartFile spaceSeat) {
+    public Space saveSpace(
+            SpaceRequestDTO.SpaceRegisterRequestDTO dto,
+            SpaceUser spaceUser, MultipartFile soundEquipment,
+            MultipartFile lightingEquipment,
+            MultipartFile stageMachinery,
+            MultipartFile spaceDrawing,
+            MultipartFile spaceStaff,
+            MultipartFile spaceSeat) {
         String soundEquipmentUrl = soundEquipment != null ? amazonS3Manager.uploadFile("spaceRegister/" + UUID.randomUUID().toString(), soundEquipment) : null;
         String lightingEquipmentUrl = lightingEquipment != null ? amazonS3Manager.uploadFile("spaceRegister/" + UUID.randomUUID().toString(), lightingEquipment) : null;
         String stageMachineryUrl = stageMachinery != null ? amazonS3Manager.uploadFile("spaceRegister/" + UUID.randomUUID().toString(), stageMachinery) : null;
@@ -70,6 +80,13 @@ public class SpaceService {
             for (RentalFee rentalFee : space.getRentalFees()) {
                 rentalFee.setSpace(savedSpace);
                 rentalFeeRepository.save(rentalFee);
+            }
+        }
+
+        if (space.getPeakSeasonRentalFees() != null){
+            for (PeakSeasonRentalFee peakSeasonRentalFee : space.getPeakSeasonRentalFees()){
+                peakSeasonRentalFee.setSpace(savedSpace);
+                peakSeasonRentalFeeRepository.save(peakSeasonRentalFee);
             }
         }
 

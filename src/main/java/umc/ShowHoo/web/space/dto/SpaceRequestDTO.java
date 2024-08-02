@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
+import umc.ShowHoo.web.peakSeasonRentalFee.dto.PeakSeasonRentalFeeRequestDTO;
 import umc.ShowHoo.web.rentalFee.dto.RentalFeeRequestDTO;
 import umc.ShowHoo.web.spaceAdditionalService.dto.SpaceAdditionalServiceRequestDTO;
 import umc.ShowHoo.web.space.entity.SpaceType;
@@ -34,6 +35,7 @@ public class SpaceRequestDTO {
         private String bankOwner;
         private List<String> photoUrls;
         private List<RentalFeeRequestDTO> rentalFees;
+        private List<PeakSeasonRentalFeeRequestDTO> peakSeasonRentalFees;
         private List<SpaceAdditionalServiceRequestDTO> additionalServices;
     }
 

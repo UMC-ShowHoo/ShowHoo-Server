@@ -2,6 +2,7 @@ package umc.ShowHoo.web.space.converter;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import umc.ShowHoo.web.peakSeasonRentalFee.entity.PeakSeasonRentalFee;
 import umc.ShowHoo.web.rentalFee.entity.DayOfWeek;
 import umc.ShowHoo.web.rentalFee.entity.RentalFee;
 import umc.ShowHoo.web.space.dto.SpaceRequestDTO;
@@ -60,6 +61,15 @@ public class SpaceConverter {
                         .build())
                 .collect(Collectors.toList());
         space.setRentalFees(rentalFees);
+
+        List<PeakSeasonRentalFee> peakSeasonRentalFees = dto.getPeakSeasonRentalFees().stream()
+                .map(peakfeeDTO -> PeakSeasonRentalFee.builder()
+                        .dayOfWeek(DayOfWeek.valueOf(peakfeeDTO.getDayOfWeek()))
+                        .fee(peakfeeDTO.getFee())
+                        .space(space)
+                        .build())
+                .collect(Collectors.toList());
+        space.setPeakSeasonRentalFees(peakSeasonRentalFees);
 
         List<SpaceAdditionalService> additionalServices = dto.getAdditionalServices().stream()
                 .map(serviceDTO -> SpaceAdditionalService.builder()
