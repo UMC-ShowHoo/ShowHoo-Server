@@ -29,6 +29,9 @@ public class SpaceRequestDTO {
         private Integer seatingCapacity;
         private Integer standingCapacity;
         private String notice;
+        private String bankName;
+        private String bankAccount;
+        private String bankOwner;
         private List<String> photoUrls;
         private List<RentalFeeRequestDTO> rentalFees;
         private List<SpaceAdditionalServiceRequestDTO> additionalServices;

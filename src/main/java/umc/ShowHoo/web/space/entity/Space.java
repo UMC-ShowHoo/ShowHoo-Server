@@ -36,7 +36,9 @@ public class Space extends BaseEntity {
     private String spaceDrawing; //공연장 도면 -사진
     private String spaceStaff; //공연장 인력 가이드 -사진
     private String spaceSeat; //좌석 배치도 -사진
-
+    private String bankName; //은행명
+    private String bankAccount; //계좌번호
+    private String bankOwner; //예금주
     private String notice; // 유의사항
     private Double grade; // 평점
     @Enumerated(EnumType.STRING)
