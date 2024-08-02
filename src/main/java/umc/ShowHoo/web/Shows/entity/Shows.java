@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import umc.ShowHoo.web.showsPrefer.entity.ShowsPrefer;
 
 
 @Entity
@@ -43,4 +44,7 @@ public class Shows {
 
     @OneToMany(mappedBy = "shows", cascade = CascadeType.ALL)
     private List<Book> bookList;
+
+    @OneToMany(mappedBy = "shows", cascade = CascadeType.ALL)
+    private List<ShowsPrefer> preferList;
 }
