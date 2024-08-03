@@ -44,17 +44,22 @@ public class PerformerProfileController {
 
 
 
-    @PostMapping(value = "/profile/{performerUserId}",consumes = "multipart/form-data")
+    @PostMapping(value = "/profile/{performerUserId}")
+    @Parameter(
+            in = ParameterIn.HEADER,
+            name = "Authorization", required = true,
+            schema = @Schema(type = "string"),
+            description = "Bearer [Access 토큰]"
+    )
     @Operation(summary = "공연자 프로필 등록 API", description = "공연자가 프로필을 등록할 때 필요한 API입니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
     public ApiResponse<Void> createProfile(
             @PathVariable("performerUserId") Long performerUserId,
-            @RequestPart("profileDTO") PerformerProfileRequestDTO.CreateProfileDTO profileDTO,
-            @RequestPart(required = false) List<MultipartFile> profileImages){
+            @RequestBody PerformerProfileRequestDTO.CreateProfileDTO profileDTO){
 
-        performerProfileService.createProfile(performerUserId, profileDTO, profileImages);
+        performerProfileService.createProfile(performerUserId, profileDTO);
         return ApiResponse.onSuccess(null);
     }
 
