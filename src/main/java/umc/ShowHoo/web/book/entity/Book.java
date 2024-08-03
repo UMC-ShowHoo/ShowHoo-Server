@@ -31,6 +31,8 @@ public class Book extends BaseEntity {
 
     private Integer ticketNum;
 
+    private String payment;
+
     @Enumerated(EnumType.STRING)
     @Builder.Default
     @Column(columnDefinition = "VARCHAR(15) DEFAULT 'BOOK'")
