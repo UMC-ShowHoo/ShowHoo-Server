@@ -21,7 +21,7 @@ public class Audience {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @OneToMany(mappedBy = "audience", cascade = CascadeType.ALL)

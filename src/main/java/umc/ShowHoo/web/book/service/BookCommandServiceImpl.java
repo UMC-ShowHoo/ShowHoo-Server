@@ -19,6 +19,7 @@ import umc.ShowHoo.web.book.entity.BookStatus;
 import umc.ShowHoo.web.book.repository.BookRepository;
 import umc.ShowHoo.web.cancelBook.entity.CancelBook;
 import umc.ShowHoo.web.cancelBook.repository.CancelBookRepository;
+import umc.ShowHoo.web.notification.service.NotificationService;
 
 import java.util.List;
 
@@ -34,6 +35,7 @@ public class BookCommandServiceImpl implements BookCommandService {
     private final ShowsRepository showsRepository;
 
     private final CancelBookRepository cancelBookRepository;
+    private final NotificationService notificationService;
 
     public Book postBook(BookRequestDTO.postDTO request) {
         Audience audience = audienceRepository.findById(request.getAudienceId())
@@ -84,6 +86,9 @@ public class BookCommandServiceImpl implements BookCommandService {
         }
 
         book.setDetail(BookDetail.CONFIRMED);
+
+        notificationService.createBookConfirmNotification(book); // 알림 생성
+
         return bookRepository.save(book);
     }
 
