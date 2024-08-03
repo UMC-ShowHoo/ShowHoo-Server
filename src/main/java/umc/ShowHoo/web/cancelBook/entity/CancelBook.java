@@ -25,7 +25,7 @@ public class CancelBook extends BaseEntity {
 
     private String reason;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "book_id")
     private Book book;
 

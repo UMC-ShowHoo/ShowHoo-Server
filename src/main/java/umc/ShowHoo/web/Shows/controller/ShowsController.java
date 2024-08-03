@@ -10,13 +10,11 @@ import umc.ShowHoo.web.Shows.converter.ShowsConverter;
 import umc.ShowHoo.web.Shows.dto.ShowsRequestDTO;
 import umc.ShowHoo.web.Shows.dto.ShowsResponseDTO;
 import umc.ShowHoo.web.Shows.entity.Shows;
-import umc.ShowHoo.web.Shows.repository.ShowsRepository;
 import umc.ShowHoo.web.Shows.service.ShowsService;
 
 @RestController
 @RequiredArgsConstructor
 public class ShowsController {
-    private final ShowsRepository showsRepository;
     private final ShowsService showsService;
 
     @PostMapping(value="/performer/{showId}/register",consumes = "multipart/form-data")
@@ -47,5 +45,7 @@ public class ShowsController {
         ShowsResponseDTO.ShowRequirementDTO showRequirement = showsService.getShowRequirement(showId);
         return ApiResponse.onSuccess(showRequirement);
     }
+
+
 
 }

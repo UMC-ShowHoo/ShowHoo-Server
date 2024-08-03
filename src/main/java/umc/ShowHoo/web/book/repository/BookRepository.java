@@ -2,10 +2,10 @@ package umc.ShowHoo.web.book.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import umc.ShowHoo.web.Shows.entity.Shows;
 import umc.ShowHoo.web.audience.entity.Audience;
 import umc.ShowHoo.web.book.entity.Book;
@@ -13,8 +13,8 @@ import umc.ShowHoo.web.book.entity.BookDetail;
 import umc.ShowHoo.web.book.entity.BookStatus;
 
 import java.util.List;
-import java.util.Optional;
 
+@Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
     Page<Book> findAllByAudienceAndStatus(Audience audience, BookStatus status, PageRequest pageRequest);
@@ -23,4 +23,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findAllByAudienceAndDetailOrderByShowsDateAsc(@Param("audience") Audience audience, @Param("detail") BookDetail detail);
 
     List<Book> findAllByAudienceAndShows(Audience audience, Shows shows);
+
+    List<Book> findAllByShowsAndDetail(Shows shows,BookDetail detail);
 }
