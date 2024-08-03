@@ -3,6 +3,8 @@ package umc.ShowHoo.web.space.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import umc.ShowHoo.web.common.BaseEntity;
+import umc.ShowHoo.web.holiday.entity.Holiday;
+import umc.ShowHoo.web.peakSeasonRentalFee.entity.PeakSeasonRentalFee;
 import umc.ShowHoo.web.rentalFee.entity.RentalFee;
 import umc.ShowHoo.web.rentalFile.entity.RentalFile;
 import umc.ShowHoo.web.spaceAdditionalService.entity.SpaceAdditionalService;
@@ -37,7 +39,9 @@ public class Space extends BaseEntity {
     private String spaceDrawing; //공연장 도면 -사진
     private String spaceStaff; //공연장 인력 가이드 -사진
     private String spaceSeat; //좌석 배치도 -사진
-
+    private String bankName; //은행명
+    private String bankAccount; //계좌번호
+    private String bankOwner; //예금주
     private String notice; // 유의사항
     private Double grade; // 평점
     @Enumerated(EnumType.STRING)
@@ -55,6 +59,12 @@ public class Space extends BaseEntity {
     private List<RentalFee> rentalFees;
 
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
+    private List<PeakSeasonRentalFee> peakSeasonRentalFees;
+
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
+    private List<Holiday> holidays;
+
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
     private List<SpaceAdditionalService> AdditionalServices;
 
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
@@ -68,5 +78,7 @@ public class Space extends BaseEntity {
 
     @OneToOne(mappedBy = "space")
     private RentalFile rentalFile;
+
+
 
 }

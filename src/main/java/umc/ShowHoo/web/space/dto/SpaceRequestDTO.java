@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
+import umc.ShowHoo.web.peakSeasonRentalFee.dto.PeakSeasonRentalFeeRequestDTO;
 import umc.ShowHoo.web.rentalFee.dto.RentalFeeRequestDTO;
 import umc.ShowHoo.web.spaceAdditionalService.dto.SpaceAdditionalServiceRequestDTO;
 import umc.ShowHoo.web.space.entity.SpaceType;
@@ -28,16 +29,14 @@ public class SpaceRequestDTO {
         private String area;
         private Integer seatingCapacity;
         private Integer standingCapacity;
-//        private MultipartFile soundEquipment;
-//        private MultipartFile lightingEquipment;
-//        private MultipartFile stageMachinery;
-//        private MultipartFile spaceDrawing;
-//        private MultipartFile spaceStaff;
-//        private MultipartFile spaceSeat;
         private String notice;
-        private Double grade;
-//        private List<MultipartFile> photos;
+        private String bankName;
+        private String bankAccount;
+        private String bankOwner;
+        private List<String> photoUrls;
+        private List<LocalDate> holidays;
         private List<RentalFeeRequestDTO> rentalFees;
+        private List<PeakSeasonRentalFeeRequestDTO> peakSeasonRentalFees;
         private List<SpaceAdditionalServiceRequestDTO> additionalServices;
     }
 

@@ -36,8 +36,8 @@ public class SpaceController {
     private final SpaceUserRepository spaceUserRepository;
     private final RentalFeeService rentalFeeService;
 
-    @PostMapping(value = "/spaces/{spaceUserId}")
-    @Operation(summary = "공연장 등록 API", description = "공연장 등록할 때 필요한 API입니다.")
+    @PostMapping(value = "/spaces/{spaceUserId}", consumes = "multipart/form-data")
+    @Operation(summary = "공연장 등록 API", description = "공연장 등록할 때 필요한 API입니다. 사진을 등록했을 때 반환받았던 url값을 photoUrls에 넣어주시면 되고 rentalFee는 비성수기 대관료, peakSeasonRentalFee는 성수기 대관료입니다. dayOfWeek에는 MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY 중에 해당하는 요일, fee에는 가격 넣어주시면 됩니다. 월~일까지 모든 요일의 가격을 보내주셔야 합니다.")
     @Parameter(
             in = ParameterIn.HEADER,
             name = "Authorization", required = true,
@@ -55,8 +55,7 @@ public class SpaceController {
             @RequestPart(required = false) MultipartFile stageMachinery,
             @RequestPart(required = false) MultipartFile spaceDrawing,
             @RequestPart(required = false) MultipartFile spaceStaff,
-            @RequestPart(required = false) MultipartFile spaceSeat,
-            @RequestPart(required = false) List<MultipartFile> photos) {
+            @RequestPart(required = false) MultipartFile spaceSeat) {
         try {
             // spaceUserId로 SpaceUser 조회
             Optional<SpaceUser> optionalSpaceUser = spaceUserRepository.findById(spaceUserId);
@@ -66,7 +65,7 @@ public class SpaceController {
             }
 
             // Space 저장
-            Space savedSpace = spaceService.saveSpace(spaceRegisterRequestDTO, spaceUser, soundEquipment, lightingEquipment, stageMachinery, spaceDrawing, spaceStaff, spaceSeat, photos);
+            Space savedSpace = spaceService.saveSpace(spaceRegisterRequestDTO, spaceUser, soundEquipment, lightingEquipment, stageMachinery, spaceDrawing, spaceStaff, spaceSeat);
             SpaceResponseDTO.ResultDTO result = SpaceConverter.toSpaceResponseDTO(savedSpace);
 
             return ApiResponse.onSuccess(result);
@@ -80,45 +79,61 @@ public class SpaceController {
         }
     }
 
-    @GetMapping("/spaces/{spaceUserId}/description")
+    @GetMapping("/spaces/{spaceId}/description")
     @Operation(summary = "공연장 세부정보 공연장 소개 API", description = "공연장 세부정보를 조회할 때 공연장 소개에 필요한 API입니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
-    public ApiResponse<SpaceResponseDTO.SpaceDescriptionDTO> getSpaceDescription(@PathVariable Long spaceUserId) {
-        SpaceResponseDTO.SpaceDescriptionDTO spaceDescription = spaceService.getSpaceDescriptionBySpaceUserId(spaceUserId);
+    public ApiResponse<SpaceResponseDTO.SpaceDescriptionDTO> getSpaceDescription(@PathVariable Long spaceId) {
+        SpaceResponseDTO.SpaceDescriptionDTO spaceDescription = spaceService.getSpaceDescriptionBySpaceUserId(spaceId);
         return ApiResponse.onSuccess(spaceDescription);
 
     }
 
-    @GetMapping("/spaces/{spaceUserId}/notice")
+    @GetMapping("/spaces/{spaceId}/notice")
     @Operation(summary = "공연장 세부정보 유의사항 API", description = "공연장 세부정보를 조회할 때 유의사항에 필요한 API입니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
-    public ApiResponse<SpaceResponseDTO.SpaceNoticeDTO> getSpaceNotice(@PathVariable Long spaceUserId) {
-        SpaceResponseDTO.SpaceNoticeDTO spaceNotice = spaceService.getSpaceNotice(spaceUserId);
+    public ApiResponse<SpaceResponseDTO.SpaceNoticeDTO> getSpaceNotice(@PathVariable Long spaceId) {
+        SpaceResponseDTO.SpaceNoticeDTO spaceNotice = spaceService.getSpaceNotice(spaceId);
         return ApiResponse.onSuccess(spaceNotice);
 
     }
 
-    @GetMapping("/spaces/{spaceUserId}/file")
+    @GetMapping("/spaces/{spaceId}/file")
     @Operation(summary = "공연장 세부정보 시설정보 API", description = "공연장 세부정보를 조회할 때 시설정보에 필요한 API입니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
-    public ApiResponse<SpaceResponseDTO.SpaceFileDTO> getSpaceFile(@PathVariable Long spaceUserId) {
-        SpaceResponseDTO.SpaceFileDTO spaceFileDTO = spaceService.getSpaceFile(spaceUserId);
+    public ApiResponse<SpaceResponseDTO.SpaceFileDTO> getSpaceFile(@PathVariable Long spaceId) {
+        SpaceResponseDTO.SpaceFileDTO spaceFileDTO = spaceService.getSpaceFile(spaceId);
         return ApiResponse.onSuccess(spaceFileDTO);
     }
 
-    @PostMapping("/spaces/{spaceUserId}/price")
+    @GetMapping("spaces/{spaceId}/pay")
+    @Operation(summary = "공연장 대관 신청하기 - 결제하기 API", description = "공연장 대관 신청하기 - 결제하기에 필요한 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
+    })
+    @Parameter(
+            in = ParameterIn.HEADER,
+            name = "Authorization", required = true,
+            schema = @Schema(type = "string"),
+            description = "Bearer [Access 토큰]"
+    )
+    public ApiResponse<SpaceResponseDTO.SpacePayDTO> getSpacePay(@PathVariable Long spaceId) {
+        SpaceResponseDTO.SpacePayDTO spacePayDTO = spaceService.getSpacePay(spaceId);
+        return ApiResponse.onSuccess(spacePayDTO);
+    }
+
+    @PostMapping("/spaces/{spaceId}/price")
     @Operation(summary = "공연장 세부정보 가격 API", description = "공연장 세부정보 조회할 때 예약 날짜와 추가서비스를 받는 API입니다. 요일마다, 추가서비스를 추가할때마다 가격이 달라서 날짜를 선택하고 추가서비스를 선택한 후 대관비가 응답으로 나옵니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
-    public ApiResponse<SpaceResponseDTO.SpacePriceDTO> getSpaceDate(@PathVariable Long spaceUserId, @RequestBody SpaceRequestDTO.SpacePriceDTO spacePriceDTO) {
-        SpaceResponseDTO.SpacePriceDTO spacePrice = rentalFeeService.getSpaceDate(spaceUserId, spacePriceDTO.getDate(), spacePriceDTO.getAdditionalServices());
+    public ApiResponse<SpaceResponseDTO.SpacePriceResponseDTO> getSpaceDate(@PathVariable Long spaceId, @RequestBody SpaceRequestDTO.SpacePriceDTO spacePriceDTO) {
+        SpaceResponseDTO.SpacePriceResponseDTO spacePrice = rentalFeeService.getSpaceDate(spaceId, spacePriceDTO.getDate(), spacePriceDTO.getAdditionalServices());
         return ApiResponse.onSuccess(spacePrice);
     }
 
