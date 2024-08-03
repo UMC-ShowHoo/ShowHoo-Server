@@ -84,7 +84,7 @@ public class PerformerProfileService {
         log.info("Deleted image from DB: {}", profileImage.getId());
     }
 
-    public void addProfileImage(Long performerUserId, Long profileId, PerformerProfileRequestDTO.AddProfileImageDTO requestDTO) {
+    public String addProfileImage(Long performerUserId, Long profileId, PerformerProfileRequestDTO.AddProfileImageDTO requestDTO) {
         Performer performer = performerRepository.findById(performerUserId)
                 .orElseThrow(() -> new IllegalArgumentException("Performer not found"));
 
@@ -106,6 +106,7 @@ public class PerformerProfileService {
 
         profileImageRepository.save(profileImage);
         log.info("Added new image to profile ID {}: {}", profileId, imageUrl);
+        return imageUrl;
     }
 
     public void deleteProfile(Long performerUserId, Long profileId) {

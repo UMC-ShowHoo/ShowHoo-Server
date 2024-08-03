@@ -78,7 +78,7 @@ public class PerformerProfileController {
     }
 
     @DeleteMapping("/profile/profileImage")
-    @Operation(summary = "공연자 프로필 이미지 수정할 때 이미지 삭제 API", description = "공연자 프로필 수정할 때 프로필 이미지를 삭제하는 API입니다.")
+    @Operation(summary = "공연자 프로필 이미지 수정 - 이미지 삭제 API", description = "공연자 프로필 수정할 때 프로필 이미지를 삭제하는 API입니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
@@ -88,15 +88,15 @@ public class PerformerProfileController {
     }
 
     @PostMapping(value = "/profile/{performerUserId}/{profileId}/profileImage" ,consumes = "multipart/form-data")
-    @Operation(summary = "공연자 프로필 이미지 수정할 때 이미지 추가 API", description = "공연자 프로필 수정할 때 프로필 이미지를 추가하는 API입니다.")
+    @Operation(summary = "공연자 프로필 이미지 수정 - 이미지 추가 API", description = "공연자 프로필 수정할 때 프로필 이미지를 추가하는 API입니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
-    public ApiResponse<Void> addProfileImage(@PathVariable Long performerUserId,
+    public ApiResponse<String> addProfileImage(@PathVariable Long performerUserId,
                                              @PathVariable Long profileId,
                                              @ModelAttribute PerformerProfileRequestDTO.AddProfileImageDTO requestDTO) {
-        performerProfileService.addProfileImage(performerUserId, profileId, requestDTO);
-        return ApiResponse.onSuccess(null);
+        String imageUrl = performerProfileService.addProfileImage(performerUserId, profileId, requestDTO);
+        return ApiResponse.onSuccess(imageUrl);
     }
 
     @DeleteMapping("/profile/{performerUserId}/{profileId}")
