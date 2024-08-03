@@ -9,6 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
 import umc.ShowHoo.aws.s3.AmazonS3Manager;
+import umc.ShowHoo.web.holiday.entity.Holiday;
+import umc.ShowHoo.web.holiday.repository.HolidayRepository;
+import umc.ShowHoo.web.peakSeasonRentalFee.entity.PeakSeasonRentalFee;
+import umc.ShowHoo.web.peakSeasonRentalFee.repository.PeakSeasonRentalFeeRepository;
 import umc.ShowHoo.web.rentalFee.entity.RentalFee;
 import umc.ShowHoo.web.rentalFee.repository.RentalFeeRepository;
 import umc.ShowHoo.web.space.converter.SpaceConverter;
@@ -32,7 +36,9 @@ import java.util.stream.Collectors;
 public class SpaceService {
     private final SpaceRepository spaceRepository;
     private final SpacePhotoRepository spacePhotoRepository;
+    private final HolidayRepository holidayRepository;
     private final RentalFeeRepository rentalFeeRepository;
+    private final PeakSeasonRentalFeeRepository peakSeasonRentalFeeRepository;
     private final SpaceAdditionalServiceRepository spaceAdditionalServiceRepository;
     private final AmazonS3Manager amazonS3Manager;
 
@@ -40,7 +46,14 @@ public class SpaceService {
     private SpaceConverter spaceConverter;
 
     @Transactional
-    public Space saveSpace(SpaceRequestDTO.SpaceRegisterRequestDTO dto, SpaceUser spaceUser, MultipartFile soundEquipment, MultipartFile lightingEquipment, MultipartFile stageMachinery, MultipartFile spaceDrawing, MultipartFile spaceStaff, MultipartFile spaceSeat, List<MultipartFile> photos) {
+    public Space saveSpace(
+            SpaceRequestDTO.SpaceRegisterRequestDTO dto,
+            SpaceUser spaceUser, MultipartFile soundEquipment,
+            MultipartFile lightingEquipment,
+            MultipartFile stageMachinery,
+            MultipartFile spaceDrawing,
+            MultipartFile spaceStaff,
+            MultipartFile spaceSeat) {
         String soundEquipmentUrl = soundEquipment != null ? amazonS3Manager.uploadFile("spaceRegister/" + UUID.randomUUID().toString(), soundEquipment) : null;
         String lightingEquipmentUrl = lightingEquipment != null ? amazonS3Manager.uploadFile("spaceRegister/" + UUID.randomUUID().toString(), lightingEquipment) : null;
         String stageMachineryUrl = stageMachinery != null ? amazonS3Manager.uploadFile("spaceRegister/" + UUID.randomUUID().toString(), stageMachinery) : null;
@@ -48,54 +61,78 @@ public class SpaceService {
         String spaceStaffUrl = spaceStaff != null ? amazonS3Manager.uploadFile("spaceRegister/" + UUID.randomUUID().toString(), spaceStaff) : null;
         String spaceSeatUrl = spaceSeat != null ? amazonS3Manager.uploadFile("spaceRegister/" + UUID.randomUUID().toString(), spaceSeat) : null;
 
-        List<String> photoUrls = photos != null ? photos.stream().map(photo -> amazonS3Manager.uploadFile("photos/" + UUID.randomUUID().toString(), photo)).collect(Collectors.toList()) : List.of();
 
-        Space space = SpaceConverter.toEntity(dto, soundEquipmentUrl, lightingEquipmentUrl, stageMachineryUrl, spaceDrawingUrl, spaceStaffUrl, spaceSeatUrl, photoUrls, spaceUser);
-        Space savedSpace = spaceRepository.save(space);
+        Space space = SpaceConverter.toEntity(dto, soundEquipmentUrl, lightingEquipmentUrl,
+                stageMachineryUrl, spaceDrawingUrl,
+                spaceStaffUrl, spaceSeatUrl, spaceUser);
 
-        if (space.getAdditionalServices() != null) {
-            for (SpaceAdditionalService service : space.getAdditionalServices()) {
-                service.setSpace(savedSpace);
-                spaceAdditionalServiceRepository.save(service);
-            }
-        }
+        return spaceRepository.save(space);
 
-        if (space.getPhotos() != null) {
-            for (SpacePhoto photo : space.getPhotos()) {
-                photo.setSpace(savedSpace);
-                spacePhotoRepository.save(photo);
-            }
-        }
+//        Space space = SpaceConverter.toEntity(dto, soundEquipmentUrl, lightingEquipmentUrl, stageMachineryUrl, spaceDrawingUrl, spaceStaffUrl, spaceSeatUrl, spaceUser);
+//        Space savedSpace = spaceRepository.save(space);
 
-        if (space.getRentalFees() != null) {
-            for (RentalFee rentalFee : space.getRentalFees()) {
-                rentalFee.setSpace(savedSpace);
-                rentalFeeRepository.save(rentalFee);
-            }
-        }
-
-        return savedSpace;
+//        if (dto.getPhotoUrls() != null) {
+//            List<SpacePhoto> photos = dto.getPhotoUrls().stream()
+//                    .map(url -> SpacePhoto.builder().photoUrl(url).space(savedSpace).build())
+//                    .collect(Collectors.toList());
+//            spacePhotoRepository.saveAll(photos);
+//        }
+//
+//        if (dto.getHolidays() != null) {
+//            List<Holiday> holidays = dto.getHolidays().stream()
+//                    .map(date -> Holiday.builder().date(date).space(savedSpace).build())
+//                    .collect(Collectors.toList());
+//            holidayRepository.saveAll(holidays);
+//        }
+//
+//        if (space.getAdditionalServices() != null) {
+//            for (SpaceAdditionalService service : space.getAdditionalServices()) {
+//                service.setSpace(savedSpace);
+//                spaceAdditionalServiceRepository.save(service);
+//            }
+//        }
+//
+//        if (space.getRentalFees() != null) {
+//            for (RentalFee rentalFee : space.getRentalFees()) {
+//                rentalFee.setSpace(savedSpace);
+//                rentalFeeRepository.save(rentalFee);
+//            }
+//        }
+//
+//        if (space.getPeakSeasonRentalFees() != null){
+//            for (PeakSeasonRentalFee peakSeasonRentalFee : space.getPeakSeasonRentalFees()){
+//                peakSeasonRentalFee.setSpace(savedSpace);
+//                peakSeasonRentalFeeRepository.save(peakSeasonRentalFee);
+//            }
+//        }
+//
+//        return savedSpace;
     }
 
     @Transactional
-    public SpaceResponseDTO.SpaceDescriptionDTO getSpaceDescriptionBySpaceUserId(Long spaceUserId) {
-        Space space = spaceRepository.findById(spaceUserId)
+    public SpaceResponseDTO.SpaceDescriptionDTO getSpaceDescriptionBySpaceUserId(Long spaceId) {
+        Space space = spaceRepository.findById(spaceId)
                 .orElseThrow(() -> new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND));
         return SpaceConverter.toSpaceDescriptionDTO(space);
     }
 
-    public SpaceResponseDTO.SpaceNoticeDTO getSpaceNotice(Long spaceUserId) {
-        Space space = spaceRepository.findById(spaceUserId)
+    public SpaceResponseDTO.SpaceNoticeDTO getSpaceNotice(Long spaceId) {
+        Space space = spaceRepository.findById(spaceId)
                 .orElseThrow(() -> new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND));
         return SpaceConverter.toSpaceNoticeDTO(space);
     }
 
-    public SpaceResponseDTO.SpaceFileDTO getSpaceFile(Long spaceUserId) {
-        Space space = spaceRepository.findById(spaceUserId)
+    public SpaceResponseDTO.SpaceFileDTO getSpaceFile(Long spaceId) {
+        Space space = spaceRepository.findById(spaceId)
                 .orElseThrow(() -> new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND));
         return SpaceConverter.toSpaceFileDTO(space);
     }
 
+    public SpaceResponseDTO.SpacePayDTO getSpacePay(Long spaceId) {
+        Space space = spaceRepository.findById(spaceId)
+                .orElseThrow(() -> new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND));
+        return SpaceConverter.toSpacePayDTO(space);
+    }
     @Transactional
     public SpaceResponseDTO.SpaceListDTO getTopSpacesWithPreference(Long performerId) {
         Pageable pageable = PageRequest.of(0, 8);

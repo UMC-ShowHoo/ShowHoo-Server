@@ -2,6 +2,8 @@ package umc.ShowHoo.web.space.converter;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import umc.ShowHoo.web.holiday.entity.Holiday;
+import umc.ShowHoo.web.peakSeasonRentalFee.entity.PeakSeasonRentalFee;
 import umc.ShowHoo.web.rentalFee.entity.DayOfWeek;
 import umc.ShowHoo.web.rentalFee.entity.RentalFee;
 import umc.ShowHoo.web.space.dto.SpaceRequestDTO;
@@ -23,7 +25,7 @@ import java.util.stream.Collectors;
 public class SpaceConverter {
     private final SpaceRepository spaceRepository;
 
-    public static Space toEntity(SpaceRequestDTO.SpaceRegisterRequestDTO dto, String soundEquipmentUrl, String lightingEquipmentUrl, String stageMachineryUrl, String spaceDrawingUrl, String spaceStaffUrl, String spaceSeatUrl, List<String> photoUrls, SpaceUser spaceUser) {
+    public static Space toEntity(SpaceRequestDTO.SpaceRegisterRequestDTO dto, String soundEquipmentUrl, String lightingEquipmentUrl, String stageMachineryUrl, String spaceDrawingUrl, String spaceStaffUrl, String spaceSeatUrl, SpaceUser spaceUser) {
         Space space = Space.builder()
                 .name(dto.getName())
                 .description(dto.getDescription())
@@ -32,6 +34,9 @@ public class SpaceConverter {
                 .area(dto.getArea())
                 .seatingCapacity(dto.getSeatingCapacity())
                 .standingCapacity(dto.getStandingCapacity())
+                .bankOwner(dto.getBankOwner())
+                .bankAccount(dto.getBankAccount())
+                .bankName(dto.getBankName())
                 .soundEquipment(soundEquipmentUrl)
                 .lightingEquipment(lightingEquipmentUrl)
                 .stageMachinery(stageMachineryUrl)
@@ -39,14 +44,22 @@ public class SpaceConverter {
                 .spaceStaff(spaceStaffUrl)
                 .spaceSeat(spaceSeatUrl)
                 .notice(dto.getNotice())
-                .grade(dto.getGrade())
                 .spaceUser(spaceUser)
                 .build();
 
-        List<SpacePhoto> photos = photoUrls.stream()
-                .map(url -> SpacePhoto.builder().photoUrl(url).space(space).build())
-                .collect(Collectors.toList());
-        space.setPhotos(photos);
+        if (dto.getPhotoUrls() != null) {
+            List<SpacePhoto> photos = dto.getPhotoUrls().stream()
+                    .map(url -> SpacePhoto.builder().photoUrl(url).space(space).build())
+                    .collect(Collectors.toList());
+            space.setPhotos(photos);
+        }
+
+        if (dto.getHolidays() != null) {
+            List<Holiday> holidays = dto.getHolidays().stream()
+                    .map(date -> Holiday.builder().date(date).space(space).build())
+                    .collect(Collectors.toList());
+            space.setHolidays(holidays);
+        }
 
         List<RentalFee> rentalFees = dto.getRentalFees().stream()
                 .map(feeDTO -> RentalFee.builder()
@@ -56,6 +69,15 @@ public class SpaceConverter {
                         .build())
                 .collect(Collectors.toList());
         space.setRentalFees(rentalFees);
+
+        List<PeakSeasonRentalFee> peakSeasonRentalFees = dto.getPeakSeasonRentalFees().stream()
+                .map(peakfeeDTO -> PeakSeasonRentalFee.builder()
+                        .dayOfWeek(DayOfWeek.valueOf(peakfeeDTO.getDayOfWeek()))
+                        .fee(peakfeeDTO.getFee())
+                        .space(space)
+                        .build())
+                .collect(Collectors.toList());
+        space.setPeakSeasonRentalFees(peakSeasonRentalFees);
 
         List<SpaceAdditionalService> additionalServices = dto.getAdditionalServices().stream()
                 .map(serviceDTO -> SpaceAdditionalService.builder()
@@ -110,6 +132,14 @@ public class SpaceConverter {
                 .spaceDrawing(space.getSpaceDrawing())
                 .spaceStaff(space.getSpaceStaff())
                 .spaceSeat(space.getSpaceSeat())
+                .build();
+    }
+
+    public static SpaceResponseDTO.SpacePayDTO toSpacePayDTO(Space space) {
+        return SpaceResponseDTO.SpacePayDTO.builder()
+                .bankAccount(space.getBankAccount())
+                .bankName(space.getBankName())
+                .bankOwner(space.getBankOwner())
                 .build();
     }
 
