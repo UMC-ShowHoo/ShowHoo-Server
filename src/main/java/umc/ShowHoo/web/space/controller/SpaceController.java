@@ -116,8 +116,8 @@ public class SpaceController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
-    public ApiResponse<SpaceResponseDTO.SpacePriceDTO> getSpaceDate(@PathVariable Long spaceId, @RequestBody SpaceRequestDTO.SpacePriceDTO spacePriceDTO) {
-        SpaceResponseDTO.SpacePriceDTO spacePrice = rentalFeeService.getSpaceDate(spaceId, spacePriceDTO.getDate(), spacePriceDTO.getAdditionalServices());
+    public ApiResponse<SpaceResponseDTO.SpacePriceResponseDTO> getSpaceDate(@PathVariable Long spaceId, @RequestBody SpaceRequestDTO.SpacePriceDTO spacePriceDTO) {
+        SpaceResponseDTO.SpacePriceResponseDTO spacePrice = rentalFeeService.getSpaceDate(spaceId, spacePriceDTO.getDate(), spacePriceDTO.getAdditionalServices());
         return ApiResponse.onSuccess(spacePrice);
     }
 

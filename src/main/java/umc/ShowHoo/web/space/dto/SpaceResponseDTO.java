@@ -56,7 +56,7 @@ public class SpaceResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class SpacePriceDTO {
+    public static class SpacePriceResponseDTO {
         private Integer basePrice;
         private Integer additionalServicePrice;
         private Integer totalPrice;
