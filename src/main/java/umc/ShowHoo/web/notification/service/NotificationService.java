@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
 import umc.ShowHoo.apiPayload.exception.handler.AudienceHandler;
 import umc.ShowHoo.web.audience.repository.AudienceRepository;
+import umc.ShowHoo.web.book.entity.Book;
 import umc.ShowHoo.web.member.handler.MemberHandler;
 import umc.ShowHoo.web.notification.converter.NotificationConverter;
 import umc.ShowHoo.web.notification.dto.NotificationRequestDTO;
@@ -111,6 +112,20 @@ public class NotificationService {
         String message = String.format("%s이 회원님의 후기에 댓글을 남겼습니다.", spaceReview.getSpace().getName());
 
         NotificationRequestDTO.createNotificationDTO notification = notificationConverter.toCreateDTO(memberId, message, NotificationType.PERFORMER);
+
+        createNotification(notification);
+    }
+
+    @Transactional
+    public void createBookConfirmNotification(Book book){
+        // spaceUser의 memberId 가져오기
+        Long memberId = Optional.ofNullable(book.getAudience().getId())
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
+        // 알림 메시지
+        // shows 엔티티 수정 후 수정 필요
+        String message = String.format("%s이 회원님의 %s티켓을 승인하였습니다.", book.getShows().getPerformer().getMember().getName(),book.getShows().getName());
+
+        NotificationRequestDTO.createNotificationDTO notification = notificationConverter.toCreateDTO(memberId, message, NotificationType.AUDIENCE);
 
         createNotification(notification);
     }
