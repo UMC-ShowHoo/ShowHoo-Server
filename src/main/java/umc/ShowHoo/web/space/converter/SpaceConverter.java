@@ -135,6 +135,14 @@ public class SpaceConverter {
                 .build();
     }
 
+    public static SpaceResponseDTO.SpacePayDTO toSpacePayDTO(Space space) {
+        return SpaceResponseDTO.SpacePayDTO.builder()
+                .bankAccount(space.getBankAccount())
+                .bankName(space.getBankName())
+                .bankOwner(space.getBankOwner())
+                .build();
+    }
+
     public SpaceResponseDTO.SpaceListDTO toTopSpaceListDTO(List<Space> spacePreferList, List<Space> gradeList, Long performerId) {
         List<SpaceResponseDTO.SpaceSummaryDTO> spacePreferDTOList = spacePreferList.stream()
                 .map(space -> toSpaceDTOWithPreference(space, performerId))

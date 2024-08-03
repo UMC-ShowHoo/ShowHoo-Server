@@ -110,4 +110,16 @@ public class SpaceResponseDTO {
         String spaceStaff; //공연장 인력 가이드 -사진
         String spaceSeat; //좌석 배치도 -사진
     }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class SpacePayDTO {
+        String bankName;  //은행명
+        String bankAccount; //계좌번호
+        String bankOwner; //예금주
+
+    }
 }

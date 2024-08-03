@@ -79,36 +79,52 @@ public class SpaceController {
         }
     }
 
-    @GetMapping("/spaces/{spaceUserId}/description")
+    @GetMapping("/spaces/{spaceId}/description")
     @Operation(summary = "공연장 세부정보 공연장 소개 API", description = "공연장 세부정보를 조회할 때 공연장 소개에 필요한 API입니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
-    public ApiResponse<SpaceResponseDTO.SpaceDescriptionDTO> getSpaceDescription(@PathVariable Long spaceUserId) {
-        SpaceResponseDTO.SpaceDescriptionDTO spaceDescription = spaceService.getSpaceDescriptionBySpaceUserId(spaceUserId);
+    public ApiResponse<SpaceResponseDTO.SpaceDescriptionDTO> getSpaceDescription(@PathVariable Long spaceId) {
+        SpaceResponseDTO.SpaceDescriptionDTO spaceDescription = spaceService.getSpaceDescriptionBySpaceUserId(spaceId);
         return ApiResponse.onSuccess(spaceDescription);
 
     }
 
-    @GetMapping("/spaces/{spaceUserId}/notice")
+    @GetMapping("/spaces/{spaceId}/notice")
     @Operation(summary = "공연장 세부정보 유의사항 API", description = "공연장 세부정보를 조회할 때 유의사항에 필요한 API입니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
-    public ApiResponse<SpaceResponseDTO.SpaceNoticeDTO> getSpaceNotice(@PathVariable Long spaceUserId) {
-        SpaceResponseDTO.SpaceNoticeDTO spaceNotice = spaceService.getSpaceNotice(spaceUserId);
+    public ApiResponse<SpaceResponseDTO.SpaceNoticeDTO> getSpaceNotice(@PathVariable Long spaceId) {
+        SpaceResponseDTO.SpaceNoticeDTO spaceNotice = spaceService.getSpaceNotice(spaceId);
         return ApiResponse.onSuccess(spaceNotice);
 
     }
 
-    @GetMapping("/spaces/{spaceUserId}/file")
+    @GetMapping("/spaces/{spaceId}/file")
     @Operation(summary = "공연장 세부정보 시설정보 API", description = "공연장 세부정보를 조회할 때 시설정보에 필요한 API입니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
-    public ApiResponse<SpaceResponseDTO.SpaceFileDTO> getSpaceFile(@PathVariable Long spaceUserId) {
-        SpaceResponseDTO.SpaceFileDTO spaceFileDTO = spaceService.getSpaceFile(spaceUserId);
+    public ApiResponse<SpaceResponseDTO.SpaceFileDTO> getSpaceFile(@PathVariable Long spaceId) {
+        SpaceResponseDTO.SpaceFileDTO spaceFileDTO = spaceService.getSpaceFile(spaceId);
         return ApiResponse.onSuccess(spaceFileDTO);
+    }
+
+    @GetMapping("spaces/{spaceId}/pay")
+    @Operation(summary = "공연장 대관 신청하기 - 결제하기 API", description = "공연장 대관 신청하기 - 결제하기에 필요한 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
+    })
+    @Parameter(
+            in = ParameterIn.HEADER,
+            name = "Authorization", required = true,
+            schema = @Schema(type = "string"),
+            description = "Bearer [Access 토큰]"
+    )
+    public ApiResponse<SpaceResponseDTO.SpacePayDTO> getSpacePay(@PathVariable Long spaceId) {
+        SpaceResponseDTO.SpacePayDTO spacePayDTO = spaceService.getSpacePay(spaceId);
+        return ApiResponse.onSuccess(spacePayDTO);
     }
 
     @PostMapping("/spaces/{spaceId}/price")

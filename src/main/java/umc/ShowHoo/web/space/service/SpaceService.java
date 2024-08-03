@@ -110,24 +110,29 @@ public class SpaceService {
     }
 
     @Transactional
-    public SpaceResponseDTO.SpaceDescriptionDTO getSpaceDescriptionBySpaceUserId(Long spaceUserId) {
-        Space space = spaceRepository.findById(spaceUserId)
+    public SpaceResponseDTO.SpaceDescriptionDTO getSpaceDescriptionBySpaceUserId(Long spaceId) {
+        Space space = spaceRepository.findById(spaceId)
                 .orElseThrow(() -> new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND));
         return SpaceConverter.toSpaceDescriptionDTO(space);
     }
 
-    public SpaceResponseDTO.SpaceNoticeDTO getSpaceNotice(Long spaceUserId) {
-        Space space = spaceRepository.findById(spaceUserId)
+    public SpaceResponseDTO.SpaceNoticeDTO getSpaceNotice(Long spaceId) {
+        Space space = spaceRepository.findById(spaceId)
                 .orElseThrow(() -> new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND));
         return SpaceConverter.toSpaceNoticeDTO(space);
     }
 
-    public SpaceResponseDTO.SpaceFileDTO getSpaceFile(Long spaceUserId) {
-        Space space = spaceRepository.findById(spaceUserId)
+    public SpaceResponseDTO.SpaceFileDTO getSpaceFile(Long spaceId) {
+        Space space = spaceRepository.findById(spaceId)
                 .orElseThrow(() -> new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND));
         return SpaceConverter.toSpaceFileDTO(space);
     }
 
+    public SpaceResponseDTO.SpacePayDTO getSpacePay(Long spaceId) {
+        Space space = spaceRepository.findById(spaceId)
+                .orElseThrow(() -> new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND));
+        return SpaceConverter.toSpacePayDTO(space);
+    }
     @Transactional
     public SpaceResponseDTO.SpaceListDTO getTopSpacesWithPreference(Long performerId) {
         Pageable pageable = PageRequest.of(0, 8);
