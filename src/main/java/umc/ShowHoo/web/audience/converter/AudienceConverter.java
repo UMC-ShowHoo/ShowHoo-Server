@@ -22,6 +22,17 @@ public class AudienceConverter {
                 .build();
     }
 
+    public static AudienceResponseDTO.getShowsListDTO toGetLikedShowsListDTO(List<AudienceResponseDTO.getShowsDTO> showsList,Page<Shows> shows){
+        return AudienceResponseDTO.getShowsListDTO.builder()
+                .isFirst(shows.isFirst())
+                .isLast(shows.isLast())
+                .totalElements(shows.getTotalElements())
+                .totalPages(shows.getTotalPages())
+                .showsList(showsList)
+                .listSize(showsList.size())
+                .build();
+    }
+
     public static AudienceResponseDTO.getShowsDTO toGetShowsDTO(Shows shows){
         return AudienceResponseDTO.getShowsDTO.builder()
                 .showsId(shows.getId())
@@ -29,6 +40,18 @@ public class AudienceConverter {
                 .poster(shows.getPoster())
                 .date(shows.getDate())
                 .time(shows.getTime())
+                .isPreferred(false)
+                .build();
+    }
+
+    public static AudienceResponseDTO.getShowsDTO toGetLikedShowsDTO(Shows shows, boolean isPreferred){
+        return AudienceResponseDTO.getShowsDTO.builder()
+                .showsId(shows.getId())
+                .name(shows.getName())
+                .poster(shows.getPoster())
+                .date(shows.getDate())
+                .time(shows.getTime())
+                .isPreferred(isPreferred)
                 .build();
     }
 

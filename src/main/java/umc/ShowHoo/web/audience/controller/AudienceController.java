@@ -13,6 +13,8 @@ import umc.ShowHoo.web.audience.converter.AudienceConverter;
 import umc.ShowHoo.web.audience.dto.AudienceResponseDTO;
 import umc.ShowHoo.web.audience.service.AudienceQueryService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/aud")
 @RequiredArgsConstructor
@@ -31,7 +33,16 @@ public class AudienceController {
         return ApiResponse.onSuccess(AudienceConverter.toGetShowsListDTO(showsList));
     }
 
-    @GetMapping("/{showsId}")
+    @GetMapping("/{audienceId}")
+    @Operation(summary = "전체 공연게시글 조회 API", description = "공연게시글을 전체 조회하는 API, 관람자 별 찜 여부 확인 가능, 페이지 번호 필요")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+    })
+    public ApiResponse<AudienceResponseDTO.getShowsListDTO> getLikedShowsList(@PathVariable(name = "audienceId")Long id, @RequestParam(name = "page") Integer page){
+        return ApiResponse.onSuccess(audienceQueryService.getLikedShowsList(id, page));
+    }
+
+    @GetMapping("/{showsId}/detail")
     @Operation(summary = "상세 공연게시글 조회 API", description = "공연게시글의 상세정보를 조회하는 API")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
@@ -50,6 +61,15 @@ public class AudienceController {
     public ApiResponse<AudienceResponseDTO.getShowsListDTO> searchShows(@RequestParam(name = "page") Integer page, @RequestParam(name = "request") String request){
         Page<Shows> searchedList = audienceQueryService.getSearchedShowsList(page, request);
         return ApiResponse.onSuccess(AudienceConverter.toGetShowsListDTO(searchedList));
+    }
+
+    @GetMapping("/{audienceId}/search")
+    @Operation(summary = "공연게시글 검색 조회 API", description = "공연게시글의 제목으로 검색하여 조회하는 API, 관람자 별 찜 여부 확인 가능, 페이지 번호 필요")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+    })
+    public ApiResponse<AudienceResponseDTO.getShowsListDTO> searchLikedShows(@PathVariable(name = "audienceId") Long id, @RequestParam(name = "page") Integer page, @RequestParam(name = "request") String request){
+        return ApiResponse.onSuccess(audienceQueryService.getSearchedLikedShowsList(id, page, request));
     }
 
 }
