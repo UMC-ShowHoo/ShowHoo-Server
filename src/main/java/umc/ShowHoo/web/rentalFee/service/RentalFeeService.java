@@ -20,19 +20,19 @@ public class RentalFeeService {
     private final SpaceAdditionalServiceRepository spaceAdditionalServiceRepository;
 
 
-    public SpaceResponseDTO.SpacePriceDTO getSpaceDate(Long spaceUserId, LocalDate date, List<String> additionalServices) {
+    public SpaceResponseDTO.SpacePriceDTO getSpaceDate(Long spaceId, LocalDate date, List<String> additionalServices) {
         java.time.DayOfWeek javaDayOfWeek = date.getDayOfWeek();
         DayOfWeek dayOfWeek = DayOfWeek.valueOf(javaDayOfWeek.name());
 
         // 요일별 기본 대관비 조회
-        RentalFee rentalFee = rentalFeeRepository.findBySpaceIdAndDayOfWeek(spaceUserId, dayOfWeek);
+        RentalFee rentalFee = rentalFeeRepository.findBySpaceIdAndDayOfWeek(spaceId, dayOfWeek);
         int basePrice = rentalFee.getFee();
 
         // 추가 서비스 가격 계산
         int additionalServicePrice = 0;
         if (additionalServices != null) {
             for (String serviceTitle : additionalServices) {
-                SpaceAdditionalService service = spaceAdditionalServiceRepository.findBySpaceIdAndTitle(spaceUserId, serviceTitle);
+                SpaceAdditionalService service = spaceAdditionalServiceRepository.findBySpaceIdAndTitle(spaceId, serviceTitle);
                 if (service != null) {
                     additionalServicePrice += Integer.parseInt(service.getPrice());
                 }
