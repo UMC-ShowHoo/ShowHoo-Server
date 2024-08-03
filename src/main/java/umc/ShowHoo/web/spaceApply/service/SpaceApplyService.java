@@ -4,14 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
-import umc.ShowHoo.web.member.handler.MemberHandler;
-import umc.ShowHoo.web.notification.dto.NotificationRequestDTO;
-import umc.ShowHoo.web.notification.entity.NotificationType;
 import umc.ShowHoo.web.notification.service.NotificationService;
 import umc.ShowHoo.web.performer.entity.Performer;
-import umc.ShowHoo.web.performer.handler.PerformerHandler;
 import umc.ShowHoo.web.performer.repository.PerformerRepository;
-import umc.ShowHoo.web.performerProfile.entity.PerformerProfile;
 import umc.ShowHoo.web.performerProfile.repository.PerformerProfileRepository;
 import umc.ShowHoo.web.selectedAdditionalService.entity.SelectedAdditionalService;
 import umc.ShowHoo.web.selectedAdditionalService.repository.SelectedAdditionalServiceRepository;
@@ -37,11 +32,9 @@ public class SpaceApplyService {
     private final SpaceApplyRepository spaceApplyRepository;
     private final PerformerRepository performerRepository;
     private final SpaceRepository spaceRepository;
-    private final PerformerProfileRepository performerProfileRepository;
     private final SelectedAdditionalServiceRepository selectedAdditionalServiceRepository;
     private final SpaceApplyConverter spaceApplyConverter;
     private final NotificationService notificationService;
-    private final SpaceUserRepository spaceUserRepository;
 
 
     public SpaceApply createSpaceApply(Long spaceUserId, Long performerId, SpaceApplyRequestDTO.RegisterDTO registerDTO) {
@@ -63,26 +56,7 @@ public class SpaceApplyService {
             selectedAdditionalServiceRepository.save(additionalService);
         }
 
-        // 알림 생성
-        // spaceUser의 memberId 가져오기
-        Long memberId = spaceUserRepository.findMemberIdById(spaceUserId)
-                .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
-        // LocalDate type -> string
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String date = registerDTO.getDate().format(formatter);
-        // profile 받아오기
-        PerformerProfile perfomerProfile = performerProfileRepository.findById(registerDTO.getPerformerProfileId())
-                .orElseThrow(() -> new PerformerHandler(ErrorStatus.PERFORMER_PROFILE_NOT_FOUND));
-        // 알림 메시지
-        String message = String.format("%s이 %s로 대관 신청을 했습니다", perfomerProfile.getName(), date);
-
-        NotificationRequestDTO.createNotificationDTO notificationRequest = NotificationRequestDTO.createNotificationDTO.builder()
-                .memberId(memberId)
-                .message(message)
-                .type(NotificationType.SPACEUSER)
-                .build();
-
-        notificationService.createNotification(notificationRequest);
+        notificationService.createApplyNotification(spaceUserId, registerDTO); // 알림 생성
 
         return spaceApply;
     }
