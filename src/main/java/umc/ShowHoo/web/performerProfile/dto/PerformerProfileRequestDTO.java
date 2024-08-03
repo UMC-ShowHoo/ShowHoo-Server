@@ -19,6 +19,7 @@ public class PerformerProfileRequestDTO {
         private String name;
         private String introduction;
         private String phoneNumber;
+        private List<String> profileImageUrls;
 
 //        private final List<PerformerProfileImageDTO> performerProfileImages = new ArrayList<>();
     }
