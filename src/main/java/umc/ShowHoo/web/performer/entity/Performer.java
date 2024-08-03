@@ -27,7 +27,7 @@ public class Performer {
     private List<PerformerProfile> profiles;
 
     @OneToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @OneToMany(mappedBy = "performer", cascade = CascadeType.ALL)
