@@ -11,16 +11,6 @@ import java.util.stream.Collectors;
 
 public class PerformerProfileConverter {
     public static PerformerProfile toCreateProfile(PerformerProfileRequestDTO.CreateProfileDTO dto) {
-//        List<ProfileImage> profileImages = (dto.getPerformerProfileImages() != null ? dto.getPerformerProfileImages() : new ArrayList<>())
-//                .stream()
-//                .map(imageDTO -> ProfileImage.builder()
-//                        .profileImageUrl(null)  // URL은 후에 설정
-//                        .performerProfile(performerProfile)
-//                        .build())
-//                .collect(Collectors.toList());
-//
-//        performerProfile.setProfileImages(profileImages);
-
         return PerformerProfile.builder()
                 .team(dto.getTeam())
                 .name(dto.getName())

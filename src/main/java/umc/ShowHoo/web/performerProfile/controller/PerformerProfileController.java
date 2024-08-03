@@ -2,6 +2,7 @@ package umc.ShowHoo.web.performerProfile.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import umc.ShowHoo.aws.s3.AmazonS3Manager;
@@ -24,17 +25,41 @@ public class PerformerProfileController {
 
     private final PerformerProfileService performerProfileService;
 
-    @PostMapping(value = "/profile/{performerUserId}",consumes = "multipart/form-data")
+    @PostMapping(value = "/profileImage/upload", consumes = "multipart/form-data")
+    @Parameter(
+            in = ParameterIn.HEADER,
+            name = "Authorization", required = true,
+            schema = @Schema(type = "string"),
+            description = "Bearer [Access 토큰]"
+    )
+    @Operation(summary = "프로필 이미지 업로드 API", description = "프로필 이미지를 S3에 업로드하고 URL을 반환합니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
+    })
+    public ApiResponse<List<String>>uploadProfileImages(@RequestPart List<MultipartFile> profileImages){
+        List<String> imageUrls = performerProfileService.uploadProfileImages(profileImages);
+        return ApiResponse.onSuccess(imageUrls);
+    }
+
+
+
+
+    @PostMapping(value = "/profile/{performerUserId}")
+    @Parameter(
+            in = ParameterIn.HEADER,
+            name = "Authorization", required = true,
+            schema = @Schema(type = "string"),
+            description = "Bearer [Access 토큰]"
+    )
     @Operation(summary = "공연자 프로필 등록 API", description = "공연자가 프로필을 등록할 때 필요한 API입니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
     public ApiResponse<Void> createProfile(
             @PathVariable("performerUserId") Long performerUserId,
-            @RequestPart("profileDTO") PerformerProfileRequestDTO.CreateProfileDTO profileDTO,
-            @RequestPart(required = false) List<MultipartFile> profileImages){
+            @RequestBody PerformerProfileRequestDTO.CreateProfileDTO profileDTO){
 
-        performerProfileService.createProfile(performerUserId, profileDTO, profileImages);
+        performerProfileService.createProfile(performerUserId, profileDTO);
         return ApiResponse.onSuccess(null);
     }
 
@@ -53,7 +78,7 @@ public class PerformerProfileController {
     }
 
     @DeleteMapping("/profile/profileImage")
-    @Operation(summary = "공연자 프로필 이미지 수정할 때 이미지 삭제 API", description = "공연자 프로필 수정할 때 프로필 이미지를 삭제하는 API입니다.")
+    @Operation(summary = "공연자 프로필 이미지 수정 - 이미지 삭제 API", description = "공연자 프로필 수정할 때 프로필 이미지를 삭제하는 API입니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
@@ -63,15 +88,15 @@ public class PerformerProfileController {
     }
 
     @PostMapping(value = "/profile/{performerUserId}/{profileId}/profileImage" ,consumes = "multipart/form-data")
-    @Operation(summary = "공연자 프로필 이미지 수정할 때 이미지 추가 API", description = "공연자 프로필 수정할 때 프로필 이미지를 추가하는 API입니다.")
+    @Operation(summary = "공연자 프로필 이미지 수정 - 이미지 추가 API", description = "공연자 프로필 수정할 때 프로필 이미지를 추가하는 API입니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
-    public ApiResponse<Void> addProfileImage(@PathVariable Long performerUserId,
+    public ApiResponse<String> addProfileImage(@PathVariable Long performerUserId,
                                              @PathVariable Long profileId,
                                              @ModelAttribute PerformerProfileRequestDTO.AddProfileImageDTO requestDTO) {
-        performerProfileService.addProfileImage(performerUserId, profileId, requestDTO);
-        return ApiResponse.onSuccess(null);
+        String imageUrl = performerProfileService.addProfileImage(performerUserId, profileId, requestDTO);
+        return ApiResponse.onSuccess(imageUrl);
     }
 
     @DeleteMapping("/profile/{performerUserId}/{profileId}")
