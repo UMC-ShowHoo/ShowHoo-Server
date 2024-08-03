@@ -17,6 +17,7 @@ public class SpaceReviewRequestDTO {
     public static class ReviewRegisterDTO{
         private double grade;
         private String content;
+        private List<String> imageUrls;
     }
 
 }

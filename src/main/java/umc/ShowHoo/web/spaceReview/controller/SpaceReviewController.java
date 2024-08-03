@@ -38,7 +38,7 @@ public class SpaceReviewController {
 
 
 
-    @Operation(summary = "공연자 리뷰 작성 API", description = "공연자가 공연장에 대한 리뷰를 작성할 때 필요한 API입니다.")
+    @Operation(summary = "공연자 리뷰 작성 API", description = "공연자가 공연장에 대한 리뷰를 작성하고 등록하기 버튼을 눌렀을 때 필요한 API입니다. 사용자 리뷰를 입력하고 그 값을 전달해주면 db에 저장하게 됩니다.")
     @Parameter(
             in = ParameterIn.HEADER,
             name = "Authorization", required = true,
@@ -48,13 +48,12 @@ public class SpaceReviewController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
-    @PostMapping(value = "/spaces/{spaceId}/review/{performerId}", consumes = "multipart/form-data")
+    @PostMapping(value = "/spaces/{spaceId}/review/{performerId}")
     public ApiResponse<Void> createSpaceReview(
             @PathVariable Long spaceId,
             @PathVariable Long performerId,
-            @RequestPart SpaceReviewRequestDTO.ReviewRegisterDTO reviewRegisterDTO,
-            @RequestPart(required = false) List<MultipartFile> reviewImages){
-        spaceReviewService.createSpaceReview(spaceId, performerId, reviewRegisterDTO, reviewImages);
+            @RequestBody SpaceReviewRequestDTO.ReviewRegisterDTO reviewRegisterDTO){
+        spaceReviewService.createSpaceReview(spaceId, performerId, reviewRegisterDTO);
         return ApiResponse.onSuccess(null);
     }
 

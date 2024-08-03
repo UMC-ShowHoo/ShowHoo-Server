@@ -21,6 +21,7 @@ import umc.ShowHoo.web.spaceReview.dto.SpaceReviewResponseDTO;
 import umc.ShowHoo.web.spaceReview.entity.SpaceReview;
 import umc.ShowHoo.web.spaceReview.entity.SpaceReviewImage;
 import umc.ShowHoo.web.spaceReview.exception.handler.SpaceReviewHandler;
+import umc.ShowHoo.web.spaceReview.repository.SpaceReviewImageRepository;
 import umc.ShowHoo.web.spaceReview.repository.SpaceReviewRepository;
 
 import java.util.ArrayList;
@@ -36,13 +37,14 @@ public class SpaceReviewService {
     private final SpaceReviewRepository spaceReviewRepository;
     private final SpaceApplyRepository spaceApplyRepository;
     private final PerformerRepository performerRepository;
+    private final SpaceReviewImageRepository spaceReviewImageRepository;
     private final SpaceRepository spaceRepository;
     private final SpaceReviewConverter spaceReviewConverter;
     private final AmazonS3Manager amazonS3Manager;
     private final UuidRepository uuidRepository;
 
     @Transactional
-    public void createSpaceReview(Long spaceId, Long performerId, SpaceReviewRequestDTO.ReviewRegisterDTO reviewRegisterDTO, List<MultipartFile> reviewImages) {
+    public void createSpaceReview(Long spaceId, Long performerId, SpaceReviewRequestDTO.ReviewRegisterDTO reviewRegisterDTO) {
         boolean hasApplied = spaceApplyRepository.existsBySpaceIdAndPerformerId(spaceId, performerId);
         if (!hasApplied) {
             throw new SpaceReviewHandler(ErrorStatus.SPACE_REVIEW_PERMISSION_NOT_FOUND);
@@ -55,21 +57,13 @@ public class SpaceReviewService {
         SpaceReview spaceReview = spaceReviewConverter.toCreateSpaceReview(reviewRegisterDTO, space, performer);
         spaceReviewRepository.save(spaceReview);
 
-
-        if (reviewImages != null && !reviewImages.isEmpty()) {
-        List<SpaceReviewImage> reviewImagesList = new ArrayList<>();
-        for (MultipartFile image : reviewImages) {
-            String uuid = UUID.randomUUID().toString();
-            Uuid savedUuid = uuidRepository.save(Uuid.builder().uuid(uuid).build());
-            String keyName = amazonS3Manager.generateReviewKeyName(savedUuid);
-            String imageUrl = amazonS3Manager.uploadFile(keyName, image);
-
-            SpaceReviewImage reviewImage = spaceReviewConverter.toSpaceReviewImage(imageUrl, spaceReview);
-            reviewImagesList.add(reviewImage);
-        }
-        spaceReview.setSpaceReviewImages(reviewImagesList);
-        spaceReviewRepository.save(spaceReview);
-
+        if (reviewRegisterDTO.getImageUrls() != null && !reviewRegisterDTO.getImageUrls().isEmpty()) {
+            List<SpaceReviewImage> reviewImagesList = new ArrayList<>();
+            for (String imageUrl : reviewRegisterDTO.getImageUrls()) {
+                SpaceReviewImage reviewImage = spaceReviewConverter.toSpaceReviewImage(imageUrl, spaceReview);
+                reviewImagesList.add(reviewImage);
+            }
+            spaceReviewImageRepository.saveAll(reviewImagesList);
         }
 
     }
