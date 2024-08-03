@@ -96,4 +96,17 @@ public class SpaceReviewService {
                 .map(spaceReviewConverter::toGetSpaceReview)
                 .collect(Collectors.toList());
     }
+
+    public List<String> uploadReviewImages(List<MultipartFile> reviewImages) {
+        List<String> imageUrls = new ArrayList<>();
+
+        for (MultipartFile image : reviewImages) {
+            String uuid = UUID.randomUUID().toString();
+            Uuid savedUuid = uuidRepository.save(Uuid.builder().uuid(uuid).build());
+            String keyName = amazonS3Manager.generateReviewKeyName(savedUuid);
+            String imageUrl = amazonS3Manager.uploadFile(keyName, image);
+            imageUrls.add(imageUrl);
+        }
+        return imageUrls;
+    }
 }

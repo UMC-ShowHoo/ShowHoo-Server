@@ -20,6 +20,23 @@ import java.util.List;
 public class SpaceReviewController {
     private final SpaceReviewService spaceReviewService;
 
+    @PostMapping(value = "/reviewImage/upload", consumes = "multipart/form-data")
+    @Parameter(
+            in = ParameterIn.HEADER,
+            name = "Authorization", required = true,
+            schema = @Schema(type = "string"),
+            description = "Bearer [Access 토큰]"
+    )
+    @Operation(summary = "리뷰 이미지 업로드 API", description = "리뷰 이미지를 S3에 업로드하고 URL을 반환합니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
+    })
+    public ApiResponse<List<String>>uploadReviewImages(@RequestPart List<MultipartFile> reviewImages){
+        List<String> imageUrls = spaceReviewService.uploadReviewImages(reviewImages);
+        return ApiResponse.onSuccess(imageUrls);
+    }
+
+
 
     @Operation(summary = "공연자 리뷰 작성 API", description = "공연자가 공연장에 대한 리뷰를 작성할 때 필요한 API입니다.")
     @Parameter(
