@@ -148,4 +148,17 @@ public class PerformerProfileService {
                 .map(PerformerProfileConverter::toGetProfile)
                 .collect(Collectors.toList());
     }
+
+    public List<String> uploadProfileImages(List<MultipartFile> profileImages) {
+        List<String> imageUrls = new ArrayList<>();
+
+        for (MultipartFile profileImage : profileImages) {
+            String uuid = UUID.randomUUID().toString();
+            Uuid savedUuid = uuidRepository.save(Uuid.builder().uuid(uuid).build());
+            String keyName = amazonS3Manager.generatePerformerProfileImageKeyName(savedUuid);
+            String imageUrl = amazonS3Manager.uploadFile(keyName, profileImage);
+            imageUrls.add(imageUrl);
+        }
+        return imageUrls;
+    }
 }

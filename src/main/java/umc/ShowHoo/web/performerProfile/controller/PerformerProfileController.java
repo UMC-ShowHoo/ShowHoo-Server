@@ -2,6 +2,7 @@ package umc.ShowHoo.web.performerProfile.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import umc.ShowHoo.aws.s3.AmazonS3Manager;
@@ -23,6 +24,25 @@ import java.util.UUID;
 public class PerformerProfileController {
 
     private final PerformerProfileService performerProfileService;
+
+    @PostMapping(value = "/profileImage/upload", consumes = "multipart/form-data")
+    @Parameter(
+            in = ParameterIn.HEADER,
+            name = "Authorization", required = true,
+            schema = @Schema(type = "string"),
+            description = "Bearer [Access 토큰]"
+    )
+    @Operation(summary = "프로필 이미지 업로드 API", description = "프로필 이미지를 S3에 업로드하고 URL을 반환합니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
+    })
+    public ApiResponse<List<String>>uploadProfileImages(@RequestPart List<MultipartFile> profileImages){
+        List<String> imageUrls = performerProfileService.uploadProfileImages(profileImages);
+        return ApiResponse.onSuccess(imageUrls);
+    }
+
+
+
 
     @PostMapping(value = "/profile/{performerUserId}",consumes = "multipart/form-data")
     @Operation(summary = "공연자 프로필 등록 API", description = "공연자가 프로필을 등록할 때 필요한 API입니다.")
