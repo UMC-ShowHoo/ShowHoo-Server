@@ -55,9 +55,13 @@ public enum ErrorStatus implements BaseErrorCode {
     //SPACE_REVIEW
     SPACE_REVIEW_PERMISSION_NOT_FOUND(HttpStatus.NOT_FOUND, "SPACE_REVIEW001", "SpaceReviewPermission not found"),
 
+    //RENTALFILE
     RENTALFILE_FORM_NOT_FOUND(HttpStatus.NOT_FOUND,"RENTALFILE_FORM001","RentalFile form not found"),
 
-    RENTALFILE_NOT_FOUND(HttpStatus.NOT_FOUND,"RENTALFILE001","RentalFile not found")
+    RENTALFILE_NOT_FOUND(HttpStatus.NOT_FOUND,"RENTALFILE001","RentalFile not found"),
+
+    //NOTIFICATION
+    NOTIFICATION_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND,"NOTIFICATION001","정의되지 않은 notification type 입니다.")
 
     ;
 
