@@ -9,6 +9,7 @@ import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
 import umc.ShowHoo.aws.s3.AmazonS3Manager;
 import umc.ShowHoo.aws.s3.Uuid;
 import umc.ShowHoo.aws.s3.UuidRepository;
+import umc.ShowHoo.web.notification.service.NotificationService;
 import umc.ShowHoo.web.performer.entity.Performer;
 import umc.ShowHoo.web.performer.repository.PerformerRepository;
 import umc.ShowHoo.web.space.entity.Space;
@@ -40,6 +41,7 @@ public class SpaceReviewService {
     private final SpaceReviewConverter spaceReviewConverter;
     private final AmazonS3Manager amazonS3Manager;
     private final UuidRepository uuidRepository;
+    private final NotificationService notificationService;
 
     @Transactional
     public void createSpaceReview(Long spaceId, Long performerId, SpaceReviewRequestDTO.ReviewRegisterDTO reviewRegisterDTO, List<MultipartFile> reviewImages) {
@@ -68,8 +70,10 @@ public class SpaceReviewService {
             reviewImagesList.add(reviewImage);
         }
         spaceReview.setSpaceReviewImages(reviewImagesList);
-        spaceReviewRepository.save(spaceReview);
 
+        notificationService.createSpaceReviewNotification(space, performer);// 알림 생성
+
+        spaceReviewRepository.save(spaceReview);
         }
 
     }

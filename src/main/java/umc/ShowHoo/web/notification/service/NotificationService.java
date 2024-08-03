@@ -12,6 +12,7 @@ import umc.ShowHoo.web.notification.dto.NotificationRequestDTO;
 import umc.ShowHoo.web.notification.dto.NotificationResponseDTO;
 import umc.ShowHoo.web.notification.entity.Notification;
 import umc.ShowHoo.web.notification.entity.NotificationType;
+import umc.ShowHoo.web.notification.handler.NotificationHandler;
 import umc.ShowHoo.web.notification.repository.NotificationRepository;
 import umc.ShowHoo.web.performer.entity.Performer;
 import umc.ShowHoo.web.performer.handler.PerformerHandler;
@@ -20,7 +21,6 @@ import umc.ShowHoo.web.performerProfile.entity.PerformerProfile;
 import umc.ShowHoo.web.performerProfile.repository.PerformerProfileRepository;
 import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.spaceApply.dto.SpaceApplyRequestDTO;
-import umc.ShowHoo.web.spaceReview.dto.SpaceReviewRequestDTO;
 import umc.ShowHoo.web.spaceUser.handler.SpaceUserHandler;
 import umc.ShowHoo.web.spaceUser.repository.SpaceUserRepository;
 
@@ -49,18 +49,13 @@ public class NotificationService {
     @Transactional
     public List<NotificationResponseDTO.NotificationDTO> getNotifications(Long memberId, NotificationType type) {
         switch (type) {
-            case PERFORMER:
-                performerRepository.findByMemberId(memberId)
-                        .orElseThrow(() -> new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
-                break;
-            case SPACEUSER:
-                spaceUserRepository.findByMemberId(memberId)
-                        .orElseThrow(() -> new SpaceUserHandler(ErrorStatus.SPACEUSER_NOT_FOUND));
-                break;
-            case AUDIENCE:
-                audienceRepository.findByMemberId(memberId)
-                        .orElseThrow(() -> new AudienceHandler(ErrorStatus.PERFORMER_NOT_FOUND));
-                break;
+            case PERFORMER -> performerRepository.findByMemberId(memberId)
+                    .orElseThrow(() -> new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
+            case SPACEUSER -> spaceUserRepository.findByMemberId(memberId)
+                    .orElseThrow(() -> new SpaceUserHandler(ErrorStatus.SPACEUSER_NOT_FOUND));
+            case AUDIENCE -> audienceRepository.findByMemberId(memberId)
+                    .orElseThrow(() -> new AudienceHandler(ErrorStatus.PERFORMER_NOT_FOUND));
+            default -> throw new NotificationHandler(ErrorStatus.NOTIFICATION_TYPE_NOT_FOUND);
         }
         List<Notification> notifications = notificationRepository.findByMemberIdAndType(memberId, type);
         return notifications.stream()
@@ -87,12 +82,26 @@ public class NotificationService {
         // 알림 메시지
         String message = String.format("%s이 %s로 대관 신청을 했습니다", perfomerProfile.getName(), date);
 
-        NotificationRequestDTO.createNotificationDTO notificationRequest = NotificationRequestDTO.createNotificationDTO.builder()
-                .memberId(memberId)
-                .message(message)
-                .type(NotificationType.SPACEUSER)
-                .build();
+        NotificationRequestDTO.createNotificationDTO notification = notificationConverter.toCreateDTO(memberId, message, NotificationType.SPACEUSER);
 
-        createNotification(notificationRequest);
+        createNotification(notification);
     }
+
+    @Transactional
+    public void createSpaceReviewNotification(Space space, Performer performer){
+        // spaceUser의 memberId 가져오기
+        Long memberId = spaceUserRepository.findMemberIdById(space.getSpaceUser().getId())
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
+        // 알림 메시지
+        String message = String.format("%s님이 회원님의 공연장에 이용 후기를 남겼습니다.", performer.getMember().getName());
+
+        NotificationRequestDTO.createNotificationDTO notification = notificationConverter.toCreateDTO(memberId, message, NotificationType.SPACEUSER);
+
+        createNotification(notification);
+    }
+
+//    @Transactional
+//    public void createSpaceReviewCommentNotification(){
+//
+//    }
 }
