@@ -21,11 +21,13 @@ import umc.ShowHoo.web.performerProfile.entity.PerformerProfile;
 import umc.ShowHoo.web.performerProfile.repository.PerformerProfileRepository;
 import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.spaceApply.dto.SpaceApplyRequestDTO;
+import umc.ShowHoo.web.spaceReview.entity.SpaceReview;
 import umc.ShowHoo.web.spaceUser.handler.SpaceUserHandler;
 import umc.ShowHoo.web.spaceUser.repository.SpaceUserRepository;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -100,8 +102,16 @@ public class NotificationService {
         createNotification(notification);
     }
 
-//    @Transactional
-//    public void createSpaceReviewCommentNotification(){
-//
-//    }
+    @Transactional
+    public void createSpaceReviewCommentNotification(SpaceReview spaceReview){
+        // spaceUser의 memberId 가져오기
+        Long memberId = Optional.ofNullable(spaceReview.getPerformer().getMember().getId())
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
+        // 알림 메시지
+        String message = String.format("%s이 회원님의 후기에 댓글을 남겼습니다.", spaceReview.getSpace().getName());
+
+        NotificationRequestDTO.createNotificationDTO notification = notificationConverter.toCreateDTO(memberId, message, NotificationType.PERFORMER);
+
+        createNotification(notification);
+    }
 }

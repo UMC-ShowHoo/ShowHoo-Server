@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import umc.ShowHoo.web.notification.service.NotificationService;
 import umc.ShowHoo.web.spaceReview.entity.SpaceReview;
 import umc.ShowHoo.web.spaceReview.repository.SpaceReviewRepository;
 import umc.ShowHoo.web.spaceReviewAnswer.dto.SpaceReviewAnswerRequestDTO;
@@ -18,6 +19,7 @@ public class SpaceReviewAnswerService {
 
     private final SpaceReviewAnswerRepository spaceReviewAnswerRepository;
     private final SpaceReviewRepository spaceReviewRepository;
+    private final NotificationService notificationService;
 
     public void createSpaceReviewAnswer(Long spaceId, Long reviewId, SpaceReviewAnswerRequestDTO.AnswerContentDTO answerContentDTO) {
         SpaceReview spaceReview = spaceReviewRepository.findById(reviewId)
@@ -31,6 +33,8 @@ public class SpaceReviewAnswerService {
                 .content(answerContentDTO.getContent())
                 .spaceReview(spaceReview)
                 .build();
+
+        notificationService.createSpaceReviewCommentNotification(spaceReview); // 알림 생성
 
         spaceReviewAnswerRepository.save(spaceReviewAnswer);
     }
