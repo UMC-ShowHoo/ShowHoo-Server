@@ -30,7 +30,7 @@ public class BookConverter {
                 .account(request.getAccount())
                 .reason(request.getReason())
                 .book(book)
-                .performer(book.getShows().getPerformer())
+                .performer(book.getShows().getPerformerProfile().getPerformer())
                 .build();
     }
 
@@ -79,7 +79,7 @@ public class BookConverter {
                 .date(book.getShows().getDate())
                 .time(book.getShows().getTime())
                 .place("test")
-                .performer(book.getShows().getPerformer().getMember().getName())
+                .performer(book.getShows().getPerformerProfile().getTeam())
                 .status(book.getStatus())
                 .detail(book.getDetail())
                 .isCancellable(false)
