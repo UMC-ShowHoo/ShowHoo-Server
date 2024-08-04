@@ -1,18 +1,16 @@
-package umc.ShowHoo.web.Shows.controller;
+package umc.ShowHoo.web.shows.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import umc.ShowHoo.apiPayload.ApiResponse;
-import umc.ShowHoo.web.Shows.converter.ShowsConverter;
-import umc.ShowHoo.web.Shows.dto.ShowsRequestDTO;
-import umc.ShowHoo.web.Shows.dto.ShowsResponseDTO;
-import umc.ShowHoo.web.Shows.entity.Shows;
-import umc.ShowHoo.web.Shows.service.ShowsService;
+import umc.ShowHoo.web.shows.converter.ShowsConverter;
+import umc.ShowHoo.web.shows.dto.ShowsRequestDTO;
+import umc.ShowHoo.web.shows.dto.ShowsResponseDTO;
+import umc.ShowHoo.web.shows.entity.Shows;
+import umc.ShowHoo.web.shows.service.ShowsService;
 import umc.ShowHoo.web.showsDescription.converter.ShowsDscConverter;
 import umc.ShowHoo.web.showsDescription.dto.ShowsDscRequestDTO;
 import umc.ShowHoo.web.showsDescription.dto.ShowsDscResponseDTO;
