@@ -13,4 +13,6 @@ public interface ShowsPreferRepository extends JpaRepository<ShowsPrefer, Long> 
     Optional<ShowsPrefer> findByAudienceAndShows(Audience audience, Shows shows);
 
     Page<ShowsPrefer> findAllByAudience(Audience audience, PageRequest pageRequest);
+
+    boolean existsByAudienceAndShows(Audience audience, Shows shows);
 }
