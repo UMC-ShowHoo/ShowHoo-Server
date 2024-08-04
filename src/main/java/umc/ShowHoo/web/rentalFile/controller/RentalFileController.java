@@ -34,7 +34,7 @@ public class RentalFileController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
-    public ApiResponse<RentalFileResponseDTO.PerformerSaveDTO> createPerformerFile(
+    public ApiResponse<RentalFileResponseDTO.postFileDTO> createPerformerFile(
             @PathVariable Long showId,
             @RequestPart(required = false)MultipartFile setList,
             @RequestPart(required = false)MultipartFile rentalTime,
@@ -48,9 +48,8 @@ public class RentalFileController {
             }
             RentalFile rentalFile=rentalFileService.createPerformerFile(setList,rentalTime,addOrder);
             rentalFile.setShows(shows);
-            RentalFileResponseDTO.PerformerSaveDTO result= RentalFileConverter.toPerformerSaveDTO(rentalFile);
 
-            return ApiResponse.onSuccess(result);
+            return ApiResponse.onSuccess(RentalFileConverter.toPostFileDTO(rentalFile));
         }catch (RentalFileHandler e){
             logger.error("RentalFileHandler error occurred while creating rentalFile",e);
             throw e;
@@ -74,7 +73,7 @@ public class RentalFileController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
-    public ApiResponse<RentalFileResponseDTO.SpaceUserSaveDTO> createFormFile(
+    public ApiResponse<RentalFileResponseDTO.postFileDTO> createFormFile(
             @PathVariable Long spaceId,
             @RequestPart(required = false)MultipartFile setListForm,
             @RequestPart(required = false)MultipartFile rentalTimeForm,
@@ -88,9 +87,8 @@ public class RentalFileController {
             }
             RentalFile rentalFile=rentalFileService.createFormFile(setListForm,rentalTimeForm,addOrderForm);
             rentalFile.setSpace(space);
-            RentalFileResponseDTO.SpaceUserSaveDTO result= RentalFileConverter.toSpaceUserSaveDTO(rentalFile);
 
-            return ApiResponse.onSuccess(result);
+            return ApiResponse.onSuccess(RentalFileConverter.toPostFileDTO(rentalFile));
         }catch (RentalFileHandler e){
             logger.error("RentalFileHandler error occurred while creating rentalFile",e);
             throw e;

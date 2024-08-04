@@ -14,6 +14,10 @@ import umc.ShowHoo.web.Shows.repository.ShowsRepository;
 import umc.ShowHoo.web.performer.entity.Performer;
 import umc.ShowHoo.web.performer.handler.PerformerHandler;
 import umc.ShowHoo.web.performer.repository.PerformerRepository;
+import umc.ShowHoo.web.showsDescription.converter.ShowsDscConverter;
+import umc.ShowHoo.web.showsDescription.dto.ShowsDscRequestDTO;
+import umc.ShowHoo.web.showsDescription.entity.ShowsDescription;
+import umc.ShowHoo.web.showsDescription.repository.ShowsDscRepository;
 
 import java.util.UUID;
 
@@ -23,14 +27,45 @@ public class ShowsService {
     private final ShowsRepository showsRepository;
     private final PerformerRepository performerRepository;
     private final AmazonS3Manager amazonS3Manager;
+    private final ShowsDscRepository showsDscRepository;
 
-    public Shows createShows(ShowsRequestDTO requestDTO, MultipartFile poster){
+    public Shows createShows(ShowsRequestDTO.ShowInfoDTO requestDTO, MultipartFile poster,Long performerId){
         String posterUrl=poster != null ? amazonS3Manager.uploadFile("showRegister/"+ UUID.randomUUID().toString(),poster) : null;
-        Performer performer=performerRepository.findById(requestDTO.getPerformerId())
+        Performer performer=performerRepository.findById(performerId)
                 .orElseThrow(()->new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
 
-        Shows shows=ShowsConverter.toEntity(requestDTO,posterUrl);
+        Shows shows=ShowsConverter.toShowInfo(requestDTO,posterUrl);
         shows.setPerformer(performer);
+
+        return showsRepository.save(shows);
+    }
+
+    public Shows createShowsTicket(ShowsRequestDTO.ticketInfoDTO ticketInfoDTO,Long showId){
+        Shows shows=showsRepository.findById(showId)
+                .orElseThrow(()->new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
+
+        shows=ShowsConverter.toTicketInfo(ticketInfoDTO,shows);
+
+        return showsRepository.save(shows);
+    }
+
+
+
+    public ShowsDescription createShowDsc(ShowsDscRequestDTO.DescriptionDTO dto, MultipartFile img, Long showId){
+        String imgUrl=img != null ? amazonS3Manager.uploadFile("showRegister/" + UUID.randomUUID().toString(),img) : null;
+        Shows shows=showsRepository.findById(showId)
+                .orElseThrow(()-> new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
+
+        ShowsDescription showsDescription= ShowsDscConverter.toShowDsc(dto,imgUrl,shows);
+
+        return showsDscRepository.save(showsDescription);
+    }
+
+    public Shows createShowsReq(ShowsRequestDTO.requirementDTO requirementDTO,Long showId){
+        Shows shows=showsRepository.findById(showId)
+                .orElseThrow(()->new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
+
+        shows=ShowsConverter.toRequirement(requirementDTO,shows);
 
         return showsRepository.save(shows);
     }

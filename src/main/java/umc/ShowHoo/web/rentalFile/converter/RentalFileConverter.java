@@ -7,7 +7,12 @@ import umc.ShowHoo.web.rentalFile.entity.RentalFile;
 @Component
 public class RentalFileConverter {
 
-//    public static RentalFile toEntity((RentalFileRequestDTO.PerformerPostDTO pdto, RentalFileRequestDTO.SpaceUserPostDTO sdto)
+    public static RentalFileResponseDTO.postFileDTO toPostFileDTO(RentalFile rentalFile){
+        return RentalFileResponseDTO.postFileDTO.builder()
+                .rentalFileId(rentalFile.getId())
+                .showId(rentalFile.getShows().getId())
+                .build();
+    }
 
     public static RentalFile toFormEntity(String setListForm, String rentalTimeForm, String addOrderForm){
         return RentalFile.builder()

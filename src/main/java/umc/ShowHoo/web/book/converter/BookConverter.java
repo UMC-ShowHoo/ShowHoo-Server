@@ -22,6 +22,7 @@ public class BookConverter {
                 .build();
     }
 
+
     public static CancelBook toCancelBook(Book book, BookRequestDTO.deleteBookDTO request){
         return CancelBook.builder()
                 .name(request.getName())
@@ -84,5 +85,28 @@ public class BookConverter {
                 .isCancellable(false)
                 .build();
     }
+
+    public static BookResponseDTO.bookInfoDTO toBookInfoDTO(Book book){
+            return BookResponseDTO.bookInfoDTO.builder()
+                    .book_id(book.getId())
+                    .name(book.getName())
+                    .phoneNum(book.getPhoneNum())
+                    .ticketNum(book.getTicketNum())
+                    .payment(book.getPayment())
+                    .dateTime(book.getCreatedAt())
+                    .build();
+
+    }
+
+    public static BookResponseDTO.refundBookDTO toRefundDTO(CancelBook cancelBook){
+        return BookResponseDTO.refundBookDTO.builder()
+                .book_id(cancelBook.getId())
+                .name(cancelBook.getName())
+                .bankName(cancelBook.getBankName())
+                .account(cancelBook.getAccount())
+                .dateTime(cancelBook.getCreatedAt())
+                .build();
+    }
+
 
 }
