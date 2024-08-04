@@ -73,7 +73,7 @@ public class SpaceApplyController {
         return ApiResponse.onSuccess(null);
     }
 
-    @Operation(summary = " 대관 수락", description = "공연장이 공연자를 수락할 때 필요한 API. status가 승인 예정은 0, 승인 완료는 1")
+    @Operation(summary = " 대관 수락 API", description = "공연장이 공연자를 수락할 때 필요한 API. status가 승인 예정은 0, 승인 완료는 1")
     @Parameter(
             in = ParameterIn.HEADER,
             name = "Authorization", required = true,
@@ -90,7 +90,7 @@ public class SpaceApplyController {
         return ApiResponse.onSuccess(null);
     }
 
-    @Operation(summary = "대관 거절", description = "공연장이 공연자를 거절할 때 필요한 API, status가 승인 예쩡은 0, 승인 거절은 -1")
+    @Operation(summary = "대관 거절 API", description = "공연장이 공연자를 거절할 때 필요한 API, status가 승인 예쩡은 0, 승인 거절은 -1")
     @Parameter(
             in = ParameterIn.HEADER,
             name = "Authorization", required = true,
@@ -107,26 +107,5 @@ public class SpaceApplyController {
         spaceApplyService.deleteSpaceApply(spaceApplyId);
         return ApiResponse.onSuccess(null);
     }
-
-
-
-
-
-
-
-/*
-    @Operation(summary = "대관 수락 및 거절", description = "공연장이 대관을 수락하거나 거절하는 Api. status가 0이면 승인예정, 1이면 승인완료, -1일 때 승인거절입니다. 날짜를 확인한 후 과거 날짜이면 지난 공연이라고 표시하면 됩니다.")
-    @Parameter(
-            in = ParameterIn.HEADER,
-            name = "Authorization", required = true,
-            schema = @Schema(type = "string"),
-            description = "Bearer [Access 토큰]"
-    )
-    @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
-    })
-    @RequestMapping("spaces/spaceApply/{performerId}")
-
-*/
 
 }

@@ -11,7 +11,7 @@ import umc.ShowHoo.web.selectedAdditionalService.repository.SelectedAdditionalSe
 import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.space.repository.SpaceRepository;
 import umc.ShowHoo.web.spaceApply.converter.SpaceApplyConverter;
-import umc.ShowHoo.web.spaceApply.dto.SpaceApplyDTO;
+//import umc.ShowHoo.web.spaceApply.dto.SpaceApplyDTO;
 import umc.ShowHoo.web.spaceApply.dto.SpaceApplyRequestDTO;
 import umc.ShowHoo.web.spaceApply.dto.SpaceApplyResponseDTO;
 import umc.ShowHoo.web.spaceApply.entity.SpaceApply;
@@ -75,6 +75,7 @@ public class SpaceApplyService {
     }
 
 
+    @Transactional
     public void setSpaceApply(Long spaceUserId, Long spaceApplyId, int status) {
         Space space = spaceRepository.findById(spaceUserId)
                 .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_NOT_FOUND));
