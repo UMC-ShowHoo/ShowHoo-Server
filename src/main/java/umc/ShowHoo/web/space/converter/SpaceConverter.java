@@ -13,6 +13,7 @@ import umc.ShowHoo.web.space.repository.SpaceRepository;
 import umc.ShowHoo.web.spaceAdditionalService.entity.SpaceAdditionalService;
 import umc.ShowHoo.web.spaceAdditionalService.repository.SpaceAdditionalServiceRepository;
 import umc.ShowHoo.web.spacePhoto.entity.SpacePhoto;
+import umc.ShowHoo.web.spacePrefer.entity.SpacePrefer;
 import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
 
 import java.time.LocalDateTime;
@@ -158,6 +159,13 @@ public class SpaceConverter {
     public SpaceResponseDTO.SpaceFilteredListDTO toSpaceListDTO(List<Space> spaces, Long performerId) {
         List<SpaceResponseDTO.SpaceSummaryDTO> spaceSummaryDTOs = spaces.stream()
                 .map(space -> toSpaceDTOWithPreference(space, performerId))
+                .collect(Collectors.toList());
+        return new SpaceResponseDTO.SpaceFilteredListDTO(spaceSummaryDTOs);
+    }
+
+    public SpaceResponseDTO.SpaceFilteredListDTO toSpaceByPreferListDTO(List<SpacePrefer> spacePrefers, Long performerId) {
+        List<SpaceResponseDTO.SpaceSummaryDTO> spaceSummaryDTOs = spacePrefers.stream()
+                .map(spacePrefer -> toSpaceDTOWithPreference(spacePrefer.getSpace(), performerId))
                 .collect(Collectors.toList());
         return new SpaceResponseDTO.SpaceFilteredListDTO(spaceSummaryDTOs);
     }
