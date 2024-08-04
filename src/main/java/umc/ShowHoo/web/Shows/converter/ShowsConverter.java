@@ -6,6 +6,12 @@ import umc.ShowHoo.web.Shows.entity.Shows;
 
 public class ShowsConverter {
 
+    public static ShowsResponseDTO.postShowDTO toPostShowDTO(Shows shows){
+        return ShowsResponseDTO.postShowDTO.builder()
+                .showId(shows.getId())
+                .build();
+    }
+
     public static Shows toShowInfo(ShowsRequestDTO.ShowInfoDTO dto, String poster){
         return Shows.builder()
                 .name(dto.getName())
