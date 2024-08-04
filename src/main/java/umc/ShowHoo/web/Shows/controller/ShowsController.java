@@ -1,6 +1,8 @@
 package umc.ShowHoo.web.Shows.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,10 @@ import umc.ShowHoo.web.Shows.dto.ShowsRequestDTO;
 import umc.ShowHoo.web.Shows.dto.ShowsResponseDTO;
 import umc.ShowHoo.web.Shows.entity.Shows;
 import umc.ShowHoo.web.Shows.service.ShowsService;
+import umc.ShowHoo.web.showsDescription.converter.ShowsDscConverter;
+import umc.ShowHoo.web.showsDescription.dto.ShowsDscRequestDTO;
+import umc.ShowHoo.web.showsDescription.dto.ShowsDscResponseDTO;
+import umc.ShowHoo.web.showsDescription.entity.ShowsDescription;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,6 +39,22 @@ public class ShowsController {
         shows.setId(showId);
 
         return ApiResponse.onSuccess(ShowsConverter.toPostShowDTO(shows));
+    }
+
+    @PostMapping(value="/{performerId}/{showId}/show-register/description",consumes = "multipart/form-data")
+    @Operation(summary = "공연자 공연 준비- 공연 설명 등록 API", description = "공연을 등록할 때 공연 설명을 작성하는 API")
+    @ApiResponses({
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공")
+    })
+/*    @Parameters({
+            @Parameter(name = "text",description = "등록하는 공연 설명의 텍스트"),
+    })*/
+    public ApiResponse<ShowsDscResponseDTO.PostDscDTO> createShowDsc(@PathVariable Long showId,
+                                                                     @RequestBody ShowsDscRequestDTO.DescriptionDTO descriptionDTO,
+                                                                     @RequestBody(required = false) MultipartFile img){
+        ShowsDescription showsDescription=showsService.createShowDsc(descriptionDTO,img,showId);
+
+        return ApiResponse.onSuccess(ShowsDscConverter.toPostDscDTO(showsDescription));
     }
 
     @PostMapping(value="/{performerId}/{showId}/ticket-register")
