@@ -46,6 +46,7 @@ public class AudienceResponseDTO {
         String poster; //포스터 사진
         String name; //공연 이름
         String description;//공연 소개
+        String descriptionImg;
         String date; //공연 날짜
         String time; //공연 시간
         String runningTime; //러닝 타임
