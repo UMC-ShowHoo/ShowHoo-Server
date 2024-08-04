@@ -2,16 +2,18 @@ package umc.ShowHoo.web.performerProfile.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import umc.ShowHoo.web.common.BaseEntity;
 import umc.ShowHoo.web.performer.entity.Performer;
 
 import java.util.List;
 
-@Getter@Setter
+@Getter
+@Setter
 @Entity
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class PerformerProfile {
+public class PerformerProfile extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
