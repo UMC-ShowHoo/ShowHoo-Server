@@ -25,4 +25,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findAllByAudienceAndShows(Audience audience, Shows shows);
 
     List<Book> findAllByShowsAndDetail(Shows shows,BookDetail detail);
+
+    List<Book> findAllByShows(Shows shows);
 }

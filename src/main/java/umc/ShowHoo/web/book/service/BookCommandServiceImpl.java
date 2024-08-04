@@ -59,6 +59,9 @@ public class BookCommandServiceImpl implements BookCommandService {
             }
 
         }
+        //티켓 매진 로직 2번째 안
+        //shows.setTicketNum(shows.getTicketNum() - request.getTicketNum());
+        //showsRepository.save(shows);
 
         return bookRepository.save(BookConverter.toBook(audience, shows, request));
     }

@@ -20,6 +20,7 @@ public class BookResponseDTO {
         Long book_id;
         Long showsId;
         Long audienceId;
+        String payment;
         String alert;
     }
 

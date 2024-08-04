@@ -33,6 +33,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     //BOOK
     BOOK_NOT_FOUND(HttpStatus.NOT_FOUND, "BOOK001", "Book not found"),
+    SHOW_ALREADY_SOLD_OUT(HttpStatus.BAD_REQUEST, "BOOK002", "Already sold out Shows"),
 
     //PERFORMER
     PERFORMER_NOT_FOUND(HttpStatus.NOT_FOUND, "PERFORMER001", "Performer not found"),
