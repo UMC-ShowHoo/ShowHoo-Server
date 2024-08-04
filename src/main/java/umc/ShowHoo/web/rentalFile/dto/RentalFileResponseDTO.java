@@ -5,7 +5,15 @@ import lombok.*;
 public class RentalFileResponseDTO {
 
     @Getter
-    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class postFileDTO{
+        Long rentalFileId;
+        Long showId;
+    }
+
+    @Getter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
@@ -17,7 +25,6 @@ public class RentalFileResponseDTO {
     }
 
     @Getter
-    @Setter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
