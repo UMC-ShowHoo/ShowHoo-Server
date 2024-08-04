@@ -13,12 +13,15 @@ import java.util.List;
 public class BookConverter {
 
     public static Book toBook(Audience audience, Shows shows, BookRequestDTO.postDTO request){
+        int payment = request.getTicketNum() * Integer.parseInt(shows.getTicketPrice());
+
         return Book.builder()
                 .audience(audience)
                 .shows(shows)
                 .name(request.getName())
                 .phoneNum(request.getPhoneNum())
                 .ticketNum(request.getTicketNum())
+                .payment(Integer.toString(payment))
                 .build();
     }
 
@@ -39,6 +42,7 @@ public class BookConverter {
                 .book_id(book.getId())
                 .showsId(book.getShows().getId())
                 .audienceId(book.getAudience().getId())
+                .payment(book.getPayment())
                 .alert("예매가 완료되었습니다!")
                 .build();
     }
