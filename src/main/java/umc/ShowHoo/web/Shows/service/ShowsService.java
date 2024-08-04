@@ -24,13 +24,31 @@ public class ShowsService {
     private final PerformerRepository performerRepository;
     private final AmazonS3Manager amazonS3Manager;
 
-    public Shows createShows(ShowsRequestDTO requestDTO, MultipartFile poster){
+    public Shows createShows(ShowsRequestDTO.ShowInfoDTO requestDTO, MultipartFile poster,Long performerId){
         String posterUrl=poster != null ? amazonS3Manager.uploadFile("showRegister/"+ UUID.randomUUID().toString(),poster) : null;
-        Performer performer=performerRepository.findById(requestDTO.getPerformerId())
+        Performer performer=performerRepository.findById(performerId)
                 .orElseThrow(()->new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
 
-        Shows shows=ShowsConverter.toEntity(requestDTO,posterUrl);
+        Shows shows=ShowsConverter.toShowInfo(requestDTO,posterUrl);
         shows.setPerformer(performer);
+
+        return showsRepository.save(shows);
+    }
+
+    public Shows createShowsTicket(ShowsRequestDTO.ticketInfoDTO ticketInfoDTO,Long showId){
+        Shows shows=showsRepository.findById(showId)
+                .orElseThrow(()->new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
+
+        shows=ShowsConverter.toTicketInfo(ticketInfoDTO,shows);
+
+        return showsRepository.save(shows);
+    }
+
+    public Shows createShowsReq(ShowsRequestDTO.requirementDTO requirementDTO,Long showId){
+        Shows shows=showsRepository.findById(showId)
+                .orElseThrow(()->new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
+
+        shows=ShowsConverter.toRequirement(requirementDTO,shows);
 
         return showsRepository.save(shows);
     }

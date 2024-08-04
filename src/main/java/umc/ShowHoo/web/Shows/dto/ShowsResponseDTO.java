@@ -11,6 +11,14 @@ public class ShowsResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class postShowDTO{
+        Long showId;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class ShowinfoDTO{
         Long shows_id;
         String poster;
