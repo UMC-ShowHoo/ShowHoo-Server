@@ -13,6 +13,9 @@ import umc.ShowHoo.web.holiday.entity.Holiday;
 import umc.ShowHoo.web.holiday.repository.HolidayRepository;
 import umc.ShowHoo.web.peakSeasonRentalFee.entity.PeakSeasonRentalFee;
 import umc.ShowHoo.web.peakSeasonRentalFee.repository.PeakSeasonRentalFeeRepository;
+import umc.ShowHoo.web.performer.entity.Performer;
+import umc.ShowHoo.web.performer.handler.PerformerHandler;
+import umc.ShowHoo.web.performer.repository.PerformerRepository;
 import umc.ShowHoo.web.rentalFee.entity.RentalFee;
 import umc.ShowHoo.web.rentalFee.repository.RentalFeeRepository;
 import umc.ShowHoo.web.space.converter.SpaceConverter;
@@ -25,6 +28,8 @@ import umc.ShowHoo.web.spaceAdditionalService.entity.SpaceAdditionalService;
 import umc.ShowHoo.web.spaceAdditionalService.repository.SpaceAdditionalServiceRepository;
 import umc.ShowHoo.web.spacePhoto.entity.SpacePhoto;
 import umc.ShowHoo.web.spacePhoto.repository.SpacePhotoRepository;
+import umc.ShowHoo.web.spacePrefer.entity.SpacePrefer;
+import umc.ShowHoo.web.spacePrefer.repository.SpacePreferRepository;
 import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
 
 import java.util.List;
@@ -41,6 +46,8 @@ public class SpaceService {
     private final PeakSeasonRentalFeeRepository peakSeasonRentalFeeRepository;
     private final SpaceAdditionalServiceRepository spaceAdditionalServiceRepository;
     private final AmazonS3Manager amazonS3Manager;
+    private final SpacePreferRepository spacePreferRepository;
+    private final PerformerRepository performerRepository;
 
     @Autowired
     private SpaceConverter spaceConverter;
@@ -161,6 +168,15 @@ public class SpaceService {
         );
 
         return spaceConverter.toSpaceListDTO(spaces, performerId);
+    }
+
+    @Transactional
+    public SpaceResponseDTO.SpaceFilteredListDTO getPreferSpace(Long performerId) {
+        Performer performer = performerRepository.findById(performerId)
+                .orElseThrow(() -> new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
+        List<SpacePrefer> spacePreferList = spacePreferRepository.findByPerformer(performer);
+
+        return spaceConverter.toSpaceByPreferListDTO(spacePreferList, performerId);
     }
 
     public Space saveSpaceName(SpaceRequestDTO.SpaceNameDTO spaceNameDTO, SpaceUser spaceUser) {

@@ -119,6 +119,14 @@ public class PerformerProfileController {
         return ApiResponse.onSuccess(profiles);
     }
 
-
+    @GetMapping("/performer/mypage/{performerUserId}")
+    @Operation(summary = "공연자 마이페이지 조회 API", description = "공연자의 마이페이지(가장 최근 프로필, 회원 정보)를 조회하는 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
+    })
+    public ApiResponse<PerformerProfileResponseDTO.MyPageProfileDTO> getMyPageProfiles(@PathVariable Long performerUserId) {
+        PerformerProfileResponseDTO.MyPageProfileDTO myPageProfile = performerProfileService.getMyPageProfiles(performerUserId);
+        return ApiResponse.onSuccess(myPageProfile);
+    }
 
 }
