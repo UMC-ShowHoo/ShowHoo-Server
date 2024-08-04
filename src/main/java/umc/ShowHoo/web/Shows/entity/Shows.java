@@ -11,6 +11,7 @@ import java.util.List;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import umc.ShowHoo.web.showsDescription.entity.ShowsDescription;
 import umc.ShowHoo.web.showsPrefer.entity.ShowsPrefer;
 
 import umc.ShowHoo.web.rentalFile.entity.RentalFile;
@@ -27,7 +28,6 @@ public class Shows {
     private String requirement;
     private String poster; //포스터 사진
     private String name; //공연 이름
-    private String description;//공연 소개
     private String date; //공연 날짜
     private String time; //공연 시간
     private String runningTime; //러닝 타임
@@ -53,4 +53,7 @@ public class Shows {
 
     @OneToMany(mappedBy = "shows", cascade = CascadeType.ALL)
     private List<ShowsPrefer> preferList;
+
+    @OneToOne(mappedBy = "shows")
+    private ShowsDescription showsDescription;
 }

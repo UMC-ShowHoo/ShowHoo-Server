@@ -23,7 +23,6 @@ public class ShowsResponseDTO {
         Long shows_id;
         String poster;
         String name;
-        String description;
         String date;
         String time;
         String runningTime;

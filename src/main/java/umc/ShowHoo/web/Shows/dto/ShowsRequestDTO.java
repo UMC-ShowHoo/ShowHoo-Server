@@ -16,7 +16,6 @@ public class ShowsRequestDTO {
         private Long performerId;
         private String poster;
         private String name;
-        private String description;
         private String date;
         private String time;
         private String runningTime;
