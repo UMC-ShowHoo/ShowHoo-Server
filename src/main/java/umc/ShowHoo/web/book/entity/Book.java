@@ -9,9 +9,6 @@ import umc.ShowHoo.web.audience.entity.Audience;
 import umc.ShowHoo.web.cancelBook.entity.CancelBook;
 import umc.ShowHoo.web.common.BaseEntity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Getter
 @Setter
@@ -53,7 +50,6 @@ public class Book extends BaseEntity {
     private Audience audience;
 
     //취소 정보
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-    @Builder.Default
-    List<CancelBook> cancelBooks = new ArrayList<>();
+    @OneToOne(mappedBy = "book", cascade = CascadeType.ALL)
+    CancelBook cancelBooks;
 }
