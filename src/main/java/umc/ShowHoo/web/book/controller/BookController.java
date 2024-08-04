@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import umc.ShowHoo.apiPayload.ApiResponse;
 import umc.ShowHoo.web.book.converter.BookConverter;
@@ -18,12 +19,14 @@ import umc.ShowHoo.web.book.dto.BookResponseDTO;
 import umc.ShowHoo.web.book.entity.Book;
 import umc.ShowHoo.web.book.service.BookCommandService;
 import umc.ShowHoo.web.book.service.BookQueryService;
+import umc.ShowHoo.web.book.validation.CheckSoldout;
 import umc.ShowHoo.web.cancelBook.entity.CancelBook;
 
 import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 @RequestMapping("/book")
 public class BookController {
 
@@ -32,7 +35,7 @@ public class BookController {
     private final BookQueryService bookQueryService;
 
     //공연 예매 API
-    //공연 정보 엔티티 생성 시 포함시켜서 수정할 것.
+    //티켓 매진 로직 validation으로 구현
     @PostMapping("/post")
     @Operation(summary = "공연 예매 API", description = "관람자가 공연 게시글 상세 조회 페이지에서 공연을 예매하기 위한 API")
     @ApiResponses({
@@ -46,7 +49,7 @@ public class BookController {
             @Parameter(name = "name", description = "예매자의 이름, NOT NULL"),
             @Parameter(name = "phoneNum", description = "예매자의 전화번호, NOT NULL")
     })
-    public ApiResponse<BookResponseDTO.postBookDTO> bookTicket(@RequestBody @Valid BookRequestDTO.postDTO request){
+    public ApiResponse<BookResponseDTO.postBookDTO> bookTicket(@CheckSoldout @RequestBody @Valid BookRequestDTO.postDTO request){
         Book book = bookCommandService.postBook(request);
         if (book == null) {
             return ApiResponse.onSuccess(BookResponseDTO.postBookDTO.builder()
