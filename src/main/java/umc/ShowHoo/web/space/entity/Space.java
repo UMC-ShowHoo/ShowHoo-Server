@@ -79,6 +79,14 @@ public class Space extends BaseEntity {
     @OneToOne(mappedBy = "space")
     private RentalFile rentalFile;
 
-
-
+    public void updateGrade() {
+        if (spaceReviews != null && !spaceReviews.isEmpty()) {
+            this.grade = spaceReviews.stream()
+                    .mapToDouble(SpaceReview::getGrade)
+                    .average()
+                    .orElse(0.0);
+        } else {
+            this.grade = 0.0;
+        }
+    }
 }

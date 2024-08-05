@@ -75,4 +75,14 @@ public class SpaceApplyService {
                 .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_APPLY_NOT_FOUND));
         spaceApplyRepository.delete(spaceApply);
     }
+
+    @Transactional
+    public void setSpaceApply(Long spaceId, Long spaceApplyId, int status) {
+        Space space = spaceRepository.findById(spaceId)
+                .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_NOT_FOUND));
+
+        SpaceApply spaceApply = spaceApplyRepository.findById(spaceApplyId)
+                .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_NOT_FOUND));
+        spaceApply.setStatus(status);
+    }
 }

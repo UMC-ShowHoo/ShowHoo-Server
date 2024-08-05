@@ -14,6 +14,7 @@ import umc.ShowHoo.web.performer.entity.Performer;
 import umc.ShowHoo.web.performer.repository.PerformerRepository;
 import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.space.repository.SpaceRepository;
+import umc.ShowHoo.web.space.service.SpaceService;
 import umc.ShowHoo.web.spaceApply.exception.handler.SpaceApplyHandler;
 import umc.ShowHoo.web.spaceApply.repository.SpaceApplyRepository;
 import umc.ShowHoo.web.spaceReview.converter.SpaceReviewConverter;
@@ -44,6 +45,7 @@ public class SpaceReviewService {
     private final AmazonS3Manager amazonS3Manager;
     private final UuidRepository uuidRepository;
     private final NotificationService notificationService;
+    private final SpaceService spaceService;
 
     @Transactional
     public void createSpaceReview(Long spaceId, Long performerId, SpaceReviewRequestDTO.ReviewRegisterDTO reviewRegisterDTO) {
@@ -67,9 +69,9 @@ public class SpaceReviewService {
             }
             spaceReviewImageRepository.saveAll(reviewImagesList);
         }
-          
-        notificationService.createSpaceReviewNotification(space, performer);// 알림 생성
 
+        notificationService.createSpaceReviewNotification(space, performer);// 알림 생성
+        spaceService.updateSpaceGrade(spaceReview.getSpace()); // grade update
     }
 
     public void deleteSpaceReview(Long reviewId) {
