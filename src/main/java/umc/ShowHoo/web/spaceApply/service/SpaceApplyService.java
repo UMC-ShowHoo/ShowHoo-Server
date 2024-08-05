@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
+import umc.ShowHoo.web.notification.service.NotificationService;
 import umc.ShowHoo.web.performer.entity.Performer;
 import umc.ShowHoo.web.performer.repository.PerformerRepository;
+import umc.ShowHoo.web.performerProfile.repository.PerformerProfileRepository;
 import umc.ShowHoo.web.selectedAdditionalService.entity.SelectedAdditionalService;
 import umc.ShowHoo.web.selectedAdditionalService.repository.SelectedAdditionalServiceRepository;
 import umc.ShowHoo.web.space.entity.Space;
@@ -17,7 +19,9 @@ import umc.ShowHoo.web.spaceApply.dto.SpaceApplyResponseDTO;
 import umc.ShowHoo.web.spaceApply.entity.SpaceApply;
 import umc.ShowHoo.web.spaceApply.exception.handler.SpaceApplyHandler;
 import umc.ShowHoo.web.spaceApply.repository.SpaceApplyRepository;
+import umc.ShowHoo.web.spaceUser.repository.SpaceUserRepository;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +35,8 @@ public class SpaceApplyService {
     private final SpaceRepository spaceRepository;
     private final SelectedAdditionalServiceRepository selectedAdditionalServiceRepository;
     private final SpaceApplyConverter spaceApplyConverter;
+    private final NotificationService notificationService;
+
 
 
     public SpaceApply createSpaceApply(Long spaceUserId, Long performerId, SpaceApplyRequestDTO.RegisterDTO registerDTO) {
@@ -39,7 +45,6 @@ public class SpaceApplyService {
 
         Space space = spaceRepository.findById(spaceUserId)
                 .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_NOT_FOUND));
-
 
         SpaceApply spaceApply = spaceApplyConverter.toCreateSpaceApply(registerDTO, performer, space);
 
@@ -52,6 +57,8 @@ public class SpaceApplyService {
                     .build();
             selectedAdditionalServiceRepository.save(additionalService);
         }
+
+        notificationService.createApplyNotification(spaceUserId, registerDTO); // 알림 생성
 
         return spaceApply;
     }

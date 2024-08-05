@@ -8,5 +8,5 @@ import umc.ShowHoo.web.rentalFee.entity.DayOfWeek;
 
 @Repository
 public interface RentalFeeRepository extends JpaRepository<RentalFee, Long> {
-    RentalFee findBySpaceIdAndDayOfWeek(Long spaceUserId, DayOfWeek dayOfWeek);
+    RentalFee findBySpaceIdAndDayOfWeek(Long spaceId, DayOfWeek dayOfWeek);
 }

@@ -2,6 +2,8 @@ package umc.ShowHoo.web.space.converter;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import umc.ShowHoo.web.holiday.entity.Holiday;
+import umc.ShowHoo.web.peakSeasonRentalFee.entity.PeakSeasonRentalFee;
 import umc.ShowHoo.web.rentalFee.entity.DayOfWeek;
 import umc.ShowHoo.web.rentalFee.entity.RentalFee;
 import umc.ShowHoo.web.space.dto.SpaceRequestDTO;
@@ -9,13 +11,14 @@ import umc.ShowHoo.web.space.dto.SpaceResponseDTO;
 import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.space.repository.SpaceRepository;
 import umc.ShowHoo.web.spaceAdditionalService.entity.SpaceAdditionalService;
-import umc.ShowHoo.web.spaceAdditionalService.repository.SpaceAdditionalServiceRepository;
 import umc.ShowHoo.web.spacePhoto.entity.SpacePhoto;
+import umc.ShowHoo.web.spacePrefer.entity.SpacePrefer;
 import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -23,7 +26,7 @@ import java.util.stream.Collectors;
 public class SpaceConverter {
     private final SpaceRepository spaceRepository;
 
-    public static Space toEntity(SpaceRequestDTO.SpaceRegisterRequestDTO dto, String soundEquipmentUrl, String lightingEquipmentUrl, String stageMachineryUrl, String spaceDrawingUrl, String spaceStaffUrl, String spaceSeatUrl, List<String> photoUrls, SpaceUser spaceUser) {
+    public static Space toEntity(SpaceRequestDTO.SpaceRegisterRequestDTO dto, String soundEquipmentUrl, String lightingEquipmentUrl, String stageMachineryUrl, String spaceDrawingUrl, String spaceStaffUrl, String spaceSeatUrl, SpaceUser spaceUser) {
         Space space = Space.builder()
                 .name(dto.getName())
                 .description(dto.getDescription())
@@ -32,6 +35,9 @@ public class SpaceConverter {
                 .area(dto.getArea())
                 .seatingCapacity(dto.getSeatingCapacity())
                 .standingCapacity(dto.getStandingCapacity())
+                .bankOwner(dto.getBankOwner())
+                .bankAccount(dto.getBankAccount())
+                .bankName(dto.getBankName())
                 .soundEquipment(soundEquipmentUrl)
                 .lightingEquipment(lightingEquipmentUrl)
                 .stageMachinery(stageMachineryUrl)
@@ -39,14 +45,22 @@ public class SpaceConverter {
                 .spaceStaff(spaceStaffUrl)
                 .spaceSeat(spaceSeatUrl)
                 .notice(dto.getNotice())
-                .grade(dto.getGrade())
                 .spaceUser(spaceUser)
                 .build();
 
-        List<SpacePhoto> photos = photoUrls.stream()
-                .map(url -> SpacePhoto.builder().photoUrl(url).space(space).build())
-                .collect(Collectors.toList());
-        space.setPhotos(photos);
+        if (dto.getPhotoUrls() != null) {
+            List<SpacePhoto> photos = dto.getPhotoUrls().stream()
+                    .map(url -> SpacePhoto.builder().photoUrl(url).space(space).build())
+                    .collect(Collectors.toList());
+            space.setPhotos(photos);
+        }
+
+        if (dto.getHolidays() != null) {
+            List<Holiday> holidays = dto.getHolidays().stream()
+                    .map(date -> Holiday.builder().date(date).space(space).build())
+                    .collect(Collectors.toList());
+            space.setHolidays(holidays);
+        }
 
         List<RentalFee> rentalFees = dto.getRentalFees().stream()
                 .map(feeDTO -> RentalFee.builder()
@@ -56,6 +70,15 @@ public class SpaceConverter {
                         .build())
                 .collect(Collectors.toList());
         space.setRentalFees(rentalFees);
+
+        List<PeakSeasonRentalFee> peakSeasonRentalFees = dto.getPeakSeasonRentalFees().stream()
+                .map(peakfeeDTO -> PeakSeasonRentalFee.builder()
+                        .dayOfWeek(DayOfWeek.valueOf(peakfeeDTO.getDayOfWeek()))
+                        .fee(peakfeeDTO.getFee())
+                        .space(space)
+                        .build())
+                .collect(Collectors.toList());
+        space.setPeakSeasonRentalFees(peakSeasonRentalFees);
 
         List<SpaceAdditionalService> additionalServices = dto.getAdditionalServices().stream()
                 .map(serviceDTO -> SpaceAdditionalService.builder()
@@ -113,6 +136,14 @@ public class SpaceConverter {
                 .build();
     }
 
+    public static SpaceResponseDTO.SpacePayDTO toSpacePayDTO(Space space) {
+        return SpaceResponseDTO.SpacePayDTO.builder()
+                .bankAccount(space.getBankAccount())
+                .bankName(space.getBankName())
+                .bankOwner(space.getBankOwner())
+                .build();
+    }
+
     public SpaceResponseDTO.SpaceListDTO toTopSpaceListDTO(List<Space> spacePreferList, List<Space> gradeList, Long performerId) {
         List<SpaceResponseDTO.SpaceSummaryDTO> spacePreferDTOList = spacePreferList.stream()
                 .map(space -> toSpaceDTOWithPreference(space, performerId))
@@ -132,8 +163,17 @@ public class SpaceConverter {
         return new SpaceResponseDTO.SpaceFilteredListDTO(spaceSummaryDTOs);
     }
 
+    public SpaceResponseDTO.SpaceFilteredListDTO toSpaceByPreferListDTO(List<SpacePrefer> spacePrefers, Long performerId) {
+        List<SpaceResponseDTO.SpaceSummaryDTO> spaceSummaryDTOs = spacePrefers.stream()
+                .map(spacePrefer -> toSpaceDTOWithPreference(spacePrefer.getSpace(), performerId))
+                .collect(Collectors.toList());
+        return new SpaceResponseDTO.SpaceFilteredListDTO(spaceSummaryDTOs);
+    }
+
     public SpaceResponseDTO.SpaceSummaryDTO toSpaceDTO(Space space){
-        Integer totalCapacity = space.getSeatingCapacity() + space.getStandingCapacity();
+        Integer seatingCapacity = Optional.ofNullable(space.getSeatingCapacity()).orElse(0);
+        Integer standingCapacity = Optional.ofNullable(space.getStandingCapacity()).orElse(0);
+        Integer totalCapacity = seatingCapacity + standingCapacity;
         String imageURL = space.getPhotos().isEmpty() ? null : space.getPhotos().get(0).getPhotoUrl();
         String additionalService = space.getPhotos().isEmpty() ? null : space.getAdditionalServices().get(0).getTitle();
 

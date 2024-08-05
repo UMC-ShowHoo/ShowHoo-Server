@@ -19,14 +19,27 @@ public enum ErrorStatus implements BaseErrorCode {
     //Exception 핸들링 테스트
     TEMP_EXCEPTION(HttpStatus.BAD_REQUEST, "TEMP4001", "에러 핸들링 테스트"),
 
+    //MEMBER
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER001", "member not found"),
+
     //SPACE
     SPACE_NOT_FOUND(HttpStatus.NOT_FOUND, "SPACE001", "Space not found"),
+
+    //SPACEUSER
+    SPACEUSER_NOT_FOUND(HttpStatus.NOT_FOUND, "SPACEUSER001", "SpaceUser not found"),
 
     //AUDIENCE
     AUDIENCE_NOT_FOUND(HttpStatus.NOT_FOUND, "AUDIENCE001", "Audience not found"),
 
+    //BOOK
+    BOOK_NOT_FOUND(HttpStatus.NOT_FOUND, "BOOK001", "Book not found"),
+    SHOW_ALREADY_SOLD_OUT(HttpStatus.BAD_REQUEST, "BOOK002", "Already sold out Shows"),
+
     //PERFORMER
     PERFORMER_NOT_FOUND(HttpStatus.NOT_FOUND, "PERFORMER001", "Performer not found"),
+
+    //PERFORMER PROFILE
+    PERFORMER_PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "PERFORMER_PROFILE001", "Performer Profile not found"),
 
     //SHOW
     SHOW_NOT_FOUND(HttpStatus.NOT_FOUND,"SHOW001","Show not found"),
@@ -40,10 +53,16 @@ public enum ErrorStatus implements BaseErrorCode {
     //SPACE_APPLY
     SPACE_APPLY_NOT_FOUND(HttpStatus.NOT_FOUND, "SPACE_APPLY001", "SpaceApply not found"),
 
+    //SPACE_REVIEW
+    SPACE_REVIEW_PERMISSION_NOT_FOUND(HttpStatus.NOT_FOUND, "SPACE_REVIEW001", "SpaceReviewPermission not found"),
 
+    //RENTALFILE
     RENTALFILE_FORM_NOT_FOUND(HttpStatus.NOT_FOUND,"RENTALFILE_FORM001","RentalFile form not found"),
 
-    RENTALFILE_NOT_FOUND(HttpStatus.NOT_FOUND,"RENTALFILE001","RentalFile not found")
+    RENTALFILE_NOT_FOUND(HttpStatus.NOT_FOUND,"RENTALFILE001","RentalFile not found"),
+
+    //NOTIFICATION
+    NOTIFICATION_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND,"NOTIFICATION001","정의되지 않은 notification type 입니다.")
 
     ;
 

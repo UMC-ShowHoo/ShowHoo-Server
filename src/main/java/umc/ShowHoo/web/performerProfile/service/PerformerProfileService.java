@@ -6,9 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
 import umc.ShowHoo.aws.s3.AmazonS3Manager;
 import umc.ShowHoo.aws.s3.Uuid;
+import umc.ShowHoo.web.member.entity.Member;
+import umc.ShowHoo.web.member.handler.MemberHandler;
+import umc.ShowHoo.web.member.repository.MemberRepository;
 import umc.ShowHoo.web.performer.entity.Performer;
+import umc.ShowHoo.web.performer.handler.PerformerHandler;
 import umc.ShowHoo.web.performerProfile.dto.PerformerProfileRequestDTO;
 import umc.ShowHoo.web.performerProfile.dto.PerformerProfileResponseDTO;
 import umc.ShowHoo.web.performerProfile.entity.PerformerProfile;
@@ -21,6 +26,7 @@ import umc.ShowHoo.web.performerProfile.repository.ProfileImageRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -35,31 +41,23 @@ public class PerformerProfileService {
     private final UuidRepository uuidRepository;
     private final ProfileImageRepository profileImageRepository;
 
-    public PerformerProfile createProfile(Long performerUserId, PerformerProfileRequestDTO.CreateProfileDTO profileDTO, List<MultipartFile> profileImages) {
+    public PerformerProfile createProfile(Long performerUserId, PerformerProfileRequestDTO.CreateProfileDTO profileDTO) {
         Performer performer = performerRepository.findById(performerUserId)
                 .orElseThrow(() -> new IllegalArgumentException("Performer not found"));
 
         PerformerProfile performerProfile = PerformerProfileConverter.toCreateProfile(profileDTO);
         performerProfile.setPerformer(performer);
 
-
-        if (profileImages != null && !profileImages.isEmpty()) {
-
-        List<ProfileImage> profileImageList = new ArrayList<>();
-        for (MultipartFile image : profileImages) {
-            String uuid = UUID.randomUUID().toString();
-            Uuid savedUuid = uuidRepository.save(Uuid.builder().uuid(uuid).build());
-            String keyName = amazonS3Manager.generatePerformerProfileImageKeyName(savedUuid);
-            String imageUrl = amazonS3Manager.uploadFile(keyName, image);
-
-            ProfileImage profileImage = ProfileImage.builder()
-                    .profileImageUrl(imageUrl)
-                    .performerProfile(performerProfile)
-                    .build();
-            profileImageList.add(profileImage);
-        }
-        performerProfile.setProfileImages(profileImageList);
-
+        if (profileDTO.getProfileImageUrls() != null && !profileDTO.getProfileImageUrls().isEmpty()) {
+            List<ProfileImage> profileImageList = new ArrayList<>();
+            for (String imageUrl : profileDTO.getProfileImageUrls()) {
+                ProfileImage profileImage = ProfileImage.builder()
+                        .profileImageUrl(imageUrl)
+                        .performerProfile(performerProfile)
+                        .build();
+                profileImageList.add(profileImage);
+            }
+            performerProfile.setProfileImages(profileImageList);
         }
 
         return performerProfileRepository.save(performerProfile);
@@ -92,7 +90,7 @@ public class PerformerProfileService {
         log.info("Deleted image from DB: {}", profileImage.getId());
     }
 
-    public void addProfileImage(Long performerUserId, Long profileId, PerformerProfileRequestDTO.AddProfileImageDTO requestDTO) {
+    public String addProfileImage(Long performerUserId, Long profileId, PerformerProfileRequestDTO.AddProfileImageDTO requestDTO) {
         Performer performer = performerRepository.findById(performerUserId)
                 .orElseThrow(() -> new IllegalArgumentException("Performer not found"));
 
@@ -114,6 +112,7 @@ public class PerformerProfileService {
 
         profileImageRepository.save(profileImage);
         log.info("Added new image to profile ID {}: {}", profileId, imageUrl);
+        return imageUrl;
     }
 
     public void deleteProfile(Long performerUserId, Long profileId) {
@@ -140,12 +139,47 @@ public class PerformerProfileService {
 
     public List<PerformerProfileResponseDTO.ProfileDTO> getAllProfiles(Long performerUserId) {
         Performer performer = performerRepository.findById(performerUserId)
-                .orElseThrow(() -> new IllegalArgumentException("Performer not found"));
+                .orElseThrow(() -> new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
 
         List<PerformerProfile> profiles = performerProfileRepository.findByPerformer(performer);
 
         return profiles.stream()
                 .map(PerformerProfileConverter::toGetProfile)
                 .collect(Collectors.toList());
+    }
+
+    public PerformerProfileResponseDTO.MyPageProfileDTO getMyPageProfiles(Long performerUserId) {
+        Member member = performerRepository.findMemberIdById(performerUserId)
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
+        Optional<PerformerProfile> profileOptional = performerProfileRepository.findTopByPerformerId(performerUserId);
+
+        if (profileOptional.isPresent()) {
+            PerformerProfile profile = profileOptional.get();
+            PerformerProfileResponseDTO.ProfileDTO profileDTO = PerformerProfileConverter.toGetProfile(profile);
+            return new PerformerProfileResponseDTO.MyPageProfileDTO(
+                    profileDTO,
+                    member.getName(),
+                    member.getProfileimage()
+            );
+        } else {
+            // 프로필이 없을 경우
+            return new PerformerProfileResponseDTO.MyPageProfileDTO(null,
+                    member.getName(),
+                    member.getProfileimage()
+            );
+        }
+    }
+
+    public List<String> uploadProfileImages(List<MultipartFile> profileImages) {
+        List<String> imageUrls = new ArrayList<>();
+
+        for (MultipartFile profileImage : profileImages) {
+            String uuid = UUID.randomUUID().toString();
+            Uuid savedUuid = uuidRepository.save(Uuid.builder().uuid(uuid).build());
+            String keyName = amazonS3Manager.generatePerformerProfileImageKeyName(savedUuid);
+            String imageUrl = amazonS3Manager.uploadFile(keyName, profileImage);
+            imageUrls.add(imageUrl);
+        }
+        return imageUrls;
     }
 }

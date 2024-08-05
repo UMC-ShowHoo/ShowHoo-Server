@@ -6,22 +6,38 @@ import umc.ShowHoo.web.Shows.entity.Shows;
 
 public class ShowsConverter {
 
-    public static Shows toEntity(ShowsRequestDTO dto,String poster){
+    public static ShowsResponseDTO.postShowDTO toPostShowDTO(Shows shows){
+        return ShowsResponseDTO.postShowDTO.builder()
+                .showId(shows.getId())
+                .build();
+    }
+
+    public static Shows toShowInfo(ShowsRequestDTO.ShowInfoDTO dto, String poster){
         return Shows.builder()
-                .requirement(dto.getRequirement())
                 .name(dto.getName())
                 .showAge(dto.getShowAge())
                 .date(dto.getDate())
-                .description(dto.getDescription())
                 .poster(poster)
                 .runningTime(dto.getRunningTime())
                 .time(dto.getTime())
-                .perMaxticket(dto.getPerMaxticket())
-                .ticketPrice(dto.getTicketPrice())
-                .bank(dto.getBank())
-                .accountHolder(dto.getAccountHolder())
-                .accountNum(dto.getAccountNum())
                 .build();
+    }
+
+    public static Shows toTicketInfo(ShowsRequestDTO.ticketInfoDTO dto,Shows shows){
+        shows.setBank(dto.getBank());
+        shows.setAccountHolder(dto.getAccountHolder());
+        shows.setAccountNum(dto.getAccountNum());
+        shows.setTicketNum(dto.getTicketNum());
+        shows.setTicketPrice(dto.getTicketPrice());
+        shows.setPerMaxticket(dto.getPerMaxticket());
+
+        return shows;
+    }
+
+    public static Shows toRequirement(ShowsRequestDTO.requirementDTO dto,Shows shows){
+        shows.setRequirement(dto.getRequirement());
+
+        return shows;
     }
 
 
@@ -31,7 +47,6 @@ public class ShowsConverter {
                 .name(shows.getName())
                 .showAge(shows.getShowAge())
                 .date(shows.getDate())
-                .description(shows.getDescription())
                 .runningTime(shows.getRunningTime())
                 .time(shows.getTime())
                 .ticketPrice(shows.getTicketPrice())

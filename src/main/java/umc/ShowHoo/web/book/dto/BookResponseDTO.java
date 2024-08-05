@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import umc.ShowHoo.web.book.entity.BookDetail;
 import umc.ShowHoo.web.book.entity.BookStatus;
 
-import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class BookResponseDTO {
@@ -20,8 +20,25 @@ public class BookResponseDTO {
         Long book_id;
         Long showsId;
         Long audienceId;
+        String payment;
         String alert;
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class bookInfoDTO{
+        Long book_id;
+        String name;
+        String phoneNum;
+        Integer ticketNum;
+        String payment;
+
+        //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+        LocalDateTime dateTime;
+    }
+
 
     @Getter
     @Builder
@@ -64,6 +81,18 @@ public class BookResponseDTO {
         Long bookId;
         Long cancelBookId;
         //바로 삭제하지 않고 상태를 우선 취소로 바꿈
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class refundBookDTO{
+        Long book_id;
+        String name;
+        String bankName;
+        String account;
+        LocalDateTime dateTime;
     }
 
     @Getter

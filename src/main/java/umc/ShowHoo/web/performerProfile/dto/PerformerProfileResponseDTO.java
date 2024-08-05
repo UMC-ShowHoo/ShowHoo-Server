@@ -2,6 +2,7 @@ package umc.ShowHoo.web.performerProfile.dto;
 
 import lombok.*;
 
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,6 +26,19 @@ public class PerformerProfileResponseDTO {
         private String team;
         private String introduction;
         private List<ProfileImageDTO> profileImages;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class MyPageProfileDTO{
+        ProfileDTO profileDTO;
+
+        private String name;
+
+        private URL profileimage;
     }
 
     @Getter

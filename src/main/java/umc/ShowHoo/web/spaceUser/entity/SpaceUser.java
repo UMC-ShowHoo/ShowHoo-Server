@@ -19,7 +19,7 @@ public class SpaceUser {
     private Boolean status; //공연장 인증 상태, 인증이 되어야 대관글 올릴 수 있음
 
     @OneToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @OneToMany(mappedBy = "spaceUser", cascade = CascadeType.ALL)
