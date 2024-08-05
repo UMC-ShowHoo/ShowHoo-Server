@@ -13,7 +13,6 @@ import umc.ShowHoo.web.selectedAdditionalService.repository.SelectedAdditionalSe
 import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.space.repository.SpaceRepository;
 import umc.ShowHoo.web.spaceApply.converter.SpaceApplyConverter;
-//import umc.ShowHoo.web.spaceApply.dto.SpaceApplyDTO;
 import umc.ShowHoo.web.spaceApply.dto.SpaceApplyRequestDTO;
 import umc.ShowHoo.web.spaceApply.dto.SpaceApplyResponseDTO;
 import umc.ShowHoo.web.spaceApply.entity.SpaceApply;
@@ -36,7 +35,6 @@ public class SpaceApplyService {
     private final SelectedAdditionalServiceRepository selectedAdditionalServiceRepository;
     private final SpaceApplyConverter spaceApplyConverter;
     private final NotificationService notificationService;
-
 
 
     public SpaceApply createSpaceApply(Long spaceUserId, Long performerId, SpaceApplyRequestDTO.RegisterDTO registerDTO) {
@@ -63,16 +61,13 @@ public class SpaceApplyService {
         return spaceApply;
     }
 
-
     @Transactional
     public List<SpaceApplyResponseDTO.SpaceApplyDetailDTO> getSpaceAppliesByPerformerId(Long performerId) {
-        List<SpaceApply> spaceApplies = spaceApplyRepository.findByPerformer(performerId);
+        List<SpaceApply> spaceApplies = spaceApplyRepository.findByPerformerId(performerId);
         return spaceApplies.stream()
                 .map(spaceApplyConverter::toGetSpaceApply)
                 .collect(Collectors.toList());
     }
-
-
 
     @Transactional
     public void deleteSpaceApply(Long spaceApplyId) {
@@ -80,19 +75,4 @@ public class SpaceApplyService {
                 .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_APPLY_NOT_FOUND));
         spaceApplyRepository.delete(spaceApply);
     }
-
-
-    @Transactional
-    public void setSpaceApply(Long spaceUserId, Long spaceApplyId, int status) {
-        Space space = spaceRepository.findById(spaceUserId)
-                .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_NOT_FOUND));
-
-        SpaceApply spaceApply = spaceApplyRepository.findById(spaceApplyId)
-                .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_NOT_FOUND));
-        spaceApply.setStatus(status);
-    }
-
-
-
-
 }
