@@ -74,46 +74,6 @@ public class SpaceService {
                 spaceStaffUrl, spaceSeatUrl, spaceUser);
 
         return spaceRepository.save(space);
-
-//        Space space = SpaceConverter.toEntity(dto, soundEquipmentUrl, lightingEquipmentUrl, stageMachineryUrl, spaceDrawingUrl, spaceStaffUrl, spaceSeatUrl, spaceUser);
-//        Space savedSpace = spaceRepository.save(space);
-
-//        if (dto.getPhotoUrls() != null) {
-//            List<SpacePhoto> photos = dto.getPhotoUrls().stream()
-//                    .map(url -> SpacePhoto.builder().photoUrl(url).space(savedSpace).build())
-//                    .collect(Collectors.toList());
-//            spacePhotoRepository.saveAll(photos);
-//        }
-//
-//        if (dto.getHolidays() != null) {
-//            List<Holiday> holidays = dto.getHolidays().stream()
-//                    .map(date -> Holiday.builder().date(date).space(savedSpace).build())
-//                    .collect(Collectors.toList());
-//            holidayRepository.saveAll(holidays);
-//        }
-//
-//        if (space.getAdditionalServices() != null) {
-//            for (SpaceAdditionalService service : space.getAdditionalServices()) {
-//                service.setSpace(savedSpace);
-//                spaceAdditionalServiceRepository.save(service);
-//            }
-//        }
-//
-//        if (space.getRentalFees() != null) {
-//            for (RentalFee rentalFee : space.getRentalFees()) {
-//                rentalFee.setSpace(savedSpace);
-//                rentalFeeRepository.save(rentalFee);
-//            }
-//        }
-//
-//        if (space.getPeakSeasonRentalFees() != null){
-//            for (PeakSeasonRentalFee peakSeasonRentalFee : space.getPeakSeasonRentalFees()){
-//                peakSeasonRentalFee.setSpace(savedSpace);
-//                peakSeasonRentalFeeRepository.save(peakSeasonRentalFee);
-//            }
-//        }
-//
-//        return savedSpace;
     }
 
     @Transactional
@@ -150,6 +110,15 @@ public class SpaceService {
     }
 
     @Transactional
+    public SpaceResponseDTO.SpaceListDTO getTopSpacesWithNull() {
+        Pageable pageable = PageRequest.of(0, 8);
+        List<Space> spacePreferList = spaceRepository.findTopBySpacePreferOrderByCountDesc(pageable);
+        List<Space> gradeList = spaceRepository.findTopByOrderByGradeDesc(pageable);
+
+        return spaceConverter.toTopSpaceListWithNullDTO(spacePreferList, gradeList);
+    }
+
+    @Transactional
     public SpaceResponseDTO.SpaceFilteredListDTO searchSpaces(SpaceRequestDTO.SpaceSearchRequestDTO searchRequest, Long performerId) {
         Pageable pageable = PageRequest.of(searchRequest.getPage(), searchRequest.getSize());
         String namePattern = searchRequest.getName() != null ? "%" + searchRequest.getName() + "%" : null;
@@ -166,8 +135,27 @@ public class SpaceService {
                 searchRequest.getMaxCapacity(),
                 pageable
         );
-
         return spaceConverter.toSpaceListDTO(spaces, performerId);
+    }
+
+    @Transactional
+    public SpaceResponseDTO.SpaceFilteredListDTO searchSpacesWithNull(SpaceRequestDTO.SpaceSearchRequestDTO searchRequest) {
+        Pageable pageable = PageRequest.of(searchRequest.getPage(), searchRequest.getSize());
+        String namePattern = searchRequest.getName() != null ? "%" + searchRequest.getName() + "%" : null;
+        String locationPattern = searchRequest.getLocation() != null ? "%" + searchRequest.getLocation() + "%" : null;
+
+        List<Space> spaces = spaceRepository.searchSpaces(
+                namePattern,
+                locationPattern,
+                searchRequest.getDate(),
+                searchRequest.getType(),
+                searchRequest.getMinPrice(),
+                searchRequest.getMaxPrice(),
+                searchRequest.getMinCapacity(),
+                searchRequest.getMaxCapacity(),
+                pageable
+        );
+        return spaceConverter.toSpaceListWithNullDTO(spaces);
     }
 
     @Transactional

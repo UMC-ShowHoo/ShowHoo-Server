@@ -156,9 +156,28 @@ public class SpaceConverter {
         return new SpaceResponseDTO.SpaceListDTO(spacePreferDTOList, gradeDTOList);
     }
 
+    public SpaceResponseDTO.SpaceListDTO toTopSpaceListWithNullDTO(List<Space> spacePreferList, List<Space> gradeList) {
+        List<SpaceResponseDTO.SpaceSummaryDTO> spacePreferDTOList = spacePreferList.stream()
+                .map(space -> toSpaceDTO(space))
+                .collect(Collectors.toList());
+
+        List<SpaceResponseDTO.SpaceSummaryDTO> gradeDTOList = gradeList.stream()
+                .map(space -> toSpaceDTO(space))
+                .collect(Collectors.toList());
+
+        return new SpaceResponseDTO.SpaceListDTO(spacePreferDTOList, gradeDTOList);
+    }
+
     public SpaceResponseDTO.SpaceFilteredListDTO toSpaceListDTO(List<Space> spaces, Long performerId) {
         List<SpaceResponseDTO.SpaceSummaryDTO> spaceSummaryDTOs = spaces.stream()
                 .map(space -> toSpaceDTOWithPreference(space, performerId))
+                .collect(Collectors.toList());
+        return new SpaceResponseDTO.SpaceFilteredListDTO(spaceSummaryDTOs);
+    }
+
+    public SpaceResponseDTO.SpaceFilteredListDTO toSpaceListWithNullDTO(List<Space> spaces) {
+        List<SpaceResponseDTO.SpaceSummaryDTO> spaceSummaryDTOs = spaces.stream()
+                .map(space -> toSpaceDTO(space))
                 .collect(Collectors.toList());
         return new SpaceResponseDTO.SpaceFilteredListDTO(spaceSummaryDTOs);
     }
