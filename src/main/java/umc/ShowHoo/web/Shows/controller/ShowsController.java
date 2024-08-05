@@ -1,16 +1,18 @@
-package umc.ShowHoo.web.shows.controller;
+package umc.ShowHoo.web.Shows.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import umc.ShowHoo.apiPayload.ApiResponse;
-import umc.ShowHoo.web.shows.converter.ShowsConverter;
-import umc.ShowHoo.web.shows.dto.ShowsRequestDTO;
-import umc.ShowHoo.web.shows.dto.ShowsResponseDTO;
-import umc.ShowHoo.web.shows.entity.Shows;
-import umc.ShowHoo.web.shows.service.ShowsService;
+import umc.ShowHoo.web.Shows.converter.ShowsConverter;
+import umc.ShowHoo.web.Shows.dto.ShowsRequestDTO;
+import umc.ShowHoo.web.Shows.dto.ShowsResponseDTO;
+import umc.ShowHoo.web.Shows.entity.Shows;
+import umc.ShowHoo.web.Shows.service.ShowsService;
 import umc.ShowHoo.web.showsDescription.converter.ShowsDscConverter;
 import umc.ShowHoo.web.showsDescription.dto.ShowsDscRequestDTO;
 import umc.ShowHoo.web.showsDescription.dto.ShowsDscResponseDTO;
@@ -19,6 +21,7 @@ import umc.ShowHoo.web.showsDescription.entity.ShowsDescription;
 @RestController
 @RequiredArgsConstructor
 public class ShowsController {
+    private static final Logger logger = LoggerFactory.getLogger(ShowsController.class);
     private final ShowsService showsService;
 
     @PostMapping(value="/{performerId}/{showId}/show-register",consumes = "multipart/form-data")
@@ -30,7 +33,7 @@ public class ShowsController {
             @PathVariable Long showId,
             @PathVariable Long performerId,
             //@RequestBody ShowsRequestDTO showsRequestDTO,
-            @RequestBody ShowsRequestDTO.ShowInfoDTO showsRequestDTO,
+            @RequestPart ShowsRequestDTO.ShowInfoDTO showsRequestDTO,
             @RequestPart(required = false) MultipartFile poster){
 
         Shows shows= showsService.createShows(showsRequestDTO,poster,performerId);
@@ -47,8 +50,7 @@ public class ShowsController {
 /*    @Parameters({
             @Parameter(name = "text",description = "등록하는 공연 설명의 텍스트"),
     })*/
-    public ApiResponse<ShowsDscResponseDTO.PostDscDTO> createShowDsc(@PathVariable Long showId,
-                                                                     @RequestBody ShowsDscRequestDTO.DescriptionDTO descriptionDTO,
+    public ApiResponse<ShowsDscResponseDTO.PostDscDTO> createShowDsc(@PathVariable Long showId, @RequestPart ShowsDscRequestDTO.DescriptionDTO descriptionDTO,
                                                                      @RequestBody(required = false) MultipartFile img){
         ShowsDescription showsDescription=showsService.createShowDsc(descriptionDTO,img,showId);
 

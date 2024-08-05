@@ -62,7 +62,7 @@ public class AudienceConverter {
                 .poster(shows.getPoster())
                 .date(shows.getDate())
                 .time(shows.getTime())
-                .description(shows.getDescription())
+                .description(shows.getShowsDescription().getText())
                 .runningTime(shows.getRunningTime())
                 .showAge(shows.getShowAge())
                 .ticketPrice(shows.getTicketPrice())

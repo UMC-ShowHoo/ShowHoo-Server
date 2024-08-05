@@ -2,7 +2,7 @@ package umc.ShowHoo.web.performer.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import umc.ShowHoo.web.shows.entity.Shows;
+import umc.ShowHoo.web.Shows.entity.Shows;
 import umc.ShowHoo.web.cancelBook.entity.CancelBook;
 import umc.ShowHoo.web.member.entity.Member;
 import umc.ShowHoo.web.performerProfile.entity.PerformerProfile;

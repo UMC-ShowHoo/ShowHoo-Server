@@ -1,6 +1,6 @@
 package umc.ShowHoo.web.showsDescription.converter;
 
-import umc.ShowHoo.web.shows.entity.Shows;
+import umc.ShowHoo.web.Shows.entity.Shows;
 import umc.ShowHoo.web.showsDescription.dto.ShowsDscRequestDTO;
 import umc.ShowHoo.web.showsDescription.dto.ShowsDscResponseDTO;
 import umc.ShowHoo.web.showsDescription.entity.ShowsDescription;

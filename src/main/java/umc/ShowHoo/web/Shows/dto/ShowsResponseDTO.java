@@ -1,4 +1,4 @@
-package umc.ShowHoo.web.shows.dto;
+package umc.ShowHoo.web.Shows.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

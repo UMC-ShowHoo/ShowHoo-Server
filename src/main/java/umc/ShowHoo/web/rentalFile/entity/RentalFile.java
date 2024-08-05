@@ -2,7 +2,7 @@ package umc.ShowHoo.web.rentalFile.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import umc.ShowHoo.web.shows.entity.Shows;
+import umc.ShowHoo.web.Shows.entity.Shows;
 import umc.ShowHoo.web.space.entity.Space;
 
 @Entity

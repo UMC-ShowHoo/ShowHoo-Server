@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import umc.ShowHoo.web.shows.entity.Shows;
+import umc.ShowHoo.web.Shows.entity.Shows;
 import umc.ShowHoo.web.audience.entity.Audience;
 import umc.ShowHoo.web.cancelBook.entity.CancelBook;
 import umc.ShowHoo.web.common.BaseEntity;

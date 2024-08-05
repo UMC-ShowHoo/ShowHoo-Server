@@ -2,7 +2,7 @@ package umc.ShowHoo.web.showsDescription.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import umc.ShowHoo.web.shows.entity.Shows;
+import umc.ShowHoo.web.Shows.entity.Shows;
 
 @Entity
 @Getter

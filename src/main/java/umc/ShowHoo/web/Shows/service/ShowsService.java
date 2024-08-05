@@ -1,16 +1,17 @@
-package umc.ShowHoo.web.shows.service;
+package umc.ShowHoo.web.Shows.service;
 
+import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
 import umc.ShowHoo.aws.s3.AmazonS3Manager;
-import umc.ShowHoo.web.shows.converter.ShowsConverter;
-import umc.ShowHoo.web.shows.dto.ShowsRequestDTO;
-import umc.ShowHoo.web.shows.dto.ShowsResponseDTO;
-import umc.ShowHoo.web.shows.entity.Shows;
-import umc.ShowHoo.web.shows.handler.ShowsHandler;
-import umc.ShowHoo.web.shows.repository.ShowsRepository;
+import umc.ShowHoo.web.Shows.converter.ShowsConverter;
+import umc.ShowHoo.web.Shows.dto.ShowsRequestDTO;
+import umc.ShowHoo.web.Shows.dto.ShowsResponseDTO;
+import umc.ShowHoo.web.Shows.entity.Shows;
+import umc.ShowHoo.web.Shows.handler.ShowsHandler;
+import umc.ShowHoo.web.Shows.repository.ShowsRepository;
 import umc.ShowHoo.web.performer.entity.Performer;
 import umc.ShowHoo.web.performer.handler.PerformerHandler;
 import umc.ShowHoo.web.performer.repository.PerformerRepository;
@@ -57,6 +58,12 @@ public class ShowsService {
                 .orElseThrow(()-> new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
 
         ShowsDescription showsDescription= ShowsDscConverter.toShowDsc(dto,imgUrl,shows);
+
+        boolean exists=showsDscRepository.existsById(showsDescription.getShows().getId());
+
+        if(exists){
+            throw new DuplicateRequestException("Show description already exists for shows_id: "+showsDescription.getShows().getId());
+        }
 
         return showsDscRepository.save(showsDescription);
     }

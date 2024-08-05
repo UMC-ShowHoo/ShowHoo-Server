@@ -2,7 +2,7 @@ package umc.ShowHoo.web.showsPrefer.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import umc.ShowHoo.web.shows.entity.Shows;
+import umc.ShowHoo.web.Shows.entity.Shows;
 import umc.ShowHoo.web.audience.entity.Audience;
 import umc.ShowHoo.web.common.BaseEntity;
 
