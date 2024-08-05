@@ -184,5 +184,11 @@ public class SpaceService {
         return spaceRepository.save(space);
     }
 
+    @Transactional
+    public void updateSpaceGrade(Space space) {
+        space.updateGrade();
+        spaceRepository.save(space);
+    }
+
 }
 
