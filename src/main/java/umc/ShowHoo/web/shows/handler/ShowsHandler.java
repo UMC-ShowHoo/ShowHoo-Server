@@ -1,4 +1,4 @@
-package umc.ShowHoo.web.Shows.handler;
+package umc.ShowHoo.web.shows.handler;
 
 import umc.ShowHoo.apiPayload.code.BaseErrorCode;
 import umc.ShowHoo.apiPayload.exception.GeneralException;
