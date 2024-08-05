@@ -34,9 +34,6 @@ public class Performer {
     private List<SpacePrefer> spacePrefers;
 
     @OneToMany(mappedBy = "performer", cascade = CascadeType.ALL)
-    private List<Shows> showsList;
-
-    @OneToMany(mappedBy = "performer", cascade = CascadeType.ALL)
     private List<SpaceApply> spaceApplies;
 
     @OneToMany(mappedBy = "performer", cascade = CascadeType.ALL)
