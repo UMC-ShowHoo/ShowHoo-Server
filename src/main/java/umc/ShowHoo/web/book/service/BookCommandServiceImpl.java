@@ -77,6 +77,8 @@ public class BookCommandServiceImpl implements BookCommandService {
         book.setDetail(BookDetail.CANCELLING);
         bookRepository.save(book);
 
+        notificationService.createBookCancleNotification(book); // 알림 생성
+
         return cancelBookRepository.save(BookConverter.toCancelBook(book, request));
     }
 
