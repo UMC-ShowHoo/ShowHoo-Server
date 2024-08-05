@@ -74,7 +74,7 @@ public class NotificationService {
 
     // 공연장 알림 - 공연장 대관 요청
     @Transactional
-    public void createApplyNotification(Long spaceUserId, SpaceApplyRequestDTO.RegisterDTO registerDTO){
+    public void createSpaceApplyNotification(Long spaceUserId, SpaceApplyRequestDTO.RegisterDTO registerDTO){
         // spaceUser의 memberId 가져오기
         Long memberId = spaceUserRepository.findMemberIdById(spaceUserId)
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
@@ -93,12 +93,25 @@ public class NotificationService {
     }
 
     @Transactional
+    public void createSpaceConfirmNotification(SpaceApply spaceApply){
+        // spaceUser의 memberId 가져오기
+        Long memberId = Optional.ofNullable(spaceApply.getPerformer().getMember().getId())
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
+        // 알림 메시지
+        String message = String.format("%s이 회원님의 대관 신청을 승인하였습니다. 이제 공연 준비를 시작해보세요", spaceApply.getSpace().getName());
+
+        NotificationRequestDTO.createNotificationDTO notification = notificationConverter.toCreateDTO(memberId, message, NotificationType.PERFORMER);
+
+        createNotification(notification);
+    }
+
+    @Transactional
     public void createSpaceCancleNotification(SpaceApply spaceApply){
         // spaceUser의 memberId 가져오기
         Long memberId = Optional.ofNullable(spaceApply.getPerformer().getMember().getId())
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
         // 알림 메시지
-        String message = String.format("%s의 대관 신청이 취소되었습니다.", spaceApply.getSpace().getName());
+        String message = String.format("%s의 대관 신청이 거절 되었습니다. 자세한 사항은 해당 공연장에 문의 바랍니다.", spaceApply.getSpace().getName());
 
         NotificationRequestDTO.createNotificationDTO notification = notificationConverter.toCreateDTO(memberId, message, NotificationType.PERFORMER);
 

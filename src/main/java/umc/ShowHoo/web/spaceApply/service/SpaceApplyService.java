@@ -56,7 +56,7 @@ public class SpaceApplyService {
             selectedAdditionalServiceRepository.save(additionalService);
         }
 
-        notificationService.createApplyNotification(spaceUserId, registerDTO); // 알림 생성
+        notificationService.createSpaceApplyNotification(spaceUserId, registerDTO); // 알림 생성
 
         return spaceApply;
     }
@@ -79,12 +79,14 @@ public class SpaceApplyService {
     }
 
     @Transactional
-    public void setSpaceApply(Long spaceId, Long spaceApplyId, int status) {
+    public void setSpaceApply(Long spaceId, Long spaceApplyId) {
         Space space = spaceRepository.findById(spaceId)
                 .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_NOT_FOUND));
 
         SpaceApply spaceApply = spaceApplyRepository.findById(spaceApplyId)
                 .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_NOT_FOUND));
-        spaceApply.setStatus(status);
+        spaceApply.setStatus(1);
+
+        notificationService.createSpaceConfirmNotification(spaceApply); // 알림 생성
     }
 }
