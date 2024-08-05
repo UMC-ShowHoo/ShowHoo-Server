@@ -68,6 +68,20 @@ public class NotificationService {
     }
 
     @Transactional
+    public Integer getNotificationCount(Long memberId, NotificationType type) {
+        switch (type) {
+            case PERFORMER -> performerRepository.findByMemberId(memberId)
+                    .orElseThrow(() -> new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
+            case SPACEUSER -> spaceUserRepository.findByMemberId(memberId)
+                    .orElseThrow(() -> new SpaceUserHandler(ErrorStatus.SPACEUSER_NOT_FOUND));
+            case AUDIENCE -> audienceRepository.findByMemberId(memberId)
+                    .orElseThrow(() -> new AudienceHandler(ErrorStatus.PERFORMER_NOT_FOUND));
+            default -> throw new NotificationHandler(ErrorStatus.NOTIFICATION_TYPE_NOT_FOUND);
+        }
+        return notificationRepository.countByMemberIdAndType(memberId, type);
+    }
+
+    @Transactional
     public void deleteNotification(Long notificationId) {
         notificationRepository.deleteById(notificationId);
     }
