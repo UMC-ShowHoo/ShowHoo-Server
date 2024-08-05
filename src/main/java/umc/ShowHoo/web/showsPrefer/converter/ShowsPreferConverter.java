@@ -1,7 +1,7 @@
 package umc.ShowHoo.web.showsPrefer.converter;
 
 import org.springframework.data.domain.Page;
-import umc.ShowHoo.web.Shows.entity.Shows;
+import umc.ShowHoo.web.shows.entity.Shows;
 import umc.ShowHoo.web.audience.entity.Audience;
 import umc.ShowHoo.web.showsPrefer.dto.ShowsPreferResponseDTO;
 import umc.ShowHoo.web.showsPrefer.entity.ShowsPrefer;

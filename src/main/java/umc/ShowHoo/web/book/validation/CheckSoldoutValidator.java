@@ -9,7 +9,7 @@ import umc.ShowHoo.web.book.dto.BookRequestDTO;
 import umc.ShowHoo.web.book.entity.Book;
 import umc.ShowHoo.web.book.entity.BookStatus;
 import umc.ShowHoo.web.book.repository.BookRepository;
-import umc.ShowHoo.web.Shows.repository.ShowsRepository;
+import umc.ShowHoo.web.shows.repository.ShowsRepository;
 
 import java.util.List;
 
@@ -32,8 +32,8 @@ public class CheckSoldoutValidator implements ConstraintValidator<CheckSoldout, 
         boolean isValid = true;
 
         if(isExist){
-            umc.ShowHoo.web.Shows.entity.Shows shows = showsRepository.findById(request.getShowsId())
-                    .orElseThrow(()->new umc.ShowHoo.web.Shows.handler.ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
+            umc.ShowHoo.web.shows.entity.Shows shows = showsRepository.findById(request.getShowsId())
+                    .orElseThrow(()->new umc.ShowHoo.web.shows.handler.ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
 
             List<Book> bookList = bookRepository.findAllByShows(shows);
 
