@@ -77,4 +77,14 @@ public class SpaceApplyService {
 
         notificationService.createSpaceCancleNotification(spaceApply); // 알림 생성
     }
+
+    @Transactional
+    public void setSpaceApply(Long spaceId, Long spaceApplyId, int status) {
+        Space space = spaceRepository.findById(spaceId)
+                .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_NOT_FOUND));
+
+        SpaceApply spaceApply = spaceApplyRepository.findById(spaceApplyId)
+                .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_NOT_FOUND));
+        spaceApply.setStatus(status);
+    }
 }
