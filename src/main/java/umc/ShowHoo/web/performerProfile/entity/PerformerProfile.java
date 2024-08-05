@@ -2,6 +2,7 @@ package umc.ShowHoo.web.performerProfile.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import umc.ShowHoo.web.Shows.entity.Shows;
 import umc.ShowHoo.web.common.BaseEntity;
 import umc.ShowHoo.web.performer.entity.Performer;
 
@@ -25,6 +26,9 @@ public class PerformerProfile extends BaseEntity {
     private String phoneNumber;
 
     private String introduction;
+
+    @OneToMany(mappedBy = "performerProfile", cascade = CascadeType.ALL)
+    private List<Shows> showsList;
 
     @OneToMany(mappedBy = "performerProfile",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProfileImage> profileImages;

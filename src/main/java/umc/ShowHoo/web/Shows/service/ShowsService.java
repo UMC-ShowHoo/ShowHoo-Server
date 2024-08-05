@@ -1,5 +1,6 @@
 package umc.ShowHoo.web.Shows.service;
 
+import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +15,8 @@ import umc.ShowHoo.web.Shows.repository.ShowsRepository;
 import umc.ShowHoo.web.performer.entity.Performer;
 import umc.ShowHoo.web.performer.handler.PerformerHandler;
 import umc.ShowHoo.web.performer.repository.PerformerRepository;
+import umc.ShowHoo.web.performerProfile.entity.PerformerProfile;
+import umc.ShowHoo.web.performerProfile.repository.PerformerProfileRepository;
 import umc.ShowHoo.web.showsDescription.converter.ShowsDscConverter;
 import umc.ShowHoo.web.showsDescription.dto.ShowsDscRequestDTO;
 import umc.ShowHoo.web.showsDescription.entity.ShowsDescription;
@@ -25,17 +28,17 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ShowsService {
     private final ShowsRepository showsRepository;
-    private final PerformerRepository performerRepository;
+    private final PerformerProfileRepository performerProfileRepository;
     private final AmazonS3Manager amazonS3Manager;
     private final ShowsDscRepository showsDscRepository;
 
-    public Shows createShows(ShowsRequestDTO.ShowInfoDTO requestDTO, MultipartFile poster,Long performerId){
+    public Shows createShows(ShowsRequestDTO.ShowInfoDTO requestDTO, MultipartFile poster,Long performerProfileId){
         String posterUrl=poster != null ? amazonS3Manager.uploadFile("showRegister/"+ UUID.randomUUID().toString(),poster) : null;
-        Performer performer=performerRepository.findById(performerId)
-                .orElseThrow(()->new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
+        PerformerProfile performer = performerProfileRepository.findById(performerProfileId)
+            .orElseThrow(()->new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
 
         Shows shows=ShowsConverter.toShowInfo(requestDTO,posterUrl);
-        shows.setPerformer(performer);
+        shows.setPerformerProfile(performer);
 
         return showsRepository.save(shows);
     }
@@ -57,6 +60,12 @@ public class ShowsService {
                 .orElseThrow(()-> new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
 
         ShowsDescription showsDescription= ShowsDscConverter.toShowDsc(dto,imgUrl,shows);
+
+        boolean exists=showsDscRepository.existsById(showsDescription.getShows().getId());
+
+        if(exists){
+            throw new DuplicateRequestException("Show description already exists for shows_id: "+showsDescription.getShows().getId());
+        }
 
         return showsDscRepository.save(showsDescription);
     }

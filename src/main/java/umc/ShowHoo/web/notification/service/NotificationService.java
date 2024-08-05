@@ -154,7 +154,7 @@ public class NotificationService {
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
         // 알림 메시지
         // shows 엔티티 수정 후 수정 필요
-        String message = String.format("%s이 회원님의 %s티켓을 승인하였습니다.", book.getShows().getPerformer().getMember().getName(),book.getShows().getName());
+        String message = String.format("%s이 회원님의 %s티켓을 승인하였습니다.", book.getShows().getPerformerProfile().getName(),book.getShows().getName());
 
         NotificationRequestDTO.createNotificationDTO notification = notificationConverter.toCreateDTO(memberId, message, NotificationType.AUDIENCE);
 

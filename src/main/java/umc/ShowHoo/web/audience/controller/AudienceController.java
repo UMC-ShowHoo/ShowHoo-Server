@@ -13,8 +13,6 @@ import umc.ShowHoo.web.audience.converter.AudienceConverter;
 import umc.ShowHoo.web.audience.dto.AudienceResponseDTO;
 import umc.ShowHoo.web.audience.service.AudienceQueryService;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/aud")
 @RequiredArgsConstructor

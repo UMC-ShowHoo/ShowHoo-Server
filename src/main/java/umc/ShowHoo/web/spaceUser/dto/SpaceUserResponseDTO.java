@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.net.URL;
-import java.time.LocalDateTime;
 
 public class SpaceUserResponseDTO {
     @Builder
