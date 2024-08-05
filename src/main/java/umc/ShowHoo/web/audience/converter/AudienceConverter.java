@@ -1,7 +1,7 @@
 package umc.ShowHoo.web.audience.converter;
 
 import org.springframework.data.domain.Page;
-import umc.ShowHoo.web.Shows.entity.Shows;
+import umc.ShowHoo.web.shows.entity.Shows;
 import umc.ShowHoo.web.audience.dto.AudienceResponseDTO;
 
 import java.util.List;
@@ -58,12 +58,13 @@ public class AudienceConverter {
     public static AudienceResponseDTO.ShowsDetailDTO toGetShowsDetailDTO(Shows shows){
         return AudienceResponseDTO.ShowsDetailDTO.builder()
                 .showsId(shows.getId())
+                .host(shows.getPerformerProfile().getTeam())
                 .name(shows.getName())
                 .poster(shows.getPoster())
                 .date(shows.getDate())
                 .time(shows.getTime())
-                .description(shows.getShowsDescription().getText())
                 .descriptionImg(shows.getShowsDescription().getImg())
+                .description(shows.getShowsDescription().getText())
                 .runningTime(shows.getRunningTime())
                 .showAge(shows.getShowAge())
                 .ticketPrice(shows.getTicketPrice())

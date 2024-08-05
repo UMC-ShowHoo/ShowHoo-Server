@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import umc.ShowHoo.web.Shows.entity.Shows;
+import umc.ShowHoo.web.shows.entity.Shows;
 import umc.ShowHoo.web.audience.entity.Audience;
 import umc.ShowHoo.web.book.entity.Book;
 import umc.ShowHoo.web.book.entity.BookDetail;
@@ -25,4 +25,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findAllByAudienceAndShows(Audience audience, Shows shows);
 
     List<Book> findAllByShowsAndDetail(Shows shows,BookDetail detail);
+
+    List<Book> findAllByShows(Shows shows);
 }

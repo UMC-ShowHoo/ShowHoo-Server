@@ -38,6 +38,16 @@ public class NotificationController {
         return ApiResponse.onSuccess(notificationDTOS);
     }
 
+    @GetMapping("/count/{type}/{memberId}")
+    @Operation(summary = "알림 개수 조회 API", description = "알림 목록 개수를 조회할 때 필요한 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
+    })
+    public ApiResponse<Integer> getNotificationCount(@PathVariable Long memberId, @PathVariable NotificationType type) {
+        Integer count = notificationService.getNotificationCount(memberId, type);
+        return ApiResponse.onSuccess(count);
+    }
+
     @DeleteMapping("/{notificationId}")
     @Operation(summary = "알림 삭제 API", description = "알림을 삭제할 때 필요한 API입니다.")
     @ApiResponses({

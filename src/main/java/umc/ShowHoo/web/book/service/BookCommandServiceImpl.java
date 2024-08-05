@@ -6,9 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
 import umc.ShowHoo.apiPayload.exception.handler.AudienceHandler;
 import umc.ShowHoo.apiPayload.exception.handler.BookHandler;
-import umc.ShowHoo.web.Shows.entity.Shows;
-import umc.ShowHoo.web.Shows.handler.ShowsHandler;
-import umc.ShowHoo.web.Shows.repository.ShowsRepository;
+import umc.ShowHoo.web.shows.entity.Shows;
+import umc.ShowHoo.web.shows.handler.ShowsHandler;
+import umc.ShowHoo.web.shows.repository.ShowsRepository;
 import umc.ShowHoo.web.audience.entity.Audience;
 import umc.ShowHoo.web.audience.repository.AudienceRepository;
 import umc.ShowHoo.web.book.converter.BookConverter;
@@ -59,6 +59,9 @@ public class BookCommandServiceImpl implements BookCommandService {
             }
 
         }
+        //티켓 매진 로직 2번째 안
+        //shows.setTicketNum(shows.getTicketNum() - request.getTicketNum());
+        //showsRepository.save(shows);
 
         return bookRepository.save(BookConverter.toBook(audience, shows, request));
     }
@@ -73,6 +76,8 @@ public class BookCommandServiceImpl implements BookCommandService {
 
         book.setDetail(BookDetail.CANCELLING);
         bookRepository.save(book);
+
+        notificationService.createBookCancleNotification(book); // 알림 생성
 
         return cancelBookRepository.save(BookConverter.toCancelBook(book, request));
     }

@@ -1,4 +1,4 @@
-package umc.ShowHoo.web.Shows.dto;
+package umc.ShowHoo.web.shows.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +14,7 @@ public class ShowsRequestDTO {
     @AllArgsConstructor
     public static class ShowInfoDTO{
         private Long performerId;
-        private String poster;
+        //private String poster;
         private String name;
         private String date;
         private String time;

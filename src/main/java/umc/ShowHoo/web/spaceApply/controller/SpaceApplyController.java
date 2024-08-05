@@ -57,7 +57,7 @@ public class SpaceApplyController {
     }
 
 
-    @Operation(summary = "대관 내역 취소 API", description = "공연자 대관 내역 확인하는 페이지에서 취소할 때 필요한 API입니다.")
+    @Operation(summary = "대관 내역 취소 및 거절 API", description = "공연자 대관 내역 확인하는 페이지에서 취소 및 거절할 때 필요한 API입니다.")
     @Parameter(
             in = ParameterIn.HEADER,
             name = "Authorization", required = true,
@@ -73,6 +73,20 @@ public class SpaceApplyController {
         return ApiResponse.onSuccess(null);
     }
 
-
-
+    @Operation(summary = " 대관 수락 API", description = "공연장이 공연자를 수락할 때 필요한 API. status가 승인 예정은 0, 승인 완료는 1")
+    @Parameter(
+            in = ParameterIn.HEADER,
+            name = "Authorization", required = true,
+            schema = @Schema(type = "String"),
+            description = "Bearer [Access 토큰]"
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
+    })
+    @PatchMapping("spaces/{spaceId}/spaceApply/{spaceApplyId}")
+    public ApiResponse<Void> confirmSpaceApply(
+            @PathVariable Long spaceId , @PathVariable Long spaceApplyId) {
+        spaceApplyService.setSpaceApply(spaceId, spaceApplyId);
+        return ApiResponse.onSuccess(null);
+    }
 }

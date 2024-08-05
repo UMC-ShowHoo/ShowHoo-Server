@@ -22,6 +22,7 @@ import umc.ShowHoo.web.performerProfile.entity.PerformerProfile;
 import umc.ShowHoo.web.performerProfile.repository.PerformerProfileRepository;
 import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.spaceApply.dto.SpaceApplyRequestDTO;
+import umc.ShowHoo.web.spaceApply.entity.SpaceApply;
 import umc.ShowHoo.web.spaceReview.entity.SpaceReview;
 import umc.ShowHoo.web.spaceUser.handler.SpaceUserHandler;
 import umc.ShowHoo.web.spaceUser.repository.SpaceUserRepository;
@@ -67,12 +68,27 @@ public class NotificationService {
     }
 
     @Transactional
+    public Integer getNotificationCount(Long memberId, NotificationType type) {
+        switch (type) {
+            case PERFORMER -> performerRepository.findByMemberId(memberId)
+                    .orElseThrow(() -> new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
+            case SPACEUSER -> spaceUserRepository.findByMemberId(memberId)
+                    .orElseThrow(() -> new SpaceUserHandler(ErrorStatus.SPACEUSER_NOT_FOUND));
+            case AUDIENCE -> audienceRepository.findByMemberId(memberId)
+                    .orElseThrow(() -> new AudienceHandler(ErrorStatus.PERFORMER_NOT_FOUND));
+            default -> throw new NotificationHandler(ErrorStatus.NOTIFICATION_TYPE_NOT_FOUND);
+        }
+        return notificationRepository.countByMemberIdAndType(memberId, type);
+    }
+
+    @Transactional
     public void deleteNotification(Long notificationId) {
         notificationRepository.deleteById(notificationId);
     }
 
+    // 공연장 알림 - 공연장 대관 요청
     @Transactional
-    public void createApplyNotification(Long spaceUserId, SpaceApplyRequestDTO.RegisterDTO registerDTO){
+    public void createSpaceApplyNotification(Long spaceUserId, SpaceApplyRequestDTO.RegisterDTO registerDTO){
         // spaceUser의 memberId 가져오기
         Long memberId = spaceUserRepository.findMemberIdById(spaceUserId)
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
@@ -91,6 +107,33 @@ public class NotificationService {
     }
 
     @Transactional
+    public void createSpaceConfirmNotification(SpaceApply spaceApply){
+        // spaceUser의 memberId 가져오기
+        Long memberId = Optional.ofNullable(spaceApply.getPerformer().getMember().getId())
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
+        // 알림 메시지
+        String message = String.format("%s이 회원님의 대관 신청을 승인하였습니다. 이제 공연 준비를 시작해보세요", spaceApply.getSpace().getName());
+
+        NotificationRequestDTO.createNotificationDTO notification = notificationConverter.toCreateDTO(memberId, message, NotificationType.PERFORMER);
+
+        createNotification(notification);
+    }
+
+    @Transactional
+    public void createSpaceCancleNotification(SpaceApply spaceApply){
+        // spaceUser의 memberId 가져오기
+        Long memberId = Optional.ofNullable(spaceApply.getPerformer().getMember().getId())
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
+        // 알림 메시지
+        String message = String.format("%s의 대관 신청이 거절 되었습니다. 자세한 사항은 해당 공연장에 문의 바랍니다.", spaceApply.getSpace().getName());
+
+        NotificationRequestDTO.createNotificationDTO notification = notificationConverter.toCreateDTO(memberId, message, NotificationType.PERFORMER);
+
+        createNotification(notification);
+    }
+
+    // 공연장 알림 - 공연장에 새로운 후기
+    @Transactional
     public void createSpaceReviewNotification(Space space, Performer performer){
         // spaceUser의 memberId 가져오기
         Long memberId = spaceUserRepository.findMemberIdById(space.getSpaceUser().getId())
@@ -103,6 +146,7 @@ public class NotificationService {
         createNotification(notification);
     }
 
+    // 공연자 알림 - 공연장 후기에 새로운 댓글
     @Transactional
     public void createSpaceReviewCommentNotification(SpaceReview spaceReview){
         // spaceUser의 memberId 가져오기
@@ -116,16 +160,30 @@ public class NotificationService {
         createNotification(notification);
     }
 
+    // 관람자 알림 - 공연 승인
     @Transactional
     public void createBookConfirmNotification(Book book){
         // spaceUser의 memberId 가져오기
         Long memberId = Optional.ofNullable(book.getAudience().getId())
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
         // 알림 메시지
-        // shows 엔티티 수정 후 수정 필요
-        String message = String.format("%s이 회원님의 %s티켓을 승인하였습니다.", book.getShows().getPerformer().getMember().getName(),book.getShows().getName());
+        String message = String.format("%s이 회원님의 %s티켓을 승인하였습니다.", book.getShows().getPerformerProfile().getName(),book.getShows().getName());
 
         NotificationRequestDTO.createNotificationDTO notification = notificationConverter.toCreateDTO(memberId, message, NotificationType.AUDIENCE);
+
+        createNotification(notification);
+    }
+
+    // 공연자 알림 - 공연 취소
+    @Transactional
+    public void createBookCancleNotification(Book book){
+        // spaceUser의 memberId 가져오기
+        Long memberId = Optional.ofNullable(book.getShows().getPerformerProfile().getPerformer().getMember().getId())
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
+        // 알림 메시지
+        String message = String.format("%s님이 %s티켓을 환불 요청을 하셨습니다.", book.getAudience().getMember().getName(),book.getShows().getName());
+
+        NotificationRequestDTO.createNotificationDTO notification = notificationConverter.toCreateDTO(memberId, message, NotificationType.PERFORMER);
 
         createNotification(notification);
     }

@@ -28,9 +28,16 @@ public class LoginController {
         return "Hello World";
     }
 
+    @GetMapping("/logout")
+    public String logout(){
+        return "로그아웃";
+    }
 
     @Value("${security.oauth2.client.registration.kakao.redirect-uri}")
     private String redirectUri;
+
+    @Value("http://localhost:8080/logout")
+    private String logout_redirectUri;
 
     @Value("${kakao.client.id}")
     private String kakaoClientId;
@@ -92,5 +99,12 @@ public class LoginController {
         }
 
         return "redirect:/";
+    }
+
+    @GetMapping("/kakao/logout/withAccount")
+    public RedirectView kakaoLogoutWithAccount() {
+        String uri = "https://kauth.kakao.com/oauth/logout?client_id=" + kakaoClientId + "&logout_redirect_uri=" + logout_redirectUri;
+        return new RedirectView(uri);
+
     }
 }

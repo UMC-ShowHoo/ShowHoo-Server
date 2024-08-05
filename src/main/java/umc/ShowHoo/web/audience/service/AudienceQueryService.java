@@ -1,10 +1,8 @@
 package umc.ShowHoo.web.audience.service;
 
 import org.springframework.data.domain.Page;
-import umc.ShowHoo.web.Shows.entity.Shows;
+import umc.ShowHoo.web.shows.entity.Shows;
 import umc.ShowHoo.web.audience.dto.AudienceResponseDTO;
-
-import java.util.List;
 
 public interface AudienceQueryService {
 

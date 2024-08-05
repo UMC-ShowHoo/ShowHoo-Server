@@ -1,7 +1,7 @@
 package umc.ShowHoo.web.book.converter;
 
 import org.springframework.data.domain.Page;
-import umc.ShowHoo.web.Shows.entity.Shows;
+import umc.ShowHoo.web.shows.entity.Shows;
 import umc.ShowHoo.web.audience.entity.Audience;
 import umc.ShowHoo.web.book.dto.BookRequestDTO;
 import umc.ShowHoo.web.book.dto.BookResponseDTO;
@@ -13,12 +13,15 @@ import java.util.List;
 public class BookConverter {
 
     public static Book toBook(Audience audience, Shows shows, BookRequestDTO.postDTO request){
+        int payment = request.getTicketNum() * Integer.parseInt(shows.getTicketPrice());
+
         return Book.builder()
                 .audience(audience)
                 .shows(shows)
                 .name(request.getName())
                 .phoneNum(request.getPhoneNum())
                 .ticketNum(request.getTicketNum())
+                .payment(Integer.toString(payment))
                 .build();
     }
 
@@ -30,7 +33,7 @@ public class BookConverter {
                 .account(request.getAccount())
                 .reason(request.getReason())
                 .book(book)
-                .performer(book.getShows().getPerformer())
+                .performer(book.getShows().getPerformerProfile().getPerformer())
                 .build();
     }
 
@@ -39,6 +42,7 @@ public class BookConverter {
                 .book_id(book.getId())
                 .showsId(book.getShows().getId())
                 .audienceId(book.getAudience().getId())
+                .payment(book.getPayment())
                 .alert("예매가 완료되었습니다!")
                 .build();
     }
@@ -79,7 +83,7 @@ public class BookConverter {
                 .date(book.getShows().getDate())
                 .time(book.getShows().getTime())
                 .place("test")
-                .performer(book.getShows().getPerformer().getMember().getName())
+                .performer(book.getShows().getPerformerProfile().getTeam())
                 .status(book.getStatus())
                 .detail(book.getDetail())
                 .isCancellable(false)
