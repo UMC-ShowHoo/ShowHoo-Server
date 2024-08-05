@@ -45,7 +45,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/login", "/login/oauth2/code/kakao", "/test", "/h2-console/**", "/kakao", "/swagger-ui/index.html", "/swagger-ui/**", "/v3/api-docs/**","/swagger-resources/**", "/v3/api-docs", "/spaces").permitAll()  // /login URL은 인증 없이 접근 가능
+                        .requestMatchers("/login", "/login/oauth2/code/kakao", "/test", "/h2-console/**", "/kakao", "/swagger-ui/index.html", "/swagger-ui/**", "/v3/api-docs/**","/swagger-resources/**", "/v3/api-docs", "/spaces", "/kakao/logout/withAccount", "/logout").permitAll()  // /login URL은 인증 없이 접근 가능
                         .anyRequest().authenticated()           // 나머지 URL은 인증 필요
                 )
                 .addFilterBefore(new JwtVerifyFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
@@ -53,7 +53,9 @@ public class SecurityConfig {
                         .loginPage("/login")                    // 커스텀 로그인 페이지 설정
                         .permitAll()
                 )
-                .logout(logout -> logout.permitAll())
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/kakao")
+                        .permitAll())
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint((request, response, authException) ->
                                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED)) // 인증되지 않은 사용자가 보호된 페이지에 접근할 때 401 Unauthorized 에러 반환

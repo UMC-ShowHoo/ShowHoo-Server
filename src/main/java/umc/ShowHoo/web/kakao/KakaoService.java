@@ -253,4 +253,44 @@ public class KakaoService {
             e.printStackTrace();
         }
     }
+
+    //5. 회원 탈퇴
+    public void KaKaoUnlink(String accessToken) throws JsonProcessingException {
+        // HTTP 헤더 생성
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + accessToken);
+        headers.add("Content-Type", "application/x-www-form-urlencoded");
+
+        // HTTP 요청 보내기
+        HttpEntity<String> kakaoUnlinkRequest = new HttpEntity<>(headers);
+        RestTemplate rt = new RestTemplate();
+
+        try {
+            ResponseEntity<String> response = rt.exchange(
+                    "https://kapi.kakao.com/v1/user/unlink",
+                    HttpMethod.POST,
+                    kakaoUnlinkRequest,
+                    String.class
+            );
+
+            // responseBody에 있는 정보를 꺼냄
+            String res = response.getBody();
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(res);
+
+            Long id = jsonNode.get("id").asLong();
+            System.out.println("반환된 id : " + id);
+
+        } catch (HttpClientErrorException e) {
+            // 401 Unauthorized 에러 처리
+            if (e.getStatusCode().value() == 401) {
+                System.out.println("Unauthorized: Invalid or expired token.");
+                System.out.println("Response body: " + e.getResponseBodyAsString());
+            } else {
+                System.out.println("Error: " + e.getStatusCode().value() + " " + e.getStatusText());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

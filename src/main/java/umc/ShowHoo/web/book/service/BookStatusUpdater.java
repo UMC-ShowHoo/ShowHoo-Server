@@ -14,6 +14,7 @@ import umc.ShowHoo.web.book.repository.BookRepository;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 //shows에도 status를 추가해야 쿼리가 줄 듯
@@ -32,10 +33,17 @@ public class BookStatusUpdater {
         LocalDateTime now = LocalDateTime.now();
 
         for(Shows shows : showsList){
-            String dateTimeString = shows.getDate() + " " + shows.getTime();
-            LocalDateTime showTime = LocalDateTime.parse(dateTimeString, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            String dateTimeString = Optional.ofNullable(shows.getDate()).orElse("") + " " + Optional.ofNullable(shows.getTime()).orElse("");
+            LocalDateTime showTime = null;
 
-            if(showTime.isBefore(now)){
+            try {
+                showTime = LocalDateTime.parse(dateTimeString.trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            } catch (Exception e) {
+                System.out.println("Invalid DateTime string: " + dateTimeString);
+                continue;
+            }
+
+            if(showTime != null && showTime.isBefore(now)){
                 for(Book book : shows.getBookList()){
                     if(book.getDetail() == BookDetail.CONFIRMED){
                         book.setStatus(BookStatus.WATCHED);
