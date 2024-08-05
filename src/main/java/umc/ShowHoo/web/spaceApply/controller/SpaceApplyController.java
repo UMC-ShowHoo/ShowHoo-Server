@@ -83,7 +83,7 @@ public class SpaceApplyController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
     })
-    @PatchMapping("{spaces/{spaceId}/spaceApply/{spaceApplyId}")
+    @PatchMapping("spaces/{spaceId}/spaceApply/{spaceApplyId}")
     public ApiResponse<Void> confirmSpaceApply(
             @PathVariable Long spaceId , @PathVariable Long spaceApplyId, @RequestBody int status) {
         spaceApplyService.setSpaceApply(spaceId, spaceApplyId, status);
