@@ -29,7 +29,7 @@ public class LoginController {
     }
 
 
-    @Value("${security.oauth2.client.registration.kakao.redirect-uri}")
+    @Value("http://localhost:8080/login/oauth2/code/kakao")
     private String redirectUri;
 
     @Value("${kakao.client.id}")

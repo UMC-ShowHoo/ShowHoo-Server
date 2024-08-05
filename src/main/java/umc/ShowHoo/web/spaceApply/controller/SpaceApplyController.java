@@ -67,12 +67,45 @@ public class SpaceApplyController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
-    @DeleteMapping("spaceApply/delete/{spaceApplyId}")
+    @DeleteMapping("spaceApply/{spaceId}/spaceApply")
     public ApiResponse<Void> deleteSpaceApply(@PathVariable Long spaceApplyId) {
         spaceApplyService.deleteSpaceApply(spaceApplyId);
         return ApiResponse.onSuccess(null);
     }
 
+    @Operation(summary = " 대관 수락 API", description = "공연장이 공연자를 수락할 때 필요한 API. status가 승인 예정은 0, 승인 완료는 1")
+    @Parameter(
+            in = ParameterIn.HEADER,
+            name = "Authorization", required = true,
+            schema = @Schema(type = "String"),
+            description = "Bearer [Access 토큰]"
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
+    })
+    @PatchMapping("{spaces/{spaceId}/spaceApply/{spaceApplyId}")
+    public ApiResponse<Void> confirmSpaceApply(
+            @PathVariable Long spaceId , @PathVariable Long spaceApplyId, @RequestBody int status) {
+        spaceApplyService.setSpaceApply(spaceId, spaceApplyId, status);
+        return ApiResponse.onSuccess(null);
+    }
 
+    @Operation(summary = "대관 거절 API", description = "공연장이 공연자를 거절할 때 필요한 API, status가 승인 예쩡은 0, 승인 거절은 -1")
+    @Parameter(
+            in = ParameterIn.HEADER,
+            name = "Authorization", required = true,
+            schema = @Schema(type = "String"),
+            description = "Bearer [Access 토큰]"
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
+    })
+    @PatchMapping("{spaces/{spaceId}/spaceApply/{spaceApplyId}")
+    public ApiResponse<Void> rejectSpaceApply(
+            @PathVariable Long spaceId, @PathVariable Long spaceApplyId, @RequestBody int status) {
+        spaceApplyService.setSpaceApply(spaceId, spaceApplyId, status);
+        spaceApplyService.deleteSpaceApply(spaceApplyId);
+        return ApiResponse.onSuccess(null);
+    }
 
 }
