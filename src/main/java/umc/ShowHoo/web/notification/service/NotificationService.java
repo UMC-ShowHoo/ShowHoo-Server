@@ -153,7 +153,6 @@ public class NotificationService {
         Long memberId = Optional.ofNullable(book.getAudience().getId())
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
         // 알림 메시지
-        // shows 엔티티 수정 후 수정 필요
         String message = String.format("%s이 회원님의 %s티켓을 승인하였습니다.", book.getShows().getPerformerProfile().getName(),book.getShows().getName());
 
         NotificationRequestDTO.createNotificationDTO notification = notificationConverter.toCreateDTO(memberId, message, NotificationType.AUDIENCE);
@@ -165,10 +164,9 @@ public class NotificationService {
     @Transactional
     public void createBookCancleNotification(Book book){
         // spaceUser의 memberId 가져오기
-        Long memberId = Optional.ofNullable(book.getShows().getPerformer().getMember().getId())
+        Long memberId = Optional.ofNullable(book.getShows().getPerformerProfile().getPerformer().getMember().getId())
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
         // 알림 메시지
-        // shows 엔티티 수정 후 수정 필요
         String message = String.format("%s님이 %s티켓을 환불 요청을 하셨습니다.", book.getAudience().getMember().getName(),book.getShows().getName());
 
         NotificationRequestDTO.createNotificationDTO notification = notificationConverter.toCreateDTO(memberId, message, NotificationType.PERFORMER);

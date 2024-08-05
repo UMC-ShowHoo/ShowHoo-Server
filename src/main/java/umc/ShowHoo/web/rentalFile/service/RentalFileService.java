@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
 import umc.ShowHoo.aws.s3.AmazonS3Manager;
-import umc.ShowHoo.web.Shows.repository.ShowsRepository;
+import umc.ShowHoo.web.shows.repository.ShowsRepository;
 import umc.ShowHoo.web.rentalFile.converter.RentalFileConverter;
 import umc.ShowHoo.web.rentalFile.dto.RentalFileResponseDTO;
 import umc.ShowHoo.web.rentalFile.entity.RentalFile;

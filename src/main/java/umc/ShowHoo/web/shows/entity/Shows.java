@@ -1,4 +1,4 @@
-package umc.ShowHoo.web.Shows.entity;
+package umc.ShowHoo.web.shows.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

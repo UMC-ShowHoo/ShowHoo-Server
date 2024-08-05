@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import umc.ShowHoo.apiPayload.ApiResponse;
-import umc.ShowHoo.web.Shows.entity.Shows;
+import umc.ShowHoo.web.shows.entity.Shows;
 import umc.ShowHoo.web.audience.converter.AudienceConverter;
 import umc.ShowHoo.web.audience.dto.AudienceResponseDTO;
 import umc.ShowHoo.web.audience.service.AudienceQueryService;
