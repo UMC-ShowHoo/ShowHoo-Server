@@ -11,7 +11,6 @@ import umc.ShowHoo.web.space.dto.SpaceResponseDTO;
 import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.space.repository.SpaceRepository;
 import umc.ShowHoo.web.spaceAdditionalService.entity.SpaceAdditionalService;
-import umc.ShowHoo.web.spaceAdditionalService.repository.SpaceAdditionalServiceRepository;
 import umc.ShowHoo.web.spacePhoto.entity.SpacePhoto;
 import umc.ShowHoo.web.spacePrefer.entity.SpacePrefer;
 import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
@@ -19,6 +18,7 @@ import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -171,7 +171,9 @@ public class SpaceConverter {
     }
 
     public SpaceResponseDTO.SpaceSummaryDTO toSpaceDTO(Space space){
-        Integer totalCapacity = space.getSeatingCapacity() + space.getStandingCapacity();
+        Integer seatingCapacity = Optional.ofNullable(space.getSeatingCapacity()).orElse(0);
+        Integer standingCapacity = Optional.ofNullable(space.getStandingCapacity()).orElse(0);
+        Integer totalCapacity = seatingCapacity + standingCapacity;
         String imageURL = space.getPhotos().isEmpty() ? null : space.getPhotos().get(0).getPhotoUrl();
         String additionalService = space.getPhotos().isEmpty() ? null : space.getAdditionalServices().get(0).getTitle();
 
