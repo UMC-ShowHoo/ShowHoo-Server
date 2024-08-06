@@ -14,12 +14,14 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
 import umc.ShowHoo.jwt.AuthTokens;
 import umc.ShowHoo.jwt.AuthTokensGenerator;
 import umc.ShowHoo.web.audience.entity.Audience;
 import umc.ShowHoo.web.audience.repository.AudienceRepository;
 import umc.ShowHoo.web.login.dto.LoginResponseDTO;
 import umc.ShowHoo.web.member.entity.Member;
+import umc.ShowHoo.web.member.handler.MemberHandler;
 import umc.ShowHoo.web.member.repository.MemberRepository;
 import umc.ShowHoo.web.performer.entity.Performer;
 import umc.ShowHoo.web.performer.repository.PerformerRepository;
@@ -280,6 +282,11 @@ public class KakaoService {
 
             Long id = jsonNode.get("id").asLong();
             System.out.println("반환된 id : " + id);
+
+            Member member = memberRepository.findByUid(id)
+                    .orElseThrow(()->new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
+
+            memberRepository.delete(member);
 
         } catch (HttpClientErrorException e) {
             // 401 Unauthorized 에러 처리
