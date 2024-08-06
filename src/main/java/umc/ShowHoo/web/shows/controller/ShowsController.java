@@ -42,7 +42,7 @@ public class ShowsController {
         return ApiResponse.onSuccess(ShowsConverter.toPostShowDTO(shows));
     }
 
-    @PostMapping(value="/show-register/description",consumes = "multipart/form-data")
+    @PostMapping(value="/{showId}/show-register/description",consumes = "multipart/form-data")
     @Operation(summary = "공연자 공연 준비- 공연 설명 등록 API", description = "공연을 등록할 때 공연 설명을 작성하는 API")
     @ApiResponses({
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공")
@@ -57,7 +57,7 @@ public class ShowsController {
         return ApiResponse.onSuccess(ShowsDscConverter.toPostDscDTO(showsDescription));
     }
 
-    @PostMapping(value="/ticket-register")
+    @PostMapping(value="/{showId}/ticket-register")
     @Operation(summary = "공연자 공연 준비-티켓 발행 등록 api", description = "공연 은행정보, 티켓 등록 시에 필요한 API")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공")
@@ -71,7 +71,7 @@ public class ShowsController {
         return ApiResponse.onSuccess(ShowsConverter.toPostShowDTO(shows));
     }
 
-    @PostMapping(value="/requirement-register")
+    @PostMapping(value="/{showId}/requirement-register")
     @Operation(summary = "공연자 공연 준비-요청 사항 등록 api", description = "공연 요청사항 등록 시에 필요한 API")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공")
