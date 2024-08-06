@@ -3,7 +3,7 @@ package umc.ShowHoo.web.performerProfile.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import umc.ShowHoo.web.shows.entity.Shows;
-import umc.ShowHoo.web.common.BaseEntity;
+import umc.ShowHoo.common.BaseEntity;
 import umc.ShowHoo.web.performer.entity.Performer;
 
 import java.util.List;

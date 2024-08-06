@@ -2,7 +2,7 @@ package umc.ShowHoo.web.space.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import umc.ShowHoo.web.common.BaseEntity;
+import umc.ShowHoo.common.BaseEntity;
 import umc.ShowHoo.web.holiday.entity.Holiday;
 import umc.ShowHoo.web.peakSeasonRentalFee.entity.PeakSeasonRentalFee;
 import umc.ShowHoo.web.rentalFee.entity.RentalFee;

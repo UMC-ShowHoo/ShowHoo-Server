@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
-import umc.ShowHoo.apiPayload.exception.handler.AudienceHandler;
+import umc.ShowHoo.web.audience.handler.AudienceHandler;
 import umc.ShowHoo.web.shows.entity.Shows;
 import umc.ShowHoo.web.shows.handler.ShowsHandler;
 import umc.ShowHoo.web.shows.repository.ShowsRepository;
