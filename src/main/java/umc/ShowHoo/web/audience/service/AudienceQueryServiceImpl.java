@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
-import umc.ShowHoo.apiPayload.exception.handler.AudienceHandler;
+import umc.ShowHoo.web.audience.handler.AudienceHandler;
 import umc.ShowHoo.web.shows.entity.Shows;
 import umc.ShowHoo.web.shows.handler.ShowsHandler;
 import umc.ShowHoo.web.shows.repository.ShowsRepository;

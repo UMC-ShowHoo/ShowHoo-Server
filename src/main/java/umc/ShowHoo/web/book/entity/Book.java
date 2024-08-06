@@ -7,7 +7,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import umc.ShowHoo.web.shows.entity.Shows;
 import umc.ShowHoo.web.audience.entity.Audience;
 import umc.ShowHoo.web.cancelBook.entity.CancelBook;
-import umc.ShowHoo.web.common.BaseEntity;
+import umc.ShowHoo.common.BaseEntity;
 
 @Entity
 @Getter

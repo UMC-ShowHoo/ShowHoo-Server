@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
-import umc.ShowHoo.apiPayload.exception.handler.AudienceHandler;
+import umc.ShowHoo.web.audience.handler.AudienceHandler;
 import umc.ShowHoo.web.audience.repository.AudienceRepository;
 import umc.ShowHoo.web.book.entity.Book;
 import umc.ShowHoo.web.member.handler.MemberHandler;

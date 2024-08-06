@@ -1,4 +1,4 @@
-package umc.ShowHoo.web.common;
+package umc.ShowHoo.common;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

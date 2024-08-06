@@ -3,7 +3,7 @@ package umc.ShowHoo.web.cancelBook.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import umc.ShowHoo.web.book.entity.Book;
-import umc.ShowHoo.web.common.BaseEntity;
+import umc.ShowHoo.common.BaseEntity;
 import umc.ShowHoo.web.performer.entity.Performer;
 
 @Entity

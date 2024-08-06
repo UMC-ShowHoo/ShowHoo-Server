@@ -6,7 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
-import umc.ShowHoo.apiPayload.exception.handler.AudienceHandler;
+import umc.ShowHoo.web.audience.handler.AudienceHandler;
 import umc.ShowHoo.web.audience.entity.Audience;
 import umc.ShowHoo.web.audience.repository.AudienceRepository;
 import umc.ShowHoo.web.showsPrefer.entity.ShowsPrefer;
