@@ -26,12 +26,19 @@ public class Space extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String name; // 공연장 이름
+    @Column(nullable = false)
     private String description; // 공연장 소개
+    @Column(nullable = false)
     private String rentalHours; // 대관 시간
+    @Column(nullable = false)
     private String location; // 공연장 위치
+    @Column(nullable = false)
     private String area; // 공연장 면적
+    @Column(nullable = false)
     private Integer seatingCapacity; // 좌석 수용인원
+    @Column(nullable = false)
     private Integer standingCapacity; // 입석 수용인원
     private String soundEquipment; //음향 장비 정보 - 사진
     private String lightingEquipment; //조명 장비 정보 -사진
@@ -42,8 +49,10 @@ public class Space extends BaseEntity {
     private String bankName; //은행명
     private String bankAccount; //계좌번호
     private String bankOwner; //예금주
+    @Column(nullable = false)
     private String notice; // 유의사항
     private Double grade; // 평점
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private SpaceType spaceType; // 공연장 종류
 
