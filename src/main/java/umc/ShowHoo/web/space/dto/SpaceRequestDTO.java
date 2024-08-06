@@ -72,7 +72,8 @@ public class SpaceRequestDTO {
     @AllArgsConstructor
     public static class SpaceSearchRequestDTO {
         private String name;
-        private String location;
+        private String city;
+        private String district;
         private LocalDate date;
         private SpaceType type;
         private Integer minPrice;

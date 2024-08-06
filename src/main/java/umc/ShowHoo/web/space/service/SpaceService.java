@@ -103,30 +103,25 @@ public class SpaceService {
     @Transactional
     public SpaceResponseDTO.SpaceListDTO getTopSpacesWithPreference(Long performerId) {
         Pageable pageable = PageRequest.of(0, 8);
-        List<Space> spacePreferList = spaceRepository.findTopBySpacePreferOrderByCountDesc(pageable);
-        List<Space> gradeList = spaceRepository.findTopByOrderByGradeDesc(pageable);
+        List<Space> spacePreferList = spaceRepository.findTopBySpacePreferOrderByCountDesc(pageable); // prefer순 8개 조회
+        List<Space> gradeList = spaceRepository.findTopByOrderByGradeDesc(pageable); // grade순 8개 조회
 
-        return spaceConverter.toTopSpaceListDTO(spacePreferList, gradeList, performerId);
-    }
-
-    @Transactional
-    public SpaceResponseDTO.SpaceListDTO getTopSpacesWithNull() {
-        Pageable pageable = PageRequest.of(0, 8);
-        List<Space> spacePreferList = spaceRepository.findTopBySpacePreferOrderByCountDesc(pageable);
-        List<Space> gradeList = spaceRepository.findTopByOrderByGradeDesc(pageable);
-
-        return spaceConverter.toTopSpaceListWithNullDTO(spacePreferList, gradeList);
+        if (performerId != null) {
+            performerRepository.findById(performerId).orElseThrow(() -> new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
+            return spaceConverter.toTopSpaceListDTO(spacePreferList, gradeList, performerId);
+        } else {
+            return spaceConverter.toTopSpaceListWithNullDTO(spacePreferList, gradeList);
+        }
     }
 
     @Transactional
     public SpaceResponseDTO.SpaceFilteredListDTO searchSpaces(SpaceRequestDTO.SpaceSearchRequestDTO searchRequest, Long performerId) {
         Pageable pageable = PageRequest.of(searchRequest.getPage(), searchRequest.getSize());
-        String namePattern = searchRequest.getName() != null ? "%" + searchRequest.getName() + "%" : null;
-        String locationPattern = searchRequest.getLocation() != null ? "%" + searchRequest.getLocation() + "%" : null;
 
         List<Space> spaces = spaceRepository.searchSpaces(
-                namePattern,
-                locationPattern,
+                searchRequest.getName(),
+                searchRequest.getCity(),
+                searchRequest.getDistrict(),
                 searchRequest.getDate(),
                 searchRequest.getType(),
                 searchRequest.getMinPrice(),
@@ -135,27 +130,13 @@ public class SpaceService {
                 searchRequest.getMaxCapacity(),
                 pageable
         );
-        return spaceConverter.toSpaceListDTO(spaces, performerId);
-    }
 
-    @Transactional
-    public SpaceResponseDTO.SpaceFilteredListDTO searchSpacesWithNull(SpaceRequestDTO.SpaceSearchRequestDTO searchRequest) {
-        Pageable pageable = PageRequest.of(searchRequest.getPage(), searchRequest.getSize());
-        String namePattern = searchRequest.getName() != null ? "%" + searchRequest.getName() + "%" : null;
-        String locationPattern = searchRequest.getLocation() != null ? "%" + searchRequest.getLocation() + "%" : null;
-
-        List<Space> spaces = spaceRepository.searchSpaces(
-                namePattern,
-                locationPattern,
-                searchRequest.getDate(),
-                searchRequest.getType(),
-                searchRequest.getMinPrice(),
-                searchRequest.getMaxPrice(),
-                searchRequest.getMinCapacity(),
-                searchRequest.getMaxCapacity(),
-                pageable
-        );
-        return spaceConverter.toSpaceListWithNullDTO(spaces);
+        if (performerId != null) {
+            performerRepository.findById(performerId).orElseThrow(() -> new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
+            return spaceConverter.toSpaceListDTO(spaces, performerId);
+        } else {
+            return spaceConverter.toSpaceListWithNullDTO(spaces);
+        }
     }
 
     @Transactional
@@ -177,6 +158,5 @@ public class SpaceService {
         space.updateGrade();
         spaceRepository.save(space);
     }
-
 }
 
