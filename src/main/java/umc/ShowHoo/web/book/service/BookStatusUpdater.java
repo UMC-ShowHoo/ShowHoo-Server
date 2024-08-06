@@ -26,7 +26,7 @@ public class BookStatusUpdater {
     @Autowired
     private ShowsRepository showsRepository;
 
-    @Scheduled(fixedRate = 60000) //60초마다 실행
+    @Scheduled(fixedRate = 60000 * 30) //30분마다 실행
     @Transactional
     public void updateBookStatusWatched(){
         List<Shows> showsList = showsRepository.findAll();
