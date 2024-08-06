@@ -1,6 +1,7 @@
 package umc.ShowHoo.web.book.converter;
 
 import org.springframework.data.domain.Page;
+import umc.ShowHoo.web.book.entity.BookStatus;
 import umc.ShowHoo.web.shows.entity.Shows;
 import umc.ShowHoo.web.audience.entity.Audience;
 import umc.ShowHoo.web.book.dto.BookRequestDTO;
@@ -8,9 +9,27 @@ import umc.ShowHoo.web.book.dto.BookResponseDTO;
 import umc.ShowHoo.web.book.entity.Book;
 import umc.ShowHoo.web.cancelBook.entity.CancelBook;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 public class BookConverter {
+
+    private static boolean isCancellable(Book book){
+        LocalDateTime now = LocalDateTime.now();
+        String dateTimeString = Optional.ofNullable(book.getShows().getCancelDate()).orElse("") + " " + Optional.ofNullable(book.getShows().getCancelTime()).orElse("");
+        LocalDateTime cancelTime;
+
+        try {
+            cancelTime = LocalDateTime.parse(dateTimeString.trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        } catch (Exception e){
+            System.out.println("Shows 테이블에 취소 가능 시간이 입력되지 않았습니다.");
+            return false;
+        }
+
+        return !cancelTime.isBefore(now);
+    }
 
     public static Book toBook(Audience audience, Shows shows, BookRequestDTO.postDTO request){
         int payment = request.getTicketNum() * Integer.parseInt(shows.getTicketPrice());
@@ -76,7 +95,13 @@ public class BookConverter {
                     .build();
         }
 
+        boolean isValid = false;
+        if(book.getStatus() == BookStatus.BOOK && !book.getShows().isComplete()){
+            isValid = isCancellable(book);
+        }
+
         return BookResponseDTO.getBookDTO.builder()
+                .bookId(book.getId())
                 .showsId(book.getShows().getId())
                 .poster(book.getShows().getPoster())
                 .name(book.getShows().getName())
@@ -86,7 +111,7 @@ public class BookConverter {
                 .performer(book.getShows().getPerformerProfile().getTeam())
                 .status(book.getStatus())
                 .detail(book.getDetail())
-                .isCancellable(false)
+                .isCancellable(isValid)
                 .build();
     }
 

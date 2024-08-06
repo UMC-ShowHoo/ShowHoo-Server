@@ -118,7 +118,6 @@ public class BookCommandServiceImpl implements BookCommandService {
             return null;
         }
 
-        book.setStatus(BookStatus.WATCHED);
         book.setDetail(BookDetail.WATCHED);
         return bookRepository.save(book);
     }
