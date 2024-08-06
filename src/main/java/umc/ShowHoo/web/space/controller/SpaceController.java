@@ -138,43 +138,17 @@ public class SpaceController {
     }
 
     @GetMapping("/spaces")
-    @Operation(summary = "비로그인 사용자 공연장 전체 조회 API", description = "authorization 없이 공연장 찜 순과 평점 순으로 각각 8개씩 조회하는 API입니다.")
-    public ApiResponse<SpaceResponseDTO.SpaceListDTO> getTopSpacesWithNull() {
-        SpaceResponseDTO.SpaceListDTO spaces = spaceService.getTopSpacesWithNull();
-        return ApiResponse.onSuccess(spaces);
-    }
-
-    @GetMapping("/spaces/{performerId}")
     @Operation(summary = "공연장 전체 조회 API", description = "공연장 찜 순과 평점 순으로 각각 8개씩 조회하는 API입니다.")
-    public ApiResponse<SpaceResponseDTO.SpaceListDTO> getTopSpacesWithPreference(@PathVariable Long performerId) {
+    public ApiResponse<SpaceResponseDTO.SpaceListDTO> getTopSpacesWithPreference(@RequestParam(required = false) Long performerId) {
         SpaceResponseDTO.SpaceListDTO spaces = spaceService.getTopSpacesWithPreference(performerId);
         return ApiResponse.onSuccess(spaces);
     }
 
     @GetMapping("/spaces/search")
-    @Operation(summary = "비로그인 사용자 공연장 검색 API", description = "authorization 없이 공연장, 지역, 날짜, 유형으로 검색하고 가격과 수용인원으로 필터링하는 API입니다.")
-    public ApiResponse<SpaceResponseDTO.SpaceFilteredListDTO> searchSpacesWithNull(@RequestParam(required = false) String name,
-                                                                                   @RequestParam(required = false) String location,
-                                                                                   @RequestParam(required = false) LocalDate date,
-                                                                                   @RequestParam(required = false) SpaceType type,
-                                                                                   @RequestParam(required = false) Integer minPrice,
-                                                                                   @RequestParam(required = false) Integer maxPrice,
-                                                                                   @RequestParam(required = false) Integer minCapacity,
-                                                                                   @RequestParam(required = false) Integer maxCapacity,
-                                                                                   @RequestParam(defaultValue = "0") int page,
-                                                                                   @RequestParam(defaultValue = "12") int size
-    ) {
-        SpaceRequestDTO.SpaceSearchRequestDTO searchRequest = new SpaceRequestDTO.SpaceSearchRequestDTO(
-                name, location, date, type, minPrice, maxPrice, minCapacity, maxCapacity, page, size);
-
-        SpaceResponseDTO.SpaceFilteredListDTO spaces = spaceService.searchSpacesWithNull(searchRequest);
-        return ApiResponse.onSuccess(spaces);
-    }
-
-    @GetMapping("/spaces/search/{performerId}")
     @Operation(summary = "공연장 검색 API", description = "공연장, 지역, 날짜, 유형으로 검색하고 가격과 수용인원으로 필터링하는 API입니다.")
     public ApiResponse<SpaceResponseDTO.SpaceFilteredListDTO> searchSpaces(@RequestParam(required = false) String name,
-                                                                           @RequestParam(required = false) String location,
+                                                                           @RequestParam(required = false) String city,
+                                                                           @RequestParam(required = false) String district,
                                                                            @RequestParam(required = false) LocalDate date,
                                                                            @RequestParam(required = false) SpaceType type,
                                                                            @RequestParam(required = false) Integer minPrice,
@@ -183,9 +157,9 @@ public class SpaceController {
                                                                            @RequestParam(required = false) Integer maxCapacity,
                                                                            @RequestParam(defaultValue = "0") int page,
                                                                            @RequestParam(defaultValue = "12") int size,
-                                                                           @PathVariable Long performerId) {
+                                                                           @RequestParam(required = false) Long performerId) {
         SpaceRequestDTO.SpaceSearchRequestDTO searchRequest = new SpaceRequestDTO.SpaceSearchRequestDTO(
-                name, location, date, type, minPrice, maxPrice, minCapacity, maxCapacity, page, size);
+                name, city, district, date, type, minPrice, maxPrice, minCapacity, maxCapacity, page, size);
 
         SpaceResponseDTO.SpaceFilteredListDTO spaces = spaceService.searchSpaces(searchRequest, performerId);
         return ApiResponse.onSuccess(spaces);
