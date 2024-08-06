@@ -4,12 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import umc.ShowHoo.web.shows.entity.Shows;
+import umc.ShowHoo.web.shows.repository.ShowsRepository;
 import umc.ShowHoo.web.book.entity.Book;
 import umc.ShowHoo.web.book.entity.BookDetail;
 import umc.ShowHoo.web.book.entity.BookStatus;
 import umc.ShowHoo.web.book.repository.BookRepository;
-import umc.ShowHoo.web.shows.entity.Shows;
-import umc.ShowHoo.web.shows.repository.ShowsRepository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
