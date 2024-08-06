@@ -101,6 +101,7 @@ public class BookConverter {
         }
 
         return BookResponseDTO.getBookDTO.builder()
+                .bookId(book.getId())
                 .showsId(book.getShows().getId())
                 .poster(book.getShows().getPoster())
                 .name(book.getShows().getName())
