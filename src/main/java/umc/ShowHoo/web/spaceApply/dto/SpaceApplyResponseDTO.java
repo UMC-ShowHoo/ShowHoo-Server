@@ -1,11 +1,12 @@
 package umc.ShowHoo.web.spaceApply.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jdk.dynalink.linker.LinkerServices;
+import lombok.*;
+import org.w3c.dom.stylesheets.LinkStyle;
+import umc.ShowHoo.web.holiday.dto.HolidayDTO;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class SpaceApplyResponseDTO {
 
@@ -23,5 +24,16 @@ public class SpaceApplyResponseDTO {
         private String spaceName;
         private String spaceLocation;
         private String spacePhotoUrl;
+    }
+
+    @Builder
+    @Getter @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SpaceApplySimpleDTO {
+        private Long id;
+        private LocalDate date;
+        private int status;
+        private List<HolidayDTO> holidays;
     }
 }

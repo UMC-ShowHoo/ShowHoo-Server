@@ -4,11 +4,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import umc.ShowHoo.web.spaceApply.entity.SpaceApply;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
 public interface SpaceApplyRepository extends JpaRepository<SpaceApply, Long> {
     List<SpaceApply> findByPerformerId(Long performerId);
-
+    List<SpaceApply> findByStatus(int status);
     boolean existsBySpaceIdAndPerformerId(Long spaceId, Long performerId);
 }

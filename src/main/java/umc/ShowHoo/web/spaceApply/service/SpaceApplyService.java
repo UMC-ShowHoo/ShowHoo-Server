@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
+import umc.ShowHoo.web.holiday.dto.HolidayDTO;
+import umc.ShowHoo.web.holiday.repository.HolidayRepository;
 import umc.ShowHoo.web.notification.service.NotificationService;
 import umc.ShowHoo.web.performer.entity.Performer;
 import umc.ShowHoo.web.performer.repository.PerformerRepository;
@@ -20,7 +22,9 @@ import umc.ShowHoo.web.spaceApply.exception.handler.SpaceApplyHandler;
 import umc.ShowHoo.web.spaceApply.repository.SpaceApplyRepository;
 import umc.ShowHoo.web.spaceUser.repository.SpaceUserRepository;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +39,7 @@ public class SpaceApplyService {
     private final SelectedAdditionalServiceRepository selectedAdditionalServiceRepository;
     private final SpaceApplyConverter spaceApplyConverter;
     private final NotificationService notificationService;
+    private final HolidayRepository holidayRepository;
 
 
     public SpaceApply createSpaceApply(Long spaceUserId, Long performerId, SpaceApplyRequestDTO.RegisterDTO registerDTO) {
@@ -88,5 +93,26 @@ public class SpaceApplyService {
         spaceApply.setStatus(1);
 
         notificationService.createSpaceConfirmNotification(spaceApply); // 알림 생성
+    }
+
+    public List<SpaceApplyResponseDTO.SpaceApplySimpleDTO> getSpaceAppliesWithHolidays(Long spaceId) {
+
+        // Fetch space applies by status
+        List<SpaceApply> spaceApplies = spaceApplyRepository.findByStatus(0);
+        spaceApplies.addAll(spaceApplyRepository.findByStatus(1));
+
+        // Fetch holidays for the given space
+        List<HolidayDTO> holidays = holidayRepository.findBySpaceId(spaceId).stream()
+                .map(holiday -> new HolidayDTO(holiday.getId(), holiday.getDate()))
+                .collect(Collectors.toList());
+
+        return spaceApplies.stream().map(spaceApply -> {
+            SpaceApplyResponseDTO.SpaceApplySimpleDTO dto = new SpaceApplyResponseDTO.SpaceApplySimpleDTO();
+            dto.setId(spaceApply.getId());
+            dto.setDate(spaceApply.getDate());
+            dto.setStatus(spaceApply.getStatus());
+            dto.setHolidays(holidays);
+            return dto;
+        }).collect(Collectors.toList());
     }
 }
