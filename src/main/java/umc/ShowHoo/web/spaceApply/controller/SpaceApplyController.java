@@ -89,4 +89,20 @@ public class SpaceApplyController {
         spaceApplyService.setSpaceApply(spaceId, spaceApplyId);
         return ApiResponse.onSuccess(null);
     }
+
+    @Operation(summary = "대관 가능 확인 API", description = "공연자가 공연장의 대관 가능 날짜를 확인하는 API")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
+    })
+    @GetMapping("spaces/{spaceId}/spaceApply/checkdates")
+    public ApiResponse<List<SpaceApplyResponseDTO.SpaceApplySimpleDTO>> getSpaceAppliesWithHolidays(
+            @PathVariable Long spaceId) {
+        List<SpaceApplyResponseDTO.SpaceApplySimpleDTO> spaceApplies = spaceApplyService.getSpaceAppliesWithHolidays(spaceId);
+
+        if (spaceApplies.isEmpty()) {
+            return ApiResponse.onSuccess(null);
+        }
+
+        return ApiResponse.onSuccess(spaceApplies);
+    }
 }
