@@ -24,20 +24,18 @@ public class ShowsController {
     private static final Logger logger = LoggerFactory.getLogger(ShowsController.class);
     private final ShowsService showsService;
 
-    @PostMapping(value="/show-register",consumes = "multipart/form-data")
+    @PostMapping(value="/{performerProfileId}/show-register",consumes = "multipart/form-data")
     @Operation(summary = "공연자 공연 준비-공연 포스터 및 공연 정보 등록 api", description = "공연 포스터 및 정보 등록 시에 필요한 API")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공")
     })
     public ApiResponse<ShowsResponseDTO.postShowDTO> createShow(
-            @PathVariable Long showId,
             @PathVariable Long performerProfileId,
             //@RequestBody ShowsRequestDTO showsRequestDTO,
             @RequestPart ShowsRequestDTO.ShowInfoDTO showsRequestDTO,
             @RequestPart(required = false) MultipartFile poster){
 
         Shows shows= showsService.createShows(showsRequestDTO,poster,performerProfileId);
-        shows.setId(showId);
 
         return ApiResponse.onSuccess(ShowsConverter.toPostShowDTO(shows));
     }
