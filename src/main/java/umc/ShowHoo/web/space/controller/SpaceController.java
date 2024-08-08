@@ -171,4 +171,11 @@ public class SpaceController {
         SpaceResponseDTO.SpaceFilteredListDTO spaces = spaceService.getPreferSpace(performerId);
         return ApiResponse.onSuccess(spaces);
     }
+
+    @GetMapping("/spaces/{spaceId}/prefer/{performerId}")
+    @Operation(summary = "공연장 세부정보 찜 조회 API", description = "공연장 세부정보 조회하는 페이지에서 로그인이 되어 있는 경우 찜 여부를 조회할 때 필요한 API입니다.")
+    public ApiResponse<SpaceResponseDTO.SpacePreferDTO> getSpacePrefer(@PathVariable Long spaceId, @PathVariable Long performerId) {
+        SpaceResponseDTO.SpacePreferDTO prefer = spaceService.getSpacePrefer(spaceId, performerId);
+        return ApiResponse.onSuccess(prefer);
+    }
 }
