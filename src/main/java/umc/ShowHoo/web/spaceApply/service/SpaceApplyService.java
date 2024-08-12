@@ -23,14 +23,11 @@ import umc.ShowHoo.web.spaceApply.exception.handler.SpaceApplyHandler;
 import umc.ShowHoo.web.spaceApply.repository.SpaceApplyRepository;
 import umc.ShowHoo.web.spaceUser.repository.SpaceUserRepository;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
-
 
 @Service
 @RequiredArgsConstructor
@@ -98,7 +95,6 @@ public class SpaceApplyService {
 
         notificationService.createSpaceConfirmNotification(spaceApply); // 알림 생성
     }
-
     public List<Object> getSpaceApplyInfo(Long spaceId) {
         Space space = spaceRepository.findById(spaceId)
                 .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_NOT_FOUND));
@@ -119,6 +115,5 @@ public class SpaceApplyService {
 
         return spaceInfo;
     }
-
 
 }

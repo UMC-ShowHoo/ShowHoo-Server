@@ -1,13 +1,16 @@
 package umc.ShowHoo.web.holiday.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Builder
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class HolidayDTO {
-    private LocalDate date;;
+    private LocalDate date;
 }
