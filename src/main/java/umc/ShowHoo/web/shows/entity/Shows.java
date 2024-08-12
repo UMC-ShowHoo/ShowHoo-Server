@@ -43,7 +43,6 @@ public class Shows {
     private boolean isComplete; //공연 완료 여부
 
 
-
     @ManyToOne @JoinColumn(name = "performerProfile_id")
     private PerformerProfile performerProfile;
 
