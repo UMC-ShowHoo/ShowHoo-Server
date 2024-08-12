@@ -35,11 +35,14 @@ public class ShowsController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공")
     })
+
     public ApiResponse<Map<String, Object>> createShow(
+
             @PathVariable Long performerProfileId,
             //@RequestBody ShowsRequestDTO showsRequestDTO,
             @RequestPart ShowsRequestDTO.ShowInfoDTO showsRequestDTO,
             @RequestPart(required = false) MultipartFile poster)throws IOException {
+
 
         String posterUrl = null;
         if (poster != null) {
@@ -47,7 +50,8 @@ public class ShowsController {
             posterUrl = s3Service.uploadFile(poster, objectKey);
         }
 
-        Shows shows = showsService.createShows(showsRequestDTO, poster,performerProfileId);
+        Shows shows= showsService.createShows(showsRequestDTO,poster,performerProfileId);
+
 
         // 프론트엔드에 반환할 데이터 준비
         Map<String, Object> response = new HashMap<>();
