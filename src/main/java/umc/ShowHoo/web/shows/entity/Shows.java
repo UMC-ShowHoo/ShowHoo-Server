@@ -40,7 +40,7 @@ public class Shows {
 
     private String cancelDate;  //취소 가능 날짜
     private String cancelTime;  //취소 가능 시간
-    private boolean isComplete; //공연 완료 여부
+    private Boolean isComplete; //공연 완료 여부
 
 
 

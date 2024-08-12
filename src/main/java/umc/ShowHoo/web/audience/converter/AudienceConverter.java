@@ -44,7 +44,7 @@ public class AudienceConverter {
                 .build();
     }
 
-    public static AudienceResponseDTO.getShowsDTO toGetLikedShowsDTO(Shows shows, boolean isPreferred){
+    public static AudienceResponseDTO.getShowsDTO toGetLikedShowsDTO(Shows shows, Boolean isPreferred){
         return AudienceResponseDTO.getShowsDTO.builder()
                 .showsId(shows.getId())
                 .name(shows.getName())

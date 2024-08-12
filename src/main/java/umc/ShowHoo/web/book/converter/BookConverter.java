@@ -96,7 +96,7 @@ public class BookConverter {
         }
 
         boolean isValid = false;
-        if(book.getStatus() == BookStatus.BOOK && !book.getShows().isComplete()){
+        if(book.getStatus() == BookStatus.BOOK && !book.getShows().getIsComplete()){
             isValid = isCancellable(book);
         }
 

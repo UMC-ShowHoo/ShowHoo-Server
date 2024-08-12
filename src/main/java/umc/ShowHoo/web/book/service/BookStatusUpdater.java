@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-//shows에도 status를 추가해야 쿼리가 줄 듯
 public class BookStatusUpdater {
 
     @Autowired
@@ -33,7 +32,7 @@ public class BookStatusUpdater {
         LocalDateTime now = LocalDateTime.now();
 
         for(Shows shows : showsList){
-            if(!shows.isComplete()) {
+            if(!shows.getIsComplete()) {
                 String dateTimeString = Optional.ofNullable(shows.getDate()).orElse("") + " " + Optional.ofNullable(shows.getTime()).orElse("");
                 LocalDateTime showTime = null;
 
@@ -51,7 +50,7 @@ public class BookStatusUpdater {
                             bookRepository.save(book);
                         }
                     }
-                    shows.setComplete(true);
+                    shows.setIsComplete(true);
                     showsRepository.save(shows);
                 }
             }
