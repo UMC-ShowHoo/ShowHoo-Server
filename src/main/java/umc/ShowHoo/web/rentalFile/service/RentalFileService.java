@@ -37,11 +37,9 @@ public class RentalFileService {
 
         RentalFile rentalFile = rentalFileRepository.findByShows(shows);
 
-        if (rentalFile == null) {
-            rentalFile.setShows(shows); // Shows 설정
-        }
-
-        rentalFile= RentalFileConverter.toFileEntity(setListUrl,rentalTimeUrl,addOrderUrl);
+        rentalFile.setSetList(setListUrl);
+        rentalFile.setRentalTime(rentalTimeUrl);
+        rentalFile.setAddOrder(addOrderUrl);
 
         return rentalFileRepository.save(rentalFile);
     }
@@ -67,18 +65,9 @@ public class RentalFileService {
         Shows shows=showsRepository.findById(showId)
                 .orElseThrow(()-> new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
 
-/*        RentalFile rentalFile= RentalFileConverter.toFormEntity(setListFormUrl,rentalTimeFormUrl,addOrderFormUrl);
-        rentalFile.setSpace(space);
-        return rentalFileRepository.save(rentalFile);*/
 
-        // Shows에 연관된 RentalFile을 찾는다.
-        RentalFile rentalFile = rentalFileRepository.findByShows(shows);
-
-        if (rentalFile == null) {
-            rentalFile.setShows(shows); // Shows 설정
-        }
-
-        rentalFile = RentalFileConverter.toFormEntity(setListFormUrl, rentalTimeFormUrl, addOrderFormUrl);
+        RentalFile rentalFile= RentalFileConverter.toFormEntity(setListFormUrl,rentalTimeFormUrl,addOrderFormUrl);
+        rentalFile.setShows(shows);
         rentalFile.setSpace(space);
 
         return rentalFileRepository.save(rentalFile);
@@ -89,6 +78,10 @@ public class RentalFileService {
                 .orElseThrow(()-> new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
 
         RentalFile rentalFile=rentalFileRepository.findByShows(shows);
+
+        if (rentalFile == null) {
+            throw new RentalFileHandler(ErrorStatus.RENTALFILE_NOT_FOUND); // 새로운 예외 처리
+        }
 
         return RentalFileConverter.toPerformerSaveDTO(rentalFile);
     }

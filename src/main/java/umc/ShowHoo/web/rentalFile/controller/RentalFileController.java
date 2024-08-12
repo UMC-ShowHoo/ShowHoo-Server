@@ -48,13 +48,13 @@ public class RentalFileController {
         }
     }
 
-    @GetMapping(value = "/performer/{showId}/prepare", consumes = "multipart/form-data")
+    @GetMapping(value = "/performer/{showId}/prepare")
     @Operation(summary = "공연자 - 큐시트 작성 API",description = "공연자가 큐시트 작성 시에 다운 받을 양식 자료입니다")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
-    public ApiResponse<RentalFileResponseDTO.SpaceUserSaveDTO> getRentalForm(@PathVariable Long showsId){
-        RentalFileResponseDTO.SpaceUserSaveDTO spaceUserSaveDTO=rentalFileService.getFormFile(showsId);
+    public ApiResponse<RentalFileResponseDTO.SpaceUserSaveDTO> getRentalForm(@PathVariable Long showId){
+        RentalFileResponseDTO.SpaceUserSaveDTO spaceUserSaveDTO=rentalFileService.getFormFile(showId);
         return ApiResponse.onSuccess(spaceUserSaveDTO);
 
     }
@@ -82,7 +82,7 @@ public class RentalFileController {
         }
     }
 
-    @GetMapping(value = "/space/{showId}/prepare", consumes = "multipart/form-data")
+    @GetMapping(value = "/space/{showId}/prepare")
     @Operation(summary = "공연장 - 큐시트 작성 API",description = "공연장이 큐시트 작성 시에 다운 받을 양식 자료입니다")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
