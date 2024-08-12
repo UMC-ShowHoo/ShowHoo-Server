@@ -158,5 +158,9 @@ public class SpaceService {
         space.updateGrade();
         spaceRepository.save(space);
     }
+
+    public SpaceResponseDTO.SpacePreferDTO getSpacePrefer(Long spaceId, Long performerId) {
+
+    }
 }
 
