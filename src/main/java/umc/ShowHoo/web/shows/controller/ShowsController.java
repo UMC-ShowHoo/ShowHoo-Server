@@ -12,32 +12,53 @@ import umc.ShowHoo.web.shows.converter.ShowsConverter;
 import umc.ShowHoo.web.shows.dto.ShowsRequestDTO;
 import umc.ShowHoo.web.shows.dto.ShowsResponseDTO;
 import umc.ShowHoo.web.shows.entity.Shows;
+import umc.ShowHoo.web.shows.service.S3Service;
 import umc.ShowHoo.web.shows.service.ShowsService;
 import umc.ShowHoo.web.showsDescription.converter.ShowsDscConverter;
 import umc.ShowHoo.web.showsDescription.dto.ShowsDscRequestDTO;
 import umc.ShowHoo.web.showsDescription.dto.ShowsDscResponseDTO;
 import umc.ShowHoo.web.showsDescription.entity.ShowsDescription;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 public class ShowsController {
     private static final Logger logger = LoggerFactory.getLogger(ShowsController.class);
     private final ShowsService showsService;
+    private final S3Service s3Service;
 
     @PostMapping(value="/{performerProfileId}/show-register",consumes = "multipart/form-data")
     @Operation(summary = "공연자 공연 준비-공연 포스터 및 공연 정보 등록 api", description = "공연 포스터 및 정보 등록 시에 필요한 API")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공")
     })
-    public ApiResponse<ShowsResponseDTO.postShowDTO> createShow(
+
+    public ApiResponse<Map<String, Object>> createShow(
+
             @PathVariable Long performerProfileId,
             //@RequestBody ShowsRequestDTO showsRequestDTO,
             @RequestPart ShowsRequestDTO.ShowInfoDTO showsRequestDTO,
-            @RequestPart(required = false) MultipartFile poster){
+            @RequestPart(required = false) MultipartFile poster)throws IOException {
+
+
+        String posterUrl = null;
+        if (poster != null) {
+            String objectKey = "posters/" + poster.getOriginalFilename(); // 적절한 objectKey를 생성하세요.
+            posterUrl = s3Service.uploadFile(poster, objectKey);
+        }
 
         Shows shows= showsService.createShows(showsRequestDTO,poster,performerProfileId);
 
-        return ApiResponse.onSuccess(ShowsConverter.toPostShowDTO(shows));
+
+        // 프론트엔드에 반환할 데이터 준비
+        Map<String, Object> response = new HashMap<>();
+        response.put("posterUrl", posterUrl);
+        response.put("showData", ShowsConverter.toPostShowDTO(shows));
+
+        return ApiResponse.onSuccess(response);
     }
 
     @PostMapping(value="/{showId}/show-register/description",consumes = "multipart/form-data")
