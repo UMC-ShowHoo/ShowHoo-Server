@@ -9,5 +9,6 @@ import java.util.List;
 
 @Repository
 public interface HolidayRepository extends JpaRepository<Holiday, Long> {
-    List<HolidayDTO> findBySpaceId(Long spaceId);
+    List<Holiday> findBySpaceId(Long spaceId);
+
 }

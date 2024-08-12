@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import umc.ShowHoo.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -90,19 +91,14 @@ public class SpaceApplyController {
         return ApiResponse.onSuccess(null);
     }
 
-    @Operation(summary = "대관 가능 확인 API", description = "공연자가 공연장의 대관 가능 날짜를 확인하는 API")
+    @Operation(summary = " 대관 가능 날짜 확인 API", description = "공연자가 공연장 대관 가능 날짜를 확인 하는 API, holiday와 status 체크")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
     })
-    @GetMapping("spaces/{spaceId}/spaceApply/checkdates")
-    public ApiResponse<List<SpaceApplyResponseDTO.SpaceApplySimpleDTO>> getSpaceAppliesWithHolidays(
-            @PathVariable Long spaceId) {
-        List<SpaceApplyResponseDTO.SpaceApplySimpleDTO> spaceApplies = spaceApplyService.getSpaceAppliesWithHolidays(spaceId);
+    @PatchMapping("spaces/{spaceId}/spaceApply/info")
+    public ApiResponse<List<Object>> getSpaceInfo(@PathVariable Long spaceId) {
+        return ApiResponse.onSuccess(spaceApplyService.getSpaceApplyInfo(spaceId));
 
-        if (spaceApplies.isEmpty()) {
-            return ApiResponse.onSuccess(null);
-        }
-
-        return ApiResponse.onSuccess(spaceApplies);
     }
+
 }
