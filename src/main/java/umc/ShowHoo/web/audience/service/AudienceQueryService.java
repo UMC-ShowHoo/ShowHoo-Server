@@ -15,4 +15,6 @@ public interface AudienceQueryService {
     AudienceResponseDTO.getShowsListDTO getSearchedLikedShowsList(Long id, Integer page, String request);
 
     Shows getShowsDetail(Long showsId);
+
+    Boolean isDescriptionExist(Shows shows);
 }

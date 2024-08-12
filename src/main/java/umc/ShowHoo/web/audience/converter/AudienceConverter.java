@@ -55,7 +55,7 @@ public class AudienceConverter {
                 .build();
     }
 
-    public static AudienceResponseDTO.ShowsDetailDTO toGetShowsDetailDTO(Shows shows){
+    public static AudienceResponseDTO.ShowsDetailDTO toGetShowsDetailDTO(Shows shows, Boolean isExist){
         return AudienceResponseDTO.ShowsDetailDTO.builder()
                 .showsId(shows.getId())
                 .host(shows.getPerformerProfile().getTeam())
@@ -63,8 +63,8 @@ public class AudienceConverter {
                 .poster(shows.getPoster())
                 .date(shows.getDate())
                 .time(shows.getTime())
-                .descriptionImg(shows.getShowsDescription().getImg())
-                .description(shows.getShowsDescription().getText())
+                .descriptionImg(isExist?shows.getShowsDescription().getImg():null)
+                .description(isExist?shows.getShowsDescription().getText():null)
                 .runningTime(shows.getRunningTime())
                 .showAge(shows.getShowAge())
                 .ticketPrice(shows.getTicketPrice())
