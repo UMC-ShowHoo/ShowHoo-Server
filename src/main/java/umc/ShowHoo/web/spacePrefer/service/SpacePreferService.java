@@ -43,4 +43,13 @@ public class SpacePreferService {
         }
         spacePreferRepository.deleteById(id);
     }
+
+    @Transactional
+    public Boolean checkSpacePreference(Long spaceId, Long performerId){
+        Space space = spaceRepository.findById(spaceId)
+                .orElseThrow(() -> new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND));
+        Performer performer = performerRepository.findById(performerId)
+                .orElseThrow(() -> new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
+        return spacePreferRepository.existsBySpaceAndPerformer(space, performer);
+    }
 }
