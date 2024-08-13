@@ -25,7 +25,6 @@ import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
 import umc.ShowHoo.web.spaceUser.repository.SpaceUserRepository;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -165,7 +164,7 @@ public class SpaceController {
         return ApiResponse.onSuccess(spaces);
     }
 
-    @GetMapping("/space/{performerId}/prefer")
+    @GetMapping("/spaces/{performerId}/prefer")
     @Operation(summary = "찜한 공연장 조회 API", description = "performer가 찜한 공연장을 조회하는 API입니다.")
     public ApiResponse<SpaceResponseDTO.SpaceFilteredListDTO> getPreferSpace(@PathVariable Long performerId) {
         SpaceResponseDTO.SpaceFilteredListDTO spaces = spaceService.getPreferSpace(performerId);
