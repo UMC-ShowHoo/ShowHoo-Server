@@ -46,6 +46,7 @@ public class SpaceConverter {
                 .spaceSeat(spaceSeatUrl)
                 .notice(dto.getNotice())
                 .spaceUser(spaceUser)
+                .spaceType(dto.getSpaceType())
                 .build();
 
         if (dto.getPhotoUrls() != null) {
