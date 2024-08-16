@@ -108,7 +108,7 @@ public class BookConverter {
                 .date(book.getShows().getDate())
                 .time(book.getShows().getTime())
                 .place("test")
-                .performer(book.getShows().getPerformerProfile().getTeam())
+                .performer(book.getShows().getPerformerProfile().getName())
                 .status(book.getStatus())
                 .detail(book.getDetail())
                 .isCancellable(isValid)
