@@ -4,7 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 import umc.ShowHoo.jwt.AuthTokens;
 import umc.ShowHoo.web.login.dto.LoginResponseDTO;
@@ -30,52 +33,78 @@ public class LoginController {
         return "로그아웃";
     }
 
-    @Value("http://localhost:5173/login/oauth2/code/kakao")
+    @Value("${security.oauth2.client.registration.kakao.redirect-uri}")
     private String redirectUri;
 
-    @Value("http://localhost:5173")
+    @Value("http://localhost:8080/logout")
     private String logout_redirectUri;
 
     @Value("${kakao.client.id}")
     private String kakaoClientId;
 
-    //멤버 정보 가져오는 API 만들기
     @GetMapping("/login/oauth2/code/kakao")
     public LoginResponseDTO kakao(@RequestParam("code") String code, HttpSession session) {
-        return kakaoService.kakaoLogin(code, redirectUri);
+        LoginResponseDTO member = kakaoService.kakaoLogin(code, redirectUri);
+        if (member != null){
+            session.setAttribute("loginMember", member);
+            session.setMaxInactiveInterval(60 * 30);
+            session.setAttribute("kakaoToken", member.getAccessToken());
+        }
+        return member;
     }
 
     @GetMapping("/kakao")
-    public String kakaoLogin() {
-        return "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=" + kakaoClientId + "&redirect_uri=" + redirectUri + "&response_type=code";
-    }
-
-    @GetMapping("/kakao/logout/withAccount")
-    public String kakaoLogoutWithAccount() {
-        return "https://kauth.kakao.com/oauth/logout?client_id=" + kakaoClientId + "&logout_redirect_uri=" + logout_redirectUri;
-
+    public RedirectView kakaoLogin() {
+        String kakaoLoginUrl = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=" + kakaoClientId + "&redirect_uri=" + redirectUri;
+        return new RedirectView(kakaoLoginUrl);
     }
 
     //카카오 일반 로그아웃(by accessToken)
-    @PostMapping("/kakao/logout")
-    public String kakaoLogout(@RequestBody Long uid) {
-        try {
-            kakaoService.kakaoDisconnect(kakaoService.getAccessToken(uid));
-        } catch (JsonProcessingException e){
-            throw new RuntimeException(e);
+    @GetMapping("/kakao/logout")
+    public String kakaoLogout(HttpSession session) {
+        String accessToken = (String) session.getAttribute("kakaoToken");
+        System.out.println(accessToken);
+
+        if(accessToken != null && !"".equals(accessToken)){
+            try {
+                kakaoService.kakaoDisconnect(accessToken);
+            } catch (JsonProcessingException e){
+                throw new RuntimeException(e);
+            }
+            session.removeAttribute("kakaoToken");
+            session.removeAttribute("loginMember");
+        }else {
+            System.out.println("accessToken is null");
         }
+
         return "redirect:/";
     }
 
     //카카오 연결 끊기(by accessToken)
-    @PostMapping("/kakao/delete")
-    public String kakaoUnlink(@RequestBody Long uid) {
-        try {
-            kakaoService.KaKaoUnlink(kakaoService.getAccessToken(uid));
-        } catch (JsonProcessingException e){
-            throw new RuntimeException(e);
+    @GetMapping("/kakao/delete")
+    public String kakaoUnlink(HttpSession session) {
+        String accessToken = (String) session.getAttribute("kakaoToken");
+        System.out.println(accessToken);
+
+        if(accessToken != null && !"".equals(accessToken)){
+            try {
+                kakaoService.KaKaoUnlink(accessToken);
+            } catch (JsonProcessingException e){
+                throw new RuntimeException(e);
+            }
+            session.removeAttribute("kakaoToken");
+            session.removeAttribute("loginMember");
+        }else {
+            System.out.println("accessToken is null");
         }
+
         return "redirect:/";
     }
 
+    @GetMapping("/kakao/logout/withAccount")
+    public RedirectView kakaoLogoutWithAccount() {
+        String uri = "https://kauth.kakao.com/oauth/logout?client_id=" + kakaoClientId + "&logout_redirect_uri=" + logout_redirectUri;
+        return new RedirectView(uri);
+
+    }
 }

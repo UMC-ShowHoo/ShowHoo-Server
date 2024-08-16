@@ -25,7 +25,7 @@ public class BookStatusUpdater {
     @Autowired
     private ShowsRepository showsRepository;
 
-    @Scheduled(fixedRate = 60000 * 30) //30분마다 실행
+    @Scheduled(fixedRate = 60000 * 30) //60초마다 실행
     @Transactional
     public void updateBookStatusWatched(){
         List<Shows> showsList = showsRepository.findAll();
@@ -43,12 +43,12 @@ public class BookStatusUpdater {
                     continue;
                 }
 
-                if (showTime != null && showTime.isBefore(now)) {
-                    for (Book book : shows.getBookList()) {
-                        if (book.getDetail() == BookDetail.CONFIRMED) {
-                            book.setDetail(BookDetail.WATCHED);
-                            bookRepository.save(book);
-                        }
+            if(showTime != null && showTime.isBefore(now)){
+                for(Book book : shows.getBookList()){
+                    if(book.getDetail() == BookDetail.CONFIRMED){
+                        book.setStatus(BookStatus.WATCHED);
+                        book.setDetail(BookDetail.WATCHED);
+                        bookRepository.save(book);
                     }
                     shows.setIsComplete(true);
                     showsRepository.save(shows);

@@ -48,32 +48,31 @@ public class RentalFileController {
         }
     }
 
-    @GetMapping(value = "/performer/{showId}/prepare")
+    @GetMapping(value = "/performer/{showId}/prepare", consumes = "multipart/form-data")
     @Operation(summary = "공연자 - 큐시트 작성 API",description = "공연자가 큐시트 작성 시에 다운 받을 양식 자료입니다")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
-    public ApiResponse<RentalFileResponseDTO.SpaceUserSaveDTO> getRentalForm(@PathVariable Long showId){
-        RentalFileResponseDTO.SpaceUserSaveDTO spaceUserSaveDTO=rentalFileService.getFormFile(showId);
+    public ApiResponse<RentalFileResponseDTO.SpaceUserSaveDTO> getRentalForm(@PathVariable Long showsId){
+        RentalFileResponseDTO.SpaceUserSaveDTO spaceUserSaveDTO=rentalFileService.getFormFile(showsId);
         return ApiResponse.onSuccess(spaceUserSaveDTO);
 
     }
 
 
-    @PostMapping(value = "/space/{spaceId}/{showId}/prepare",consumes = "multipart/form-data")
+    @PostMapping(value = "/space/{spaceId}/prepare",consumes = "multipart/form-data")
     @Operation(summary="공연장 - 공연준비 큐시트 작성 API", description = "공연장이 큐시트 작성 시에 제출해야하는 API입니다")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
     public ApiResponse<RentalFileResponseDTO.postFileDTO> createFormFile(
             @PathVariable Long spaceId,
-            @PathVariable Long showId,
             @RequestPart(required = false)MultipartFile setListForm,
             @RequestPart(required = false)MultipartFile rentalTimeForm,
             @RequestPart(required = false)MultipartFile addOrderForm){
         try {
 
-            RentalFile rentalFile=rentalFileService.createFormFile(setListForm,rentalTimeForm,addOrderForm,spaceId,showId);
+            RentalFile rentalFile=rentalFileService.createFormFile(setListForm,rentalTimeForm,addOrderForm,spaceId);
 
             return ApiResponse.onSuccess(RentalFileConverter.toPostFileDTO(rentalFile));
         }catch (RentalFileHandler e){
@@ -82,7 +81,7 @@ public class RentalFileController {
         }
     }
 
-    @GetMapping(value = "/space/{showId}/prepare")
+    @GetMapping(value = "/space/{showId}/prepare", consumes = "multipart/form-data")
     @Operation(summary = "공연장 - 큐시트 작성 API",description = "공연장이 큐시트 작성 시에 다운 받을 양식 자료입니다")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),

@@ -23,7 +23,6 @@ public class BookQueryServiceImpl implements BookQueryService{
 
     private final BookRepository bookRepository;
 
-    //BOOK
     @Override
     public Page<Book> getTickets(Long audienceId, Integer page){
         Audience audience = audienceRepository.findById(audienceId)
@@ -31,12 +30,11 @@ public class BookQueryServiceImpl implements BookQueryService{
         return bookRepository.findAllByAudienceAndStatus(audience, BookStatus.BOOK, PageRequest.of(page, 3));
     }
 
-    //CANCEL
     @Override
-    public Page<Book> getCanceledTickets(Long audienceId, Integer page){
+    public Page<Book> getWatchedTickets(Long audienceId, Integer page){
         Audience audience = audienceRepository.findById(audienceId)
                 .orElseThrow(()->new AudienceHandler(ErrorStatus.AUDIENCE_NOT_FOUND));
-        return bookRepository.findAllByAudienceAndStatus(audience, BookStatus.CANCEL, PageRequest.of(page, 3));
+        return bookRepository.findAllByAudienceAndStatus(audience, BookStatus.WATCHED, PageRequest.of(page, 3));
     }
 
     //detail >> CONFIRMED 중 하나
