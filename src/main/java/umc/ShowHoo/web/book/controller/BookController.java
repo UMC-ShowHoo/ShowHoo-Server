@@ -61,7 +61,7 @@ public class BookController {
 
     //예매 내역 조회 API
     @GetMapping("/{audienceId}/ticket")
-    @Operation(summary = "예매 내역 조회 API", description = "관람자의 공연 예매 내역을 조회하기 위한 API")
+    @Operation(summary = "예매 내역 조회 API", description = "관람자가 예매하여 승인 대기 중이거나 예매 완료된 공연 예매 내역을 조회하기 위한 API")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUDIENCE001", description = "Audience not found", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
@@ -75,9 +75,9 @@ public class BookController {
         return ApiResponse.onSuccess(BookConverter.toGetBookListDTO(bookList));
     }
 
-    //취소 내역 조회 API
-    @GetMapping("/{audienceId}/canceled")
-    @Operation(summary = "공연 취소 내역 조회 API", description = "관람자의 공연 취소 내역을 조회하기 위한 API")
+    //관람 내역 조회 API
+    @GetMapping("/{audienceId}/watched")
+    @Operation(summary = "관람 내역 조회 API", description = "관람자의 관람 내역을 조회하기 위한 API")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUDIENCE001", description = "Audience not found", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
@@ -87,7 +87,7 @@ public class BookController {
             @Parameter(name = "page", description = "페이지 번호")
     })
     public ApiResponse<BookResponseDTO.getBookListDTO> getWatchedList(@PathVariable(name = "audienceId") Long audienceId, @RequestParam(name = "page") Integer page){
-        Page<Book> bookList = bookQueryService.getCanceledTickets(audienceId, page);
+        Page<Book> bookList = bookQueryService.getWatchedTickets(audienceId, page);
         return ApiResponse.onSuccess(BookConverter.toGetBookListDTO(bookList));
     }
 

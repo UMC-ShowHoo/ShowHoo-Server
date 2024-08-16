@@ -20,8 +20,6 @@ public class ShowsConverter {
                 .poster(poster)
                 .runningTime(dto.getRunningTime())
                 .time(dto.getTime())
-                .cancelDate(dto.getCancelDate())
-                .cancelTime(dto.getCancelTime())
                 .build();
     }
 

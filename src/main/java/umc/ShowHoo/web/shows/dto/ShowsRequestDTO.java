@@ -13,15 +13,13 @@ public class ShowsRequestDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ShowInfoDTO{
-        private Long performerProfileId;
+        private Long performerId;
         //private String poster;
         private String name;
         private String date;
         private String time;
         private String runningTime;
         private Integer showAge;
-        private String cancelDate;
-        private String cancelTime;
     }
 
 
