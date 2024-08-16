@@ -7,7 +7,7 @@ public interface BookQueryService {
 
     Page<Book> getTickets(Long audienceId, Integer page);
 
-    Page<Book> getWatchedTickets(Long audienceId, Integer page);
+    Page<Book> getCanceledTickets(Long audienceId, Integer page);
 
     Book getNextBook(Long audienceId);
 }
