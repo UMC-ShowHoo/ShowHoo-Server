@@ -46,6 +46,7 @@ public class SpaceConverter {
                 .spaceSeat(spaceSeatUrl)
                 .notice(dto.getNotice())
                 .spaceUser(spaceUser)
+                .spaceType(dto.getSpaceType())
                 .build();
 
         if (dto.getPhotoUrls() != null) {
@@ -194,7 +195,7 @@ public class SpaceConverter {
         Integer standingCapacity = Optional.ofNullable(space.getStandingCapacity()).orElse(0);
         Integer totalCapacity = seatingCapacity + standingCapacity;
         String imageURL = space.getPhotos().isEmpty() ? null : space.getPhotos().get(0).getPhotoUrl();
-        String additionalService = space.getPhotos().isEmpty() ? null : space.getAdditionalServices().get(0).getTitle();
+        String additionalService = space.getAdditionalServices().isEmpty() ? null : space.getAdditionalServices().get(0).getTitle();
 
         Integer minRentalFee = space.getRentalFees().stream()
                 .min(Comparator.comparingInt(RentalFee::getFee))
