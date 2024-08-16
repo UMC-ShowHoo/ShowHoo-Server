@@ -14,6 +14,7 @@ import umc.ShowHoo.web.audience.converter.AudienceConverter;
 import umc.ShowHoo.web.audience.dto.AudienceResponseDTO;
 import umc.ShowHoo.web.audience.entity.Audience;
 import umc.ShowHoo.web.audience.repository.AudienceRepository;
+import umc.ShowHoo.web.showsDescription.repository.ShowsDscRepository;
 import umc.ShowHoo.web.showsPrefer.repository.ShowsPreferRepository;
 
 import java.util.ArrayList;
@@ -29,6 +30,8 @@ public class AudienceQueryServiceImpl implements AudienceQueryService{
     private final AudienceRepository audienceRepository;
 
     private final ShowsPreferRepository showsPreferRepository;
+
+    private final ShowsDscRepository showsDscRepository;
 
     @Override
     public Page<Shows> getShowsList(Integer page){
@@ -76,5 +79,10 @@ public class AudienceQueryServiceImpl implements AudienceQueryService{
     public Shows getShowsDetail(Long showsId){
         return showsRepository.findById(showsId)
                 .orElseThrow(()->new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
+    }
+
+    @Override
+    public Boolean isDescriptionExist(Shows shows){
+        return showsDscRepository.existsByShows(shows);
     }
 }

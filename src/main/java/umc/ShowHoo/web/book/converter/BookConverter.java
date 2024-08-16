@@ -96,7 +96,7 @@ public class BookConverter {
         }
 
         boolean isValid = false;
-        if(book.getStatus() == BookStatus.BOOK && !book.getShows().isComplete()){
+        if(book.getStatus() == BookStatus.BOOK && !book.getShows().getIsComplete()){
             isValid = isCancellable(book);
         }
 
@@ -108,7 +108,7 @@ public class BookConverter {
                 .date(book.getShows().getDate())
                 .time(book.getShows().getTime())
                 .place("test")
-                .performer(book.getShows().getPerformerProfile().getTeam())
+                .performer(book.getShows().getPerformerProfile().getName())
                 .status(book.getStatus())
                 .detail(book.getDetail())
                 .isCancellable(isValid)
