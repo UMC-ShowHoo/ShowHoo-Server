@@ -42,7 +42,7 @@ security:
           client-id: ${KAKAO_CLIENT_ID}
           client-secret: ${KAKAO_CLIENT_SECRET}
           authorization-grant-type: authorization_code
-          redirect-uri: http://${EC2_HOST}:5173//login/oauth2/code/kakao
+          redirect-uri: http://${EC2_HOST}:8081//login/oauth2/code/kakao
           client-authentication-method: client_secret_post
       provider:
         kakao:

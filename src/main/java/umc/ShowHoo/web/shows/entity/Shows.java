@@ -38,10 +38,6 @@ public class Shows {
     private String accountHolder; //예금주
     private String accountNum; //계좌번호
 
-    private String cancelDate;  //취소 가능 날짜
-    private String cancelTime;  //취소 가능 시간
-    private boolean isComplete; //공연 완료 여부
-
 
 
     @ManyToOne @JoinColumn(name = "performerProfile_id")

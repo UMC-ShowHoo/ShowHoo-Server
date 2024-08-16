@@ -26,33 +26,30 @@ public class BookStatusUpdater {
     @Autowired
     private ShowsRepository showsRepository;
 
-    @Scheduled(fixedRate = 60000 * 30) //30분마다 실행
+    @Scheduled(fixedRate = 60000) //60초마다 실행
     @Transactional
     public void updateBookStatusWatched(){
         List<Shows> showsList = showsRepository.findAll();
         LocalDateTime now = LocalDateTime.now();
 
         for(Shows shows : showsList){
-            if(!shows.isComplete()) {
-                String dateTimeString = Optional.ofNullable(shows.getDate()).orElse("") + " " + Optional.ofNullable(shows.getTime()).orElse("");
-                LocalDateTime showTime = null;
+            String dateTimeString = Optional.ofNullable(shows.getDate()).orElse("") + " " + Optional.ofNullable(shows.getTime()).orElse("");
+            LocalDateTime showTime = null;
 
-                try {
-                    showTime = LocalDateTime.parse(dateTimeString.trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-                } catch (Exception e) {
-                    System.out.println("Invalid DateTime string: " + dateTimeString);
-                    continue;
-                }
+            try {
+                showTime = LocalDateTime.parse(dateTimeString.trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            } catch (Exception e) {
+                System.out.println("Invalid DateTime string: " + dateTimeString);
+                continue;
+            }
 
-                if (showTime != null && showTime.isBefore(now)) {
-                    for (Book book : shows.getBookList()) {
-                        if (book.getDetail() == BookDetail.CONFIRMED) {
-                            book.setDetail(BookDetail.WATCHED);
-                            bookRepository.save(book);
-                        }
+            if(showTime != null && showTime.isBefore(now)){
+                for(Book book : shows.getBookList()){
+                    if(book.getDetail() == BookDetail.CONFIRMED){
+                        book.setStatus(BookStatus.WATCHED);
+                        book.setDetail(BookDetail.WATCHED);
+                        bookRepository.save(book);
                     }
-                    shows.setComplete(true);
-                    showsRepository.save(shows);
                 }
             }
         }

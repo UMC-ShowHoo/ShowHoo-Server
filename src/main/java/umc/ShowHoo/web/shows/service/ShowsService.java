@@ -37,7 +37,6 @@ public class ShowsService {
 
         Shows shows=ShowsConverter.toShowInfo(requestDTO,posterUrl);
         shows.setPerformerProfile(performer);
-        shows.setComplete(false);
 
         return showsRepository.save(shows);
     }

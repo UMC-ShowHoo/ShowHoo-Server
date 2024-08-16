@@ -4,10 +4,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
-import umc.ShowHoo.web.performer.entity.Performer;
 import umc.ShowHoo.web.performer.handler.PerformerHandler;
 import umc.ShowHoo.web.performer.repository.PerformerRepository;
-import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.space.exception.handler.SpaceHandler;
 import umc.ShowHoo.web.space.repository.SpaceRepository;
 import umc.ShowHoo.web.spacePrefer.converter.SpacePreferConverter;
@@ -27,29 +25,23 @@ public class SpacePreferService {
 
     @Transactional
     public SpacePreferResponseDTO.ResultDTO saveSpacePrefer(SpacePreferRequestDTO request){
-        Space space = spaceRepository.findById(request.getSpaceId())
-                .orElseThrow(() -> new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND));
-        Performer performer = performerRepository.findById(request.getPerformerId())
-                .orElseThrow(() -> new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
-        SpacePrefer spacePrefer = spacePreferConverter.toEntity(space, performer);
+        if (!spaceRepository.existsById(request.getSpaceId())) {
+            throw new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND);
+        }
+        if (!performerRepository.existsById(request.getPerformerId())) {
+            throw new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND);
+        }
+        SpacePrefer spacePrefer = spacePreferConverter.toEntity(request);
         SpacePrefer savedSpacePrefer = spacePreferRepository.save(spacePrefer);
         return spacePreferConverter.toResultDTO(savedSpacePrefer);
     }
 
     @Transactional
     public void deleteSpacePrefer(Long id) {
+        spacePreferRepository.findById(id).orElseThrow(() -> new SpacePreferHandler(ErrorStatus.SPACE_PREFER_NOT_FOUND));
         if (!spacePreferRepository.existsById(id)) {
             throw new SpacePreferHandler(ErrorStatus.SPACE_PREFER_NOT_FOUND);
         }
         spacePreferRepository.deleteById(id);
-    }
-
-    @Transactional
-    public Boolean checkSpacePreference(Long spaceId, Long performerId){
-        Space space = spaceRepository.findById(spaceId)
-                .orElseThrow(() -> new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND));
-        Performer performer = performerRepository.findById(performerId)
-                .orElseThrow(() -> new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
-        return spacePreferRepository.existsBySpaceAndPerformer(space, performer);
     }
 }
