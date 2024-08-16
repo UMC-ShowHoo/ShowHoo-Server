@@ -1,6 +1,9 @@
 package umc.ShowHoo.web.spaceApply.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
@@ -21,13 +24,4 @@ public class SpaceApplyResponseDTO {
         private String spaceLocation;
         private String spacePhotoUrl;
     }
-    @Builder
-    @Getter @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class SpaceApplySimpleDTO {
-        private LocalDate date;
-        private int status;
-    }
-
 }

@@ -25,7 +25,6 @@ import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
 import umc.ShowHoo.web.spaceUser.repository.SpaceUserRepository;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -37,7 +36,7 @@ public class SpaceController {
     private final RentalFeeService rentalFeeService;
 
     @PostMapping(value = "/spaces/{spaceUserId}", consumes = "multipart/form-data")
-    @Operation(summary = "공연장 등록 API", description = "공연장 등록할 때 필요한 API입니다. 사진을 등록했을 때 반환받았던 url값을 photoUrls에 넣어주시면 되고 rentalFee는 비성수기 대관료, peakSeasonRentalFee는 성수기 대관료입니다. dayOfWeek에는 MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY 중에 해당하는 요일, fee에는 가격 넣어주시면 됩니다. 월~일까지 모든 요일의 가격을 보내주셔야 합니다.")
+    @Operation(summary = "공연장 등록 API", description = "공연장 등록할 때 필요한 API입니다. 사진을 등록했을 때 반환받았던 url값을 photoUrls에 넣어주시면 되고 rentalFee는 비성수기 대관료, peakSeasonRentalFee는 성수기 대관료입니다. dayOfWeek에는 MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY 중에 해당하는 요일, fee에는 가격 넣어주시면 됩니다. 월~일까지 모든 요일의 가격을 보내주셔야 합니다. spaceType은 공연장 종류인데 CONCERTHALL, ARTHALL, GRANDHALL, SMALLHALL, GRANDTHEATER, SMALLTHEATER 중에 하나로 넣어주시면 돼요")
     @Parameter(
             in = ParameterIn.HEADER,
             name = "Authorization", required = true,
@@ -165,7 +164,7 @@ public class SpaceController {
         return ApiResponse.onSuccess(spaces);
     }
 
-    @GetMapping("/space/{performerId}/prefer")
+    @GetMapping("/spaces/{performerId}/prefer")
     @Operation(summary = "찜한 공연장 조회 API", description = "performer가 찜한 공연장을 조회하는 API입니다.")
     public ApiResponse<SpaceResponseDTO.SpaceFilteredListDTO> getPreferSpace(@PathVariable Long performerId) {
         SpaceResponseDTO.SpaceFilteredListDTO spaces = spaceService.getPreferSpace(performerId);

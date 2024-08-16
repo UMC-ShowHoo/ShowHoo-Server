@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface SpaceApplyRepository extends JpaRepository<SpaceApply, Long> {
     List<SpaceApply> findByPerformerId(Long performerId);
-    List<SpaceApply> findBySpaceIdAndStatusIn(Long spaceId, List<Integer> statuses);
+
     boolean existsBySpaceIdAndPerformerId(Long spaceId, Long performerId);
 }
