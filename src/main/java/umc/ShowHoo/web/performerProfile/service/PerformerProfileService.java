@@ -151,7 +151,7 @@ public class PerformerProfileService {
     public PerformerProfileResponseDTO.MyPageProfileDTO getMyPageProfiles(Long performerUserId) {
         Member member = performerRepository.findMemberIdById(performerUserId)
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
-        Optional<PerformerProfile> profileOptional = performerProfileRepository.findTopByPerformerId(performerUserId);
+        Optional<PerformerProfile> profileOptional = performerProfileRepository.findFirstByPerformerIdOrderByCreatedAtDesc(performerUserId);
 
         if (profileOptional.isPresent()) {
             PerformerProfile profile = profileOptional.get();
