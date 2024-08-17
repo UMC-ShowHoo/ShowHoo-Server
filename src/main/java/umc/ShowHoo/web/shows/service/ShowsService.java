@@ -30,8 +30,7 @@ public class ShowsService {
     private final AmazonS3Manager amazonS3Manager;
     private final ShowsDscRepository showsDscRepository;
 
-    public Shows createShows(ShowsRequestDTO.ShowInfoDTO requestDTO, MultipartFile poster,Long performerProfileId){
-        String posterUrl=poster != null ? amazonS3Manager.uploadFile("showRegister/"+ UUID.randomUUID().toString(),poster) : null;
+    public Shows createShows(ShowsRequestDTO.ShowInfoDTO requestDTO, String posterUrl,Long performerProfileId){
         PerformerProfile performer = performerProfileRepository.findById(performerProfileId)
             .orElseThrow(()->new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
 
