@@ -95,6 +95,8 @@ public class SpaceApplyService {
 
         notificationService.createSpaceConfirmNotification(spaceApply); // 알림 생성
     }
+
+    @Transactional
     public List<Object> getSpaceApplyInfo(Long spaceId) {
         Space space = spaceRepository.findById(spaceId)
                 .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_NOT_FOUND));

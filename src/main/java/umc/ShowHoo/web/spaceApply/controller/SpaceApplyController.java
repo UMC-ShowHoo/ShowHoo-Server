@@ -57,6 +57,7 @@ public class SpaceApplyController {
     }
 
 
+
     @Operation(summary = "대관 내역 취소 및 거절 API", description = "공연자 대관 내역 확인하는 페이지에서 취소 및 거절할 때 필요한 API입니다.")
     @Parameter(
             in = ParameterIn.HEADER,
@@ -94,7 +95,7 @@ public class SpaceApplyController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
     })
-    @PatchMapping("spaces/{spaceId}/spaceApply/info")
+    @GetMapping("spaces/{spaceId}/spaceApply/info")
     public ApiResponse<List<Object>> getSpaceInfo(@PathVariable Long spaceId) {
         return ApiResponse.onSuccess(spaceApplyService.getSpaceApplyInfo(spaceId));
 
