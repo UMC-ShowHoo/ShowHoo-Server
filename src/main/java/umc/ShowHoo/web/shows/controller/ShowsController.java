@@ -45,12 +45,13 @@ public class ShowsController {
         return ApiResponse.onSuccess(ShowsConverter.toPostShowDTO(shows));
     }
 
-    @PostMapping(value="/{performerProfileId}/upload-poster", consumes = "multipart/form-data")
+    @PostMapping(value="/upload-poster", consumes = "multipart/form-data")
     @Operation(summary = "공연 포스터 업로드 API", description = "포스터를 업로드하고 해당 URL을 반환하는 API")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공")
     })
-    public ApiResponse<ShowsResponseDTO.ShowPosterDTO> uploadPoster(@RequestPart MultipartFile poster) throws IOException {
+    public ApiResponse<ShowsResponseDTO.ShowPosterDTO> uploadPoster(
+            @RequestPart MultipartFile poster) throws IOException {
 
         if (poster == null || poster.isEmpty()) {
             throw new IllegalArgumentException("포스터 파일이 필요합니다.");
