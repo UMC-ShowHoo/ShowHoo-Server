@@ -45,6 +45,7 @@ public class SpaceApplyController {
     }
 
 
+
     @Operation(summary = "대관 내역 취소 및 거절 API", description = "공연자 대관 내역 확인하는 페이지에서 취소 및 거절할 때 필요한 API입니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
@@ -64,5 +65,15 @@ public class SpaceApplyController {
             @PathVariable Long spaceId , @PathVariable Long spaceApplyId) {
         spaceApplyService.setSpaceApply(spaceId, spaceApplyId);
         return ApiResponse.onSuccess(null);
+    }
+
+    @Operation(summary = " 대관 가능 날짜 확인 API", description = "공연자가 공연장 대관 가능 날짜를 확인 하는 API, holiday와 status 체크")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
+    })
+    @GetMapping("spaces/{spaceId}/spaceApply/info")
+    public ApiResponse<List<Object>> getSpaceInfo(@PathVariable Long spaceId) {
+        return ApiResponse.onSuccess(spaceApplyService.getSpaceApplyInfo(spaceId));
+
     }
 }

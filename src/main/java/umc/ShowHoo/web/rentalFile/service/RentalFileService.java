@@ -35,26 +35,20 @@ public class RentalFileService {
         Shows shows= showsRepository.findById(id)
                 .orElseThrow(()->new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
 
-        RentalFile rentalFile = rentalFileRepository.findByShows(shows);
-
-        rentalFile.setSetList(setListUrl);
-        rentalFile.setRentalTime(rentalTimeUrl);
-        rentalFile.setAddOrder(addOrderUrl);
+        RentalFile rentalFile= RentalFileConverter.toFileEntity(setListUrl,rentalTimeUrl,addOrderUrl);
+        rentalFile.setShows(shows);
 
         return rentalFileRepository.save(rentalFile);
     }
 
-    public RentalFileResponseDTO.SpaceUserSaveDTO getFormFile(Long showId){
-        Shows shows=showsRepository.findById(showId)
-                .orElseThrow(()-> new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
-
-        RentalFile rentalFile=rentalFileRepository.findByShows(shows);
-
+    public RentalFileResponseDTO.SpaceUserSaveDTO getFormFile(Long showsId){
+        RentalFile rentalFile=rentalFileRepository.findById(showsId)
+                .orElseThrow(()->new RentalFileHandler(ErrorStatus.RENTALFILE_FORM_NOT_FOUND));
         return RentalFileConverter.toSpaceUserSaveDTO(rentalFile);
     }
 
 
-    public RentalFile createFormFile(MultipartFile setListForm, MultipartFile rentalTimeForm, MultipartFile addOrderForm,Long spaceId,Long showId){
+    public RentalFile createFormFile(MultipartFile setListForm, MultipartFile rentalTimeForm, MultipartFile addOrderForm,Long spaceId){
         String setListFormUrl=setListForm != null ? amazonS3Manager.uploadFile("rentalFileForm/"+ UUID.randomUUID().toString(),setListForm):null;
         String rentalTimeFormUrl=rentalTimeForm != null ? amazonS3Manager.uploadFile("rentalFileForm/"+ UUID.randomUUID().toString(),rentalTimeForm):null;
         String addOrderFormUrl=addOrderForm != null ? amazonS3Manager.uploadFile("rentalFileForm/"+ UUID.randomUUID().toString(),addOrderForm):null;
@@ -62,27 +56,14 @@ public class RentalFileService {
         Space space=spaceRepository.findById(spaceId)
                 .orElseThrow(()->new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND));
 
-        Shows shows=showsRepository.findById(showId)
-                .orElseThrow(()-> new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
-
-
         RentalFile rentalFile= RentalFileConverter.toFormEntity(setListFormUrl,rentalTimeFormUrl,addOrderFormUrl);
-        rentalFile.setShows(shows);
         rentalFile.setSpace(space);
-
         return rentalFileRepository.save(rentalFile);
     }
 
-    public RentalFileResponseDTO.PerformerSaveDTO getPerformerFile(Long showId){
-        Shows shows=showsRepository.findById(showId)
-                .orElseThrow(()-> new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
-
-        RentalFile rentalFile=rentalFileRepository.findByShows(shows);
-
-        if (rentalFile == null) {
-            throw new RentalFileHandler(ErrorStatus.RENTALFILE_NOT_FOUND); // 새로운 예외 처리
-        }
-
+    public RentalFileResponseDTO.PerformerSaveDTO getPerformerFile(Long showsId){
+        RentalFile rentalFile=rentalFileRepository.findById(showsId)
+                .orElseThrow(()->new RentalFileHandler(ErrorStatus.RENTALFILE_NOT_FOUND));
         return RentalFileConverter.toPerformerSaveDTO(rentalFile);
     }
 

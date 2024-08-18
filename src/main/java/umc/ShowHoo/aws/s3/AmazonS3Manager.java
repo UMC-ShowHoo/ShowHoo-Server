@@ -51,6 +51,4 @@ public class AmazonS3Manager {
             log.error("Error deleting file from s3");
         }
     }
-
-
 }

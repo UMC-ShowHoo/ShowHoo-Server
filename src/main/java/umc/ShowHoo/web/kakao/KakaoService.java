@@ -3,7 +3,6 @@ package umc.ShowHoo.web.kakao;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -214,13 +213,7 @@ public class KakaoService {
         }
 
         AuthTokens token = authTokensGenerator.generate(uid.toString());
-        return new LoginResponseDTO(uid, name, token);
-    }
-
-    public String getAccessToken(Long uid){
-        Member member= memberRepository.findByUid(uid)
-                .orElseThrow(()->new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
-        return member.getAccessToken();
+        return new LoginResponseDTO(uid, name, token, accessToken);
     }
 
     //4. 로그아웃
@@ -290,10 +283,10 @@ public class KakaoService {
             Long id = jsonNode.get("id").asLong();
             System.out.println("반환된 id : " + id);
 
-            Member deleteMember = memberRepository.findByUid(id)
+            Member member = memberRepository.findByUid(id)
                     .orElseThrow(()->new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
 
-            memberRepository.delete(deleteMember);
+            memberRepository.delete(member);
 
         } catch (HttpClientErrorException e) {
             // 401 Unauthorized 에러 처리
