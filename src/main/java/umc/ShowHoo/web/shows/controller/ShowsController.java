@@ -46,7 +46,7 @@ public class ShowsController {
     }
 
     @PostMapping(value="/upload-poster", consumes = "multipart/form-data")
-    @Operation(summary = "공연 포스터 업로드 API", description = "포스터를 업로드하고 해당 URL을 반환하는 API")
+    @Operation(summary = "공연 포스터url 반환 API", description = "포스터를 업로드하고 해당 URL을 반환하는 API")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공")
     })
