@@ -48,7 +48,8 @@ public class AudienceController {
     })
     public ApiResponse<AudienceResponseDTO.ShowsDetailDTO> getShows(@PathVariable(name = "showsId") Long showsId){
         Shows shows = audienceQueryService.getShowsDetail(showsId);
-        return ApiResponse.onSuccess(AudienceConverter.toGetShowsDetailDTO(shows));
+        Boolean isExist = audienceQueryService.isDescriptionExist(shows);
+        return ApiResponse.onSuccess(AudienceConverter.toGetShowsDetailDTO(shows, isExist));
     }
 
     @GetMapping("/search")

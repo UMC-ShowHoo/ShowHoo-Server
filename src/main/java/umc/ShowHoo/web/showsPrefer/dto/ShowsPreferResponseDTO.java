@@ -47,6 +47,9 @@ public class ShowsPreferResponseDTO {
         Long showsId;
         String poster;
         String name;
+        String date;
+        String time;
+        Boolean isComplete;
     }
 
 }

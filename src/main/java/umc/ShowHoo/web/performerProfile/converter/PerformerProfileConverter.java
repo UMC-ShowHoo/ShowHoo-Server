@@ -38,6 +38,7 @@ public class PerformerProfileConverter {
                                 .profileImageUrl(image.getProfileImageUrl())
                                 .build())
                         .collect(Collectors.toList()))
+                .createdAt(profile.getCreatedAt())
                 .build();
     }
 
