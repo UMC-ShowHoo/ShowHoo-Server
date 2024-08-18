@@ -30,6 +30,8 @@ public class PerformerProfileConverter {
     public static PerformerProfileResponseDTO.ProfileDTO toGetProfile(PerformerProfile profile) {
         return PerformerProfileResponseDTO.ProfileDTO.builder()
                 .id(profile.getId())
+                .name(profile.getName())
+                .phoneNumber(profile.getPhoneNumber())
                 .team(profile.getTeam())
                 .introduction(profile.getIntroduction())
                 .profileImages(profile.getProfileImages().stream()
