@@ -31,7 +31,7 @@ public class ShowsService {
     private final ShowsDscRepository showsDscRepository;
 
     public Shows createShows(ShowsRequestDTO.ShowInfoDTO requestDTO, MultipartFile poster,Long performerProfileId){
-        String posterUrl=poster != null ? amazonS3Manager.uploadFile("showRegister/"+ UUID.randomUUID().toString(),poster) : null;
+        String posterUrl=poster != null ? amazonS3Manager.uploadFile("poster/"+UUID.randomUUID().toString(),poster) : null;
         PerformerProfile performer = performerProfileRepository.findById(performerProfileId)
             .orElseThrow(()->new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
 
@@ -78,11 +78,6 @@ public class ShowsService {
         return showsRepository.save(shows);
     }
 
-    public ShowsResponseDTO.ShowPosterDTO getShowPoster(Long showId){
-        Shows shows=showsRepository.findById(showId)
-                .orElseThrow(()-> new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
-        return ShowsConverter.toshowPosterDTO(shows);
-    }
 
     public ShowsResponseDTO.ShowRequirementDTO getShowRequirement(Long showId){
         Shows shows=showsRepository.findById(showId)
