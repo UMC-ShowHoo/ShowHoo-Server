@@ -38,9 +38,9 @@ public class ShowsController {
     public ApiResponse<ShowsResponseDTO.postShowDTO> createShow(
             @PathVariable Long performerProfileId,
             @RequestPart ShowsRequestDTO.ShowInfoDTO showsRequestDTO,
-            @RequestPart(required = false) String posterUrl)throws IOException {
+            @RequestPart(required = false) MultipartFile poster)throws IOException {
 
-        Shows shows = showsService.createShows(showsRequestDTO, posterUrl, performerProfileId);
+        Shows shows = showsService.createShows(showsRequestDTO, poster, performerProfileId);
 
         return ApiResponse.onSuccess(ShowsConverter.toPostShowDTO(shows));
     }
