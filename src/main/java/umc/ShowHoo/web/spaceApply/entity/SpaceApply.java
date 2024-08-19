@@ -3,7 +3,9 @@ package umc.ShowHoo.web.spaceApply.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import umc.ShowHoo.web.performer.entity.Performer;
+import umc.ShowHoo.web.performerProfile.entity.PerformerProfile;
 import umc.ShowHoo.web.selectedAdditionalService.entity.SelectedAdditionalService;
+import umc.ShowHoo.web.shows.entity.Shows;
 import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.spacePrefer.entity.SpacePrefer;
 
@@ -38,4 +40,7 @@ public class SpaceApply {
 
     @OneToMany(mappedBy = "spaceApply", cascade = CascadeType.ALL)
     private List<SelectedAdditionalService> selectedAdditionalServices;
+
+    @OneToMany(mappedBy = "spaceApply", cascade = CascadeType.ALL)
+    private List<Shows> shows;
 }

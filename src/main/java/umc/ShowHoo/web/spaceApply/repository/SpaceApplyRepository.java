@@ -2,6 +2,8 @@ package umc.ShowHoo.web.spaceApply.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import umc.ShowHoo.web.performer.entity.Performer;
+import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.spaceApply.entity.SpaceApply;
 
 import javax.swing.text.html.Option;
@@ -12,7 +14,9 @@ import java.util.Optional;
 @Repository
 public interface SpaceApplyRepository extends JpaRepository<SpaceApply, Long> {
     List<SpaceApply> findByPerformerId(Long performerId);
+
     List<SpaceApply> findBySpaceIdAndStatusIn(Long spaceId, List<Integer> statuses);
-    Optional<SpaceApply> findBySpaceIdAndDate(Long spaceId, LocalDate date);
+    List<SpaceApply> findBySpaceIdAndDate(Long spaceId, LocalDate date);
+    Optional<SpaceApply> findBySpaceAndPerformer(Space space, Performer performer);
     boolean existsBySpaceIdAndPerformerId(Long spaceId, Long performerId);
 }

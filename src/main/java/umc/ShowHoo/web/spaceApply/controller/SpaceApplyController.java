@@ -9,6 +9,7 @@ import org.springdoc.api.OpenApiResourceNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import umc.ShowHoo.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import umc.ShowHoo.web.selectedAdditionalService.entity.SelectedAdditionalService;
 import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.spaceApply.dto.SpaceApplyRequestDTO;
 import umc.ShowHoo.web.spaceApply.dto.SpaceApplyResponseDTO;
@@ -83,11 +84,25 @@ public class SpaceApplyController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
     })
     @GetMapping("spaces/{spaceId}/spaceApply/info/{date}")
-    public ApiResponse<SpaceApplyResponseDTO.SpaceApplyDetailDTO> getSpaceApplyByDate(
+    public ApiResponse<List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO>> getSpaceApplyByDate(
             @PathVariable Long spaceId, @PathVariable LocalDate date
             ) {
-                SpaceApplyResponseDTO.SpaceApplyDetailDTO spaceApplyDTO = spaceApplyService.getSpaceApplyDetailsByDate(spaceId, date);
-                return ApiResponse.onSuccess(spaceApplyDTO);
+               List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> dtoList = spaceApplyService.getSpaceAppliesByPSpaceAndDate(spaceId, date);
+
+                return ApiResponse.onSuccess(dtoList);
 
     }
+
+    @Operation(summary = "대관 영수증 확인 API", description = "공연장이 대관 수락 후 영수증을 확인하는 API 관련 additionalService가 보여야 합.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
+    })
+    @GetMapping("spaces/spaceApply/{spaceApplyId}")
+    public ApiResponse<List<SelectedAdditionalService>> getSelectedAdditionalService(
+            @PathVariable Long spaceApplyId) {
+        List<SelectedAdditionalService> services = spaceApplyService.getAllSelectedServicesBySpaceApply(spaceApplyId);
+        return ApiResponse.onSuccess(services);
+    }
+    
+
 }

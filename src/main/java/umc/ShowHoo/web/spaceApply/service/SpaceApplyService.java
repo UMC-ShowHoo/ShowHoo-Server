@@ -1,5 +1,6 @@
 package umc.ShowHoo.web.spaceApply.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.api.OpenApiResourceNotFoundException;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
@@ -12,9 +13,12 @@ import umc.ShowHoo.web.holiday.repository.HolidayRepository;
 import umc.ShowHoo.web.notification.service.NotificationService;
 import umc.ShowHoo.web.performer.entity.Performer;
 import umc.ShowHoo.web.performer.repository.PerformerRepository;
+import umc.ShowHoo.web.performerProfile.entity.PerformerProfile;
 import umc.ShowHoo.web.performerProfile.repository.PerformerProfileRepository;
 import umc.ShowHoo.web.selectedAdditionalService.entity.SelectedAdditionalService;
 import umc.ShowHoo.web.selectedAdditionalService.repository.SelectedAdditionalServiceRepository;
+import umc.ShowHoo.web.shows.entity.Shows;
+import umc.ShowHoo.web.shows.repository.ShowsRepository;
 import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.space.repository.SpaceRepository;
 import umc.ShowHoo.web.spaceApply.converter.SpaceApplyConverter;
@@ -45,6 +49,8 @@ public class SpaceApplyService {
     private final SpaceApplyConverter spaceApplyConverter;
     private final NotificationService notificationService;
     private final HolidayRepository holidayRepository;
+    private final PerformerProfileRepository performerProfileRepository;
+    private final ShowsRepository showsRepository;
 
 
     public SpaceApply createSpaceApply(Long spaceUserId, Long performerId, SpaceApplyRequestDTO.RegisterDTO registerDTO) {
@@ -122,15 +128,47 @@ public class SpaceApplyService {
         return spaceInfo;
     }
 
-    @Transactional(readOnly = true)
-    public SpaceApplyResponseDTO.SpaceApplyDetailDTO getSpaceApplyDetailsByDate(Long spaceId, LocalDate date) {
-        Optional<SpaceApply> spaceApplyOpt = spaceApplyRepository.findBySpaceIdAndDate(spaceId, date);
+    @Transactional
+    public List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> getSpaceAppliesByPSpaceAndDate(Long spaceId, LocalDate date) {
+        List<SpaceApply> spaceApplyList = spaceApplyRepository.findBySpaceIdAndDate(spaceId, date);
 
-        if (spaceApplyOpt.isPresent()) {
-            SpaceApply spaceApply = spaceApplyOpt.get();
-            return spaceApplyConverter.toGetSpaceApply(spaceApply);
-
+        if (spaceApplyList.isEmpty()) {
+            throw new EntityNotFoundException("No SpaceApply records found for the given spaceId and date");
         }
-        else return null;
+
+        List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> dtoList = new ArrayList<>();
+
+        for (SpaceApply spaceApply : spaceApplyList) {
+            List<Shows> showsList = showsRepository.findBySpaceApply(spaceApply);
+
+            for (Shows show : showsList) {
+                SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO dto = SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO.builder()
+                        .id(spaceApply.getId())
+                        .date(spaceApply.getDate())
+                        .status(spaceApply.getStatus())
+                        .audienceMin(spaceApply.getAudienceMin())
+                        .audienceMax(spaceApply.getAudienceMax())
+                        .rentalSum(spaceApply.getRentalSum())
+                        .spaceName(spaceApply.getSpace().getName())
+                        .spaceLocation(spaceApply.getSpace().getLocation())
+                        .title(show.getName())
+                        .poster(show.getPoster())
+                        .build();
+
+                dtoList.add(dto);
+            }
+        }
+
+        return dtoList;
     }
+
+    public List<SelectedAdditionalService> getAllSelectedServicesBySpaceApply(Long spaceApplyId) {
+        SpaceApply spaceApply = spaceApplyRepository.findById(spaceApplyId)
+                .orElseThrow(() -> new EntityNotFoundException("SpaceApply not exist"));
+
+        return selectedAdditionalServiceRepository.findBySpaceApply(spaceApply);
+
+    }
+
+
 }
