@@ -24,6 +24,4 @@ public class SpaceApplyRequestDTO {
         private Integer rentalSum; // 대관비 + 추가서비스 비용 총 합계
         private List<Long> selectedAdditionalServices; // 선택된 추가 서비스 아이디 목록
     }
-
-
 }
