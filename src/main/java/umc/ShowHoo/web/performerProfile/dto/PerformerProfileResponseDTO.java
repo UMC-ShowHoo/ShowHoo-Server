@@ -23,6 +23,8 @@ public class PerformerProfileResponseDTO {
     @Builder
     public static class ProfileDTO{
         private Long id;
+        private String name;
+        private String phoneNumber;
         private String team;
         private String introduction;
         private List<ProfileImageDTO> profileImages;

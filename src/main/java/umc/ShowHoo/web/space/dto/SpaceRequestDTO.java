@@ -38,6 +38,7 @@ public class SpaceRequestDTO {
         private List<RentalFeeRequestDTO> rentalFees;
         private List<PeakSeasonRentalFeeRequestDTO> peakSeasonRentalFees;
         private List<SpaceAdditionalServiceRequestDTO> additionalServices;
+        private SpaceType spaceType; // spaceType 추가
     }
 
 

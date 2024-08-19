@@ -29,5 +29,4 @@ public class SpaceApplyResponseDTO {
         private LocalDate date;
         private int status;
     }
-
 }
