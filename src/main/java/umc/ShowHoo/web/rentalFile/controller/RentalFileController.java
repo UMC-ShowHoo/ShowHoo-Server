@@ -49,7 +49,7 @@ public class RentalFileController {
     }
 
     @GetMapping(value = "/performer/{showId}/prepare")
-    @Operation(summary = "공연자 - 큐시트 작성 API",description = "공연자가 큐시트 작성 시에 다운 받을 양식 자료입니다")
+    @Operation(summary = "공연자 - 큐시트 작성 폼 파일 다운 API",description = "공연자가 큐시트 작성 시에 다운 받을 양식 자료입니다")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
@@ -83,7 +83,7 @@ public class RentalFileController {
     }
 
     @GetMapping(value = "/space/{showId}/prepare")
-    @Operation(summary = "공연장 - 큐시트 작성 API",description = "공연장이 큐시트 작성 시에 다운 받을 양식 자료입니다")
+    @Operation(summary = "공연장 - 큐시트 파일 다운 API",description = "공연장이 큐시트 작성 시에 다운 받을 양식 자료입니다")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
