@@ -1,9 +1,14 @@
 package umc.ShowHoo.web.spaceApply.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springdoc.api.OpenApiResourceNotFoundException;
+import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
+import umc.ShowHoo.web.holiday.dto.HolidayDTO;
+import umc.ShowHoo.web.holiday.entity.Holiday;
+import umc.ShowHoo.web.holiday.repository.HolidayRepository;
 import umc.ShowHoo.web.notification.service.NotificationService;
 import umc.ShowHoo.web.performer.entity.Performer;
 import umc.ShowHoo.web.performer.repository.PerformerRepository;
@@ -20,8 +25,12 @@ import umc.ShowHoo.web.spaceApply.exception.handler.SpaceApplyHandler;
 import umc.ShowHoo.web.spaceApply.repository.SpaceApplyRepository;
 import umc.ShowHoo.web.spaceUser.repository.SpaceUserRepository;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +44,7 @@ public class SpaceApplyService {
     private final SelectedAdditionalServiceRepository selectedAdditionalServiceRepository;
     private final SpaceApplyConverter spaceApplyConverter;
     private final NotificationService notificationService;
+    private final HolidayRepository holidayRepository;
 
 
     public SpaceApply createSpaceApply(Long spaceUserId, Long performerId, SpaceApplyRequestDTO.RegisterDTO registerDTO) {
@@ -88,5 +98,39 @@ public class SpaceApplyService {
         spaceApply.setStatus(1);
 
         notificationService.createSpaceConfirmNotification(spaceApply); // 알림 생성
+    }
+
+    @Transactional
+    public List<Object> getSpaceApplyInfo(Long spaceId) {
+        Space space = spaceRepository.findById(spaceId)
+                .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_NOT_FOUND));
+
+        List<Object> spaceInfo = new ArrayList<>();
+
+        List<SpaceApply> spaceApplies = spaceApplyRepository.findBySpaceIdAndStatusIn(spaceId, Arrays.asList(0, 1));
+        List<SpaceApplyResponseDTO.SpaceApplySimpleDTO> spaceApplySimpleDTOS = spaceApplies.stream()
+                .map(spaceApply -> new SpaceApplyResponseDTO.SpaceApplySimpleDTO(spaceApply.getDate(), spaceApply.getStatus()))
+                .collect(Collectors.toList());
+        spaceInfo.add(spaceApplySimpleDTOS);
+
+        List<Holiday> holidays = holidayRepository.findBySpaceId(spaceId);
+        List<HolidayDTO> holidayDTOS = holidays.stream()
+                .map(holiday -> new HolidayDTO(holiday.getDate()))
+                .collect(Collectors.toList());
+        spaceInfo.add(holidayDTOS);
+
+        return spaceInfo;
+    }
+
+    @Transactional(readOnly = true)
+    public SpaceApplyResponseDTO.SpaceApplyDetailDTO getSpaceApplyDetailsByDate(Long spaceId, LocalDate date) {
+        Optional<SpaceApply> spaceApplyOpt = spaceApplyRepository.findBySpaceIdAndDate(spaceId, date);
+
+        if (spaceApplyOpt.isPresent()) {
+            SpaceApply spaceApply = spaceApplyOpt.get();
+            return spaceApplyConverter.toGetSpaceApply(spaceApply);
+
+        }
+        else return null;
     }
 }
