@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import umc.ShowHoo.apiPayload.ApiResponse;
+import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
 import umc.ShowHoo.web.shows.converter.ShowsConverter;
 import umc.ShowHoo.web.shows.dto.ShowsRequestDTO;
 import umc.ShowHoo.web.shows.dto.ShowsResponseDTO;
@@ -18,8 +19,13 @@ import umc.ShowHoo.web.showsDescription.converter.ShowsDscConverter;
 import umc.ShowHoo.web.showsDescription.dto.ShowsDscRequestDTO;
 import umc.ShowHoo.web.showsDescription.dto.ShowsDscResponseDTO;
 import umc.ShowHoo.web.showsDescription.entity.ShowsDescription;
+import umc.ShowHoo.web.spaceApply.dto.SpaceApplyResponseDTO;
+import umc.ShowHoo.web.spaceApply.entity.SpaceApply;
+import umc.ShowHoo.web.spaceApply.exception.handler.SpaceApplyHandler;
+import umc.ShowHoo.web.spaceApply.repository.SpaceApplyRepository;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @RestController
@@ -29,12 +35,23 @@ public class ShowsController {
     private final ShowsService showsService;
     private final S3Service s3Service;
 
+    @GetMapping(value="/{spaceApplyId}/show-date")
+    @Operation(summary = "공연 준비 시, 공연 날짜와 공연 디데이 API",description = "공연 준비 시 위에 띄워야하는 공연 날짜, 공연까지의 디데이 API입니다")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공")
+    })
+    public ApiResponse<ShowsResponseDTO.ShowDateDTO> getShowDate(@PathVariable Long spaceApplyId){
+
+        ShowsResponseDTO.ShowDateDTO showDate=showsService.getShowDate(spaceApplyId);
+
+        return ApiResponse.onSuccess(showDate);
+    }
+
     @PostMapping(value="/{performerProfileId}/show-register")
     @Operation(summary = "공연자 공연 준비-공연 정보 등록 api", description = "공연 포스터 및 정보 등록 시에 필요한 API")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공")
     })
-
     public ApiResponse<ShowsResponseDTO.postShowDTO> createShow(
             @PathVariable Long performerProfileId,
             @RequestPart ShowsRequestDTO.ShowInfoDTO showsRequestDTO)throws IOException {

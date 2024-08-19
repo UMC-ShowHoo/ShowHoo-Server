@@ -19,7 +19,15 @@ import umc.ShowHoo.web.showsDescription.converter.ShowsDscConverter;
 import umc.ShowHoo.web.showsDescription.dto.ShowsDscRequestDTO;
 import umc.ShowHoo.web.showsDescription.entity.ShowsDescription;
 import umc.ShowHoo.web.showsDescription.repository.ShowsDscRepository;
+import umc.ShowHoo.web.spaceApply.converter.SpaceApplyConverter;
+import umc.ShowHoo.web.spaceApply.dto.SpaceApplyResponseDTO;
+import umc.ShowHoo.web.spaceApply.entity.SpaceApply;
+import umc.ShowHoo.web.spaceApply.exception.handler.SpaceApplyHandler;
+import umc.ShowHoo.web.spaceApply.repository.SpaceApplyRepository;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 @Service
@@ -29,6 +37,8 @@ public class ShowsService {
     private final PerformerProfileRepository performerProfileRepository;
     private final AmazonS3Manager amazonS3Manager;
     private final ShowsDscRepository showsDscRepository;
+    private final SpaceApplyRepository spaceApplyRepository;
+
 
     public Shows createShows(ShowsRequestDTO.ShowInfoDTO requestDTO, Long performerProfileId){
         //String posterUrl=poster != null ? amazonS3Manager.uploadFile("poster/"+UUID.randomUUID().toString(),poster) : null;
@@ -86,5 +96,21 @@ public class ShowsService {
         Shows shows=showsRepository.findById(showId)
                 .orElseThrow(()->new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
         return ShowsConverter.torequirementDTO(shows);
+    }
+
+    public ShowsResponseDTO.ShowDateDTO getShowDate(Long spaceApplyId){
+        SpaceApply spaceApply=spaceApplyRepository.findById(spaceApplyId)
+                .orElseThrow(()->new SpaceApplyHandler(ErrorStatus.SPACE_APPLY_NOT_FOUND));
+
+        LocalDate showDate=spaceApply.getDate();
+        LocalDate now = LocalDate.now();
+        long dDay = ChronoUnit.DAYS.between(now, showDate);
+
+        // 날짜 및 D-Day를 문자열로 변환
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+        String showDateString = showDate.format(formatter);
+        String dDayString = (dDay >= 0 ? "D-" + dDay : "D+" + Math.abs(dDay));
+
+        return ShowsConverter.toShowDateDTO(showDateString,dDayString);
     }
 }
