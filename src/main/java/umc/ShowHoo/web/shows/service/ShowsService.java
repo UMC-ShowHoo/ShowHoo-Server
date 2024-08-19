@@ -19,8 +19,6 @@ import umc.ShowHoo.web.showsDescription.converter.ShowsDscConverter;
 import umc.ShowHoo.web.showsDescription.dto.ShowsDscRequestDTO;
 import umc.ShowHoo.web.showsDescription.entity.ShowsDescription;
 import umc.ShowHoo.web.showsDescription.repository.ShowsDscRepository;
-import umc.ShowHoo.web.spaceApply.converter.SpaceApplyConverter;
-import umc.ShowHoo.web.spaceApply.dto.SpaceApplyResponseDTO;
 import umc.ShowHoo.web.spaceApply.entity.SpaceApply;
 import umc.ShowHoo.web.spaceApply.exception.handler.SpaceApplyHandler;
 import umc.ShowHoo.web.spaceApply.repository.SpaceApplyRepository;
@@ -39,13 +37,21 @@ public class ShowsService {
     private final ShowsDscRepository showsDscRepository;
     private final SpaceApplyRepository spaceApplyRepository;
 
+    public Shows createShows(SpaceApply spaceApply){
 
-    public Shows createShows(ShowsRequestDTO.ShowInfoDTO requestDTO, Long performerProfileId){
+        Shows shows = ShowsConverter.toShowsSpaceApply(spaceApply);
+        return showsRepository.save(shows);
+    }
+
+    public Shows createShowsInfo(ShowsRequestDTO.ShowInfoDTO requestDTO, Long performerProfileId,Long showsId){
         //String posterUrl=poster != null ? amazonS3Manager.uploadFile("poster/"+UUID.randomUUID().toString(),poster) : null;
         PerformerProfile performer = performerProfileRepository.findById(performerProfileId)
             .orElseThrow(()->new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
 
-        Shows shows=ShowsConverter.toShowInfo(requestDTO);
+        Shows shows=showsRepository.findById(showsId)
+                .orElseThrow(()->new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
+
+        shows=ShowsConverter.toShowInfo(requestDTO,shows);
         shows.setPerformerProfile(performer);
         shows.setIsComplete(false);
 

@@ -3,8 +3,15 @@ package umc.ShowHoo.web.shows.converter;
 import umc.ShowHoo.web.shows.dto.ShowsRequestDTO;
 import umc.ShowHoo.web.shows.dto.ShowsResponseDTO;
 import umc.ShowHoo.web.shows.entity.Shows;
+import umc.ShowHoo.web.spaceApply.entity.SpaceApply;
 
 public class ShowsConverter {
+
+    public static Shows toShowsSpaceApply(SpaceApply spaceApply){
+        return Shows.builder()
+                .spaceApply(spaceApply)
+                .build();
+    }
 
     public static ShowsResponseDTO.postShowDTO toPostShowDTO(Shows shows){
         return ShowsResponseDTO.postShowDTO.builder()
@@ -12,8 +19,8 @@ public class ShowsConverter {
                 .build();
     }
 
-    public static Shows toShowInfo(ShowsRequestDTO.ShowInfoDTO dto){
-        return Shows.builder()
+    public static Shows toShowInfo(ShowsRequestDTO.ShowInfoDTO dto,Shows shows){
+        /*Shows.builder()
                 .name(dto.getName())
                 .showAge(dto.getShowAge())
                 .date(dto.getDate())
@@ -22,7 +29,18 @@ public class ShowsConverter {
                 .time(dto.getTime())
                 .cancelDate(dto.getCancelDate())
                 .cancelTime(dto.getCancelTime())
-                .build();
+                .build();*/
+
+        shows.setName(dto.getName());
+        shows.setShowAge(dto.getShowAge());
+        shows.setDate(dto.getDate());
+        shows.setPoster(dto.getPosterUrl());
+        shows.setRunningTime(dto.getRunningTime());
+        shows.setTime(dto.getTime());
+        shows.setCancelDate(dto.getCancelDate());
+        shows.setCancelTime(dto.getCancelTime());
+        return shows;
+
     }
 
     public static Shows toTicketInfo(ShowsRequestDTO.ticketInfoDTO dto,Shows shows){
