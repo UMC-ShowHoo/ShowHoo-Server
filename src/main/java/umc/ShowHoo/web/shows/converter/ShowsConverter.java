@@ -20,17 +20,6 @@ public class ShowsConverter {
     }
 
     public static Shows toShowInfo(ShowsRequestDTO.ShowInfoDTO dto,Shows shows){
-        /*Shows.builder()
-                .name(dto.getName())
-                .showAge(dto.getShowAge())
-                .date(dto.getDate())
-                .poster(dto.getPosterUrl())
-                .runningTime(dto.getRunningTime())
-                .time(dto.getTime())
-                .cancelDate(dto.getCancelDate())
-                .cancelTime(dto.getCancelTime())
-                .build();*/
-
         shows.setName(dto.getName());
         shows.setShowAge(dto.getShowAge());
         shows.setDate(dto.getDate());

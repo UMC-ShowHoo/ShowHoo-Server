@@ -44,7 +44,6 @@ public class ShowsService {
     }
 
     public Shows createShowsInfo(ShowsRequestDTO.ShowInfoDTO requestDTO, Long performerProfileId,Long showsId){
-        //String posterUrl=poster != null ? amazonS3Manager.uploadFile("poster/"+UUID.randomUUID().toString(),poster) : null;
         PerformerProfile performer = performerProfileRepository.findById(performerProfileId)
             .orElseThrow(()->new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
 

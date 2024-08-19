@@ -49,7 +49,7 @@ public class ShowsController {
     public ApiResponse<ShowsResponseDTO.postShowDTO> createShow(
             @PathVariable Long performerProfileId,
             @PathVariable Long showsId,
-            @RequestPart ShowsRequestDTO.ShowInfoDTO showsRequestDTO)throws IOException {
+            @RequestBody ShowsRequestDTO.ShowInfoDTO showsRequestDTO)throws IOException {
 
         Shows shows = showsService.createShowsInfo(showsRequestDTO, performerProfileId,showsId);
 
