@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.api.OpenApiResourceNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import umc.ShowHoo.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -14,6 +15,8 @@ import umc.ShowHoo.web.spaceApply.dto.SpaceApplyResponseDTO;
 import umc.ShowHoo.web.spaceApply.entity.SpaceApply;
 import umc.ShowHoo.web.spaceApply.service.SpaceApplyService;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -72,6 +75,19 @@ public class SpaceApplyController {
     @GetMapping("spaces/{spaceId}/spaceApply/info")
     public ApiResponse<List<Object>> getSpaceInfo(@PathVariable Long spaceId) {
         return ApiResponse.onSuccess(spaceApplyService.getSpaceApplyInfo(spaceId));
+
+    }
+
+    @Operation(summary = "대관 날짜로 공연자 확인 API", description = "공연장이 날짜를 눌렀을 때 대관 요청한 공연자가 나오는 API 입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
+    })
+    @GetMapping("spaces/{spaceId}/spaceApply/info/{date}")
+    public ApiResponse<SpaceApplyResponseDTO.SpaceApplyDetailDTO> getSpaceApplyByDate(
+            @PathVariable Long spaceId, @PathVariable LocalDate date
+            ) {
+                SpaceApplyResponseDTO.SpaceApplyDetailDTO spaceApplyDTO = spaceApplyService.getSpaceApplyDetailsByDate(spaceId, date);
+                return ApiResponse.onSuccess(spaceApplyDTO);
 
     }
 }
