@@ -61,13 +61,10 @@ public class RentalFileService {
     }
 
 
-    public RentalFile createFormFile(MultipartFile setListForm, MultipartFile rentalTimeForm, MultipartFile addOrderForm,Long spaceId,Long spaceApplyId){
+    public RentalFile createFormFile(MultipartFile setListForm, MultipartFile rentalTimeForm, MultipartFile addOrderForm,Long spaceApplyId){
         String setListFormUrl=setListForm != null ? amazonS3Manager.uploadFile("rentalFileForm/"+ UUID.randomUUID().toString(),setListForm):null;
         String rentalTimeFormUrl=rentalTimeForm != null ? amazonS3Manager.uploadFile("rentalFileForm/"+ UUID.randomUUID().toString(),rentalTimeForm):null;
         String addOrderFormUrl=addOrderForm != null ? amazonS3Manager.uploadFile("rentalFileForm/"+ UUID.randomUUID().toString(),addOrderForm):null;
-
-        Space space=spaceRepository.findById(spaceId)
-                .orElseThrow(()->new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND));
 
         SpaceApply spaceApply=spaceApplyRepository.findById(spaceApplyId)
                 .orElseThrow(()-> new SpaceApplyHandler(ErrorStatus.SPACE_APPLY_NOT_FOUND));
@@ -76,7 +73,7 @@ public class RentalFileService {
 
         RentalFile rentalFile= RentalFileConverter.toFormEntity(setListFormUrl,rentalTimeFormUrl,addOrderFormUrl);
         rentalFile.setShows(shows);
-        rentalFile.setSpace(space);
+        rentalFile.setSpaceApply(spaceApply);
 
         return rentalFileRepository.save(rentalFile);
     }

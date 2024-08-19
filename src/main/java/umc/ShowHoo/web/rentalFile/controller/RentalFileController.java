@@ -66,13 +66,12 @@ public class RentalFileController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
     public ApiResponse<RentalFileResponseDTO.postFileDTO> createFormFile(
-            @PathVariable Long spaceId,
             @PathVariable Long spaceApplyId,
             @RequestPart(required = false)MultipartFile setListForm,
             @RequestPart(required = false)MultipartFile rentalTimeForm,
             @RequestPart(required = false)MultipartFile addOrderForm){
         try {
-            RentalFile rentalFile=rentalFileService.createFormFile(setListForm,rentalTimeForm,addOrderForm,spaceId,spaceApplyId);
+            RentalFile rentalFile=rentalFileService.createFormFile(setListForm,rentalTimeForm,addOrderForm,spaceApplyId);
 
             return ApiResponse.onSuccess(RentalFileConverter.toPostFileDTO(rentalFile));
         }catch (RentalFileHandler e){

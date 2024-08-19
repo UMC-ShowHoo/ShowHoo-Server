@@ -3,6 +3,7 @@ package umc.ShowHoo.web.spaceApply.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import umc.ShowHoo.web.performer.entity.Performer;
+import umc.ShowHoo.web.rentalFile.entity.RentalFile;
 import umc.ShowHoo.web.selectedAdditionalService.entity.SelectedAdditionalService;
 import umc.ShowHoo.web.shows.entity.Shows;
 import umc.ShowHoo.web.space.entity.Space;
@@ -42,4 +43,7 @@ public class SpaceApply {
 
     @OneToOne(mappedBy = "spaceApply")
     private Shows shows;
+
+    @OneToOne(mappedBy = "spaceApply")
+    private RentalFile rentalFile;
 }
