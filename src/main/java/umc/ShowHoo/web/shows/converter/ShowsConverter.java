@@ -65,11 +65,19 @@ public class ShowsConverter {
                 .build();
     }
 
-        public static ShowsResponseDTO.ShowRequirementDTO torequirementDTO(Shows shows){
+    public static ShowsResponseDTO.ShowRequirementDTO torequirementDTO(Shows shows){
         return ShowsResponseDTO.ShowRequirementDTO.builder()
                 .requirement(shows.getRequirement())
                 .build();
-        }
     }
+
+    public static ShowsResponseDTO.ShowDateDTO toShowDateDTO(String showDate, String dDay){
+        return ShowsResponseDTO.ShowDateDTO.builder()
+                .date(showDate)
+                .dDay(dDay)
+                .build();
+    }
+
+}
 
 
