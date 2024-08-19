@@ -48,13 +48,13 @@ public class SpaceApplyController {
     }
 
 
-    @Operation(summary = "대관 내역 취소 및 거절 API", description = "공연자 대관 내역 확인하는 페이지에서 취소 및 거절할 때 필요한 API입니다.")
+    @Operation(summary = "대관 내역 취소 및 거절 API", description = "공연자 대관 내역 확인하는 페이지에서 취소 및 거절할 때 필요한 API입니다. 대관신청을 공연자가 취소하는 경우 status 0, 공연장이 거절하는 경우 status 1로 호출해주세요")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
-    @DeleteMapping("spaceApply/delete/{spaceApplyId}")
-    public ApiResponse<Void> deleteSpaceApply(@PathVariable Long spaceApplyId) {
-        spaceApplyService.deleteSpaceApply(spaceApplyId);
+    @DeleteMapping("spaceApply/delete/{spaceApplyId}/{status}")
+    public ApiResponse<Void> deleteSpaceApply(@PathVariable Long spaceApplyId, @PathVariable Long status) {
+        spaceApplyService.deleteSpaceApply(spaceApplyId, status);
         return ApiResponse.onSuccess(null);
     }
 
