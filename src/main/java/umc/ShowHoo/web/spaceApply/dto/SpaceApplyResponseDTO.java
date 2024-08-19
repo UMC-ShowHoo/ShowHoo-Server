@@ -42,27 +42,17 @@ public class SpaceApplyResponseDTO {
         private String title; //공연 제목
         private String poster;  //공연 포스터
     }
-        @Builder
-        @Getter
-        @Setter
-        @NoArgsConstructor
-        @AllArgsConstructor
-        public static class SpaceApplySimpleDTO {
-            private LocalDate date;
-            private int status;
-        }
-    }
-
-
-
 
     @Builder
-    @Getter @Setter
+    @Getter
+    @Setter
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SpaceApplySimpleDTO {
         private LocalDate date;
         private int status;
     }
-}
 
+
+
+}
