@@ -12,12 +12,12 @@ public class ShowsConverter {
                 .build();
     }
 
-    public static Shows toShowInfo(ShowsRequestDTO.ShowInfoDTO dto, String poster){
+    public static Shows toShowInfo(ShowsRequestDTO.ShowInfoDTO dto){
         return Shows.builder()
                 .name(dto.getName())
                 .showAge(dto.getShowAge())
                 .date(dto.getDate())
-                .poster(poster)
+                .poster(dto.getPosterUrl())
                 .runningTime(dto.getRunningTime())
                 .time(dto.getTime())
                 .cancelDate(dto.getCancelDate())

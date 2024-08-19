@@ -26,7 +26,7 @@ public class RentalFileController {
     private final SpaceRepository spaceRepository;
 
     @PostMapping(value = "/performer/{showId}/prepare",consumes = "multipart/form-data")
-    @Operation(summary="공연자 - 공연준비 큐시트 작성 API", description = "공연자가 큐시트 작성 시에 제출해야하는 API입니다")
+    @Operation(summary="공연자 - 공연준비 큐시트 작성 API", description = "공연자가 큐시트 작성 시에 제출해야하는 API입니다. 공연장이 폼 파일을 올린 후에 등록이 가능하니, 이 점 유의바랍니다!")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
