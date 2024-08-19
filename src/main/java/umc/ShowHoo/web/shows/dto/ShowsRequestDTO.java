@@ -14,6 +14,7 @@ public class ShowsRequestDTO {
     @AllArgsConstructor
     public static class ShowInfoDTO{
         private String name;
+        private String posterUrl;
         private String date;
         private String time;
         private String runningTime;

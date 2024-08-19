@@ -4,6 +4,7 @@ import lombok.*;
 import umc.ShowHoo.web.performerProfile.entity.PerformerProfile;
 import umc.ShowHoo.web.spacePhoto.entity.SpacePhoto;
 
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -53,4 +54,15 @@ public class SpaceApplyResponseDTO {
     }
 
 
+
+
+    @Builder
+    @Getter @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SpaceApplySimpleDTO {
+        private LocalDate date;
+        private int status;
+    }
+}
 

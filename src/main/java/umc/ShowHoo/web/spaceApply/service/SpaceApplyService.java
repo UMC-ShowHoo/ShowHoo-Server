@@ -49,8 +49,10 @@ public class SpaceApplyService {
     private final SpaceApplyConverter spaceApplyConverter;
     private final NotificationService notificationService;
     private final HolidayRepository holidayRepository;
+
     private final PerformerProfileRepository performerProfileRepository;
     private final ShowsRepository showsRepository;
+
 
 
     public SpaceApply createSpaceApply(Long spaceUserId, Long performerId, SpaceApplyRequestDTO.RegisterDTO registerDTO) {
@@ -128,6 +130,7 @@ public class SpaceApplyService {
         return spaceInfo;
     }
 
+
     @Transactional
     public List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> getSpaceAppliesByPSpaceAndDate(Long spaceId, LocalDate date) {
         List<SpaceApply> spaceApplyList = spaceApplyRepository.findBySpaceIdAndDate(spaceId, date);
@@ -169,6 +172,8 @@ public class SpaceApplyService {
         return selectedAdditionalServiceRepository.findBySpaceApply(spaceApply);
 
     }
+
+
 
 
 }

@@ -84,6 +84,7 @@ public class SpaceApplyController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
     })
     @GetMapping("spaces/{spaceId}/spaceApply/info/{date}")
+
     public ApiResponse<List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO>> getSpaceApplyByDate(
             @PathVariable Long spaceId, @PathVariable LocalDate date
             ) {
