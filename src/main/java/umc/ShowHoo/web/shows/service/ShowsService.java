@@ -30,12 +30,12 @@ public class ShowsService {
     private final AmazonS3Manager amazonS3Manager;
     private final ShowsDscRepository showsDscRepository;
 
-    public Shows createShows(ShowsRequestDTO.ShowInfoDTO requestDTO, MultipartFile poster,Long performerProfileId){
-        String posterUrl=poster != null ? amazonS3Manager.uploadFile("poster/"+UUID.randomUUID().toString(),poster) : null;
+    public Shows createShows(ShowsRequestDTO.ShowInfoDTO requestDTO, Long performerProfileId){
+        //String posterUrl=poster != null ? amazonS3Manager.uploadFile("poster/"+UUID.randomUUID().toString(),poster) : null;
         PerformerProfile performer = performerProfileRepository.findById(performerProfileId)
             .orElseThrow(()->new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
 
-        Shows shows=ShowsConverter.toShowInfo(requestDTO,posterUrl);
+        Shows shows=ShowsConverter.toShowInfo(requestDTO);
         shows.setPerformerProfile(performer);
         shows.setIsComplete(false);
 
@@ -70,6 +70,9 @@ public class ShowsService {
     }
 
     public Shows createShowsReq(ShowsRequestDTO.requirementDTO requirementDTO,Long showId){
+        if(requirementDTO.getRequirement().length()>200){
+            throw new IllegalArgumentException("200자를 넘으면 안됩니다.");
+        }
         Shows shows=showsRepository.findById(showId)
                 .orElseThrow(()->new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
 
