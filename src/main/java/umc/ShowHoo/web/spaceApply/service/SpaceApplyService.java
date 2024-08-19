@@ -80,12 +80,14 @@ public class SpaceApplyService {
     }
 
     @Transactional
-    public void deleteSpaceApply(Long spaceApplyId) {
+    public void deleteSpaceApply(Long spaceApplyId, Long status) {
         SpaceApply spaceApply = spaceApplyRepository.findById(spaceApplyId)
                 .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_APPLY_NOT_FOUND));
         spaceApplyRepository.delete(spaceApply);
 
-        notificationService.createSpaceCancleNotification(spaceApply); // 알림 생성
+        if(status == 1){
+            notificationService.createSpaceCancleNotification(spaceApply); // 알림 생성
+        }
     }
 
     @Transactional
