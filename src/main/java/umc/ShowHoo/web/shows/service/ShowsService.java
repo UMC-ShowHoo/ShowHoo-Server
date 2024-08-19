@@ -102,6 +102,10 @@ public class ShowsService {
         SpaceApply spaceApply=spaceApplyRepository.findById(spaceApplyId)
                 .orElseThrow(()->new SpaceApplyHandler(ErrorStatus.SPACE_APPLY_NOT_FOUND));
 
+        if(spaceApply.getStatus()!=1){
+            throw new IllegalArgumentException("승인되지않은 공연입니다. 공연장 대여 상태를 확인해주세요");
+        }
+
         LocalDate showDate=spaceApply.getDate();
         LocalDate now = LocalDate.now();
         long dDay = ChronoUnit.DAYS.between(now, showDate);
