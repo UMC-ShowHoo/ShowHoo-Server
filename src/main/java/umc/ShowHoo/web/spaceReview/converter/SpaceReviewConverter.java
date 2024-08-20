@@ -33,7 +33,10 @@ public class SpaceReviewConverter {
 
     public SpaceReviewResponseDTO.ReviewPerformerDTO toGetPerformerReview(SpaceReview spaceReview) {
         List<SpaceReviewResponseDTO.SpaceReviewAnswerDto> answers = spaceReview.getSpaceReviewAnswers().stream()
-                .map(answer -> new SpaceReviewResponseDTO.SpaceReviewAnswerDto(answer.getId(), answer.getContent()))
+                .map(answer -> new SpaceReviewResponseDTO.SpaceReviewAnswerDto(
+                        answer.getId(),
+                        answer.getContent(),
+                        answer.getUpdatedAt()))
                 .collect(Collectors.toList());
 
         return new SpaceReviewResponseDTO.ReviewPerformerDTO(
@@ -46,14 +49,30 @@ public class SpaceReviewConverter {
 
     public SpaceReviewResponseDTO.ReviewSpaceDTO toGetSpaceReview(SpaceReview spaceReview) {
         List<SpaceReviewResponseDTO.SpaceReviewAnswerDto> answers = spaceReview.getSpaceReviewAnswers().stream()
-                .map(answer -> new SpaceReviewResponseDTO.SpaceReviewAnswerDto(answer.getId(), answer.getContent()))
+                .map(answer -> new SpaceReviewResponseDTO.SpaceReviewAnswerDto(
+                        answer.getId(),
+                        answer.getContent(),
+                        answer.getUpdatedAt()
+                ))
                 .collect(Collectors.toList());
 
-        return new SpaceReviewResponseDTO.ReviewSpaceDTO(
-                spaceReview.getId(),
-                spaceReview.getGrade(),
-                spaceReview.getContent(),
-                answers
-        );
+        // 이미지 URL 목록 생성
+        List<String> imageUrls = spaceReview.getSpaceReviewImages().stream()
+                .map(SpaceReviewImage::getImageUrl)  // SpaceReviewImage 엔티티에서 URL 추출
+                .collect(Collectors.toList());
+
+
+        return SpaceReviewResponseDTO.ReviewSpaceDTO.builder()
+                .id(spaceReview.getId())
+                .grade(spaceReview.getGrade())
+                .content(spaceReview.getContent())
+                .answers(answers)
+                .imageUrls(imageUrls) //// 이미지 URL 추가
+                .memberName(spaceReview.getMemberName()) // 리뷰 작성자 이름 추가
+                .memberUrl(spaceReview.getMemberUrl()) // 리뷰 작성자 프로필 이미지 URL 추가
+                .updatedAt(spaceReview.getUpdatedAt()) // 리뷰의 수정 시간 추가
+                .build();
+
+
     }
 }

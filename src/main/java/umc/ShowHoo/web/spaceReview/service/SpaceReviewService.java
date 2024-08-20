@@ -9,6 +9,8 @@ import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
 import umc.ShowHoo.aws.s3.AmazonS3Manager;
 import umc.ShowHoo.aws.s3.Uuid;
 import umc.ShowHoo.aws.s3.UuidRepository;
+import umc.ShowHoo.web.member.entity.Member;
+import umc.ShowHoo.web.member.repository.MemberRepository;
 import umc.ShowHoo.web.notification.service.NotificationService;
 import umc.ShowHoo.web.performer.entity.Performer;
 import umc.ShowHoo.web.performer.repository.PerformerRepository;
@@ -39,6 +41,7 @@ public class SpaceReviewService {
     private final SpaceReviewRepository spaceReviewRepository;
     private final SpaceApplyRepository spaceApplyRepository;
     private final PerformerRepository performerRepository;
+    private final MemberRepository memberRepository;
     private final SpaceReviewImageRepository spaceReviewImageRepository;
     private final SpaceRepository spaceRepository;
     private final SpaceReviewConverter spaceReviewConverter;
@@ -53,12 +56,25 @@ public class SpaceReviewService {
         if (!hasApplied) {
             throw new SpaceReviewHandler(ErrorStatus.SPACE_REVIEW_PERMISSION_NOT_FOUND);
         }
+        // Space 조회
         Space space = spaceRepository.findById(spaceId)
                 .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_NOT_FOUND));
+
+        // performerId == memberId이므로 performerId로 Member 조회
+        Member member = memberRepository.findById(performerId)
+                .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.MEMBER_NOT_FOUND));
+
+        // performerId로 Performer도 조회
         Performer performer = performerRepository.findById(performerId)
                 .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.PERFORMER_NOT_FOUND));
 
+        // 리뷰 생성 및 저장
         SpaceReview spaceReview = spaceReviewConverter.toCreateSpaceReview(reviewRegisterDTO, space, performer);
+
+        // Member 정보에서 memberName과 memberUrl 설정
+        spaceReview.setMemberName(member.getName());
+        spaceReview.setMemberUrl(member.getProfileimage());
+
         spaceReviewRepository.save(spaceReview);
 
         if (reviewRegisterDTO.getImageUrls() != null && !reviewRegisterDTO.getImageUrls().isEmpty()) {

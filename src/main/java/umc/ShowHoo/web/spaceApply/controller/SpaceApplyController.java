@@ -9,7 +9,10 @@ import org.springdoc.api.OpenApiResourceNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import umc.ShowHoo.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import umc.ShowHoo.web.performerProfile.dto.PerformerProfileRequestDTO;
+import umc.ShowHoo.web.performerProfile.service.PerformerProfileService;
 import umc.ShowHoo.web.selectedAdditionalService.entity.SelectedAdditionalService;
+import umc.ShowHoo.web.space.dto.SpaceResponseDTO;
 import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.spaceApply.dto.SpaceApplyRequestDTO;
 import umc.ShowHoo.web.spaceApply.dto.SpaceApplyResponseDTO;
@@ -98,11 +101,24 @@ public class SpaceApplyController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
     })
-    @GetMapping("spaces/spaceApply/{spaceApplyId}")
-    public ApiResponse<List<SelectedAdditionalService>> getSelectedAdditionalService(
+    @GetMapping("spaces/spaceApply/{spaceApplyId}/receipt")
+    public ApiResponse<List<SpaceResponseDTO.SpaceAdditionalServiceDTO>> getSelectedAdditionalService(
             @PathVariable Long spaceApplyId) {
-        List<SelectedAdditionalService> services = spaceApplyService.getAllSelectedServicesBySpaceApply(spaceApplyId);
-        return ApiResponse.onSuccess(services);
+        return ApiResponse.onSuccess(spaceApplyService.getSelectedAdditionalServices(spaceApplyId));
+    }
+
+    @Operation(summary = "공연장-공연자-공연자 프로필 확인 API", description = "공연장이 공연자의 프로필을 확인하는 API")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
+    })
+    @GetMapping("spaces/spaceApply/info/{spaceId}")
+    public ApiResponse<PerformerProfileRequestDTO.CreateProfileDTO> getProfileBySpaceApplyId(
+            @PathVariable long spaceApplyId) {
+        // ProfileService를 이용해 SpaceApplyId로 프로필 정보를 가져옴
+        PerformerProfileRequestDTO.CreateProfileDTO profileDTO = spaceApplyService.getProfileDTOBySpaceAppId(spaceApplyId);
+
+        // 가져온 정보를 ResponseEntity로 반환
+        return ApiResponse.onSuccess(profileDTO);
     }
     
 

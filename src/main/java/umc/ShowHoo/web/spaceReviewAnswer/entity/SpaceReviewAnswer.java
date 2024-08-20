@@ -2,6 +2,7 @@ package umc.ShowHoo.web.spaceReviewAnswer.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import umc.ShowHoo.common.BaseEntity;
 import umc.ShowHoo.web.spaceReview.entity.SpaceReview;
 
 @Entity
@@ -10,7 +11,7 @@ import umc.ShowHoo.web.spaceReview.entity.SpaceReview;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class SpaceReviewAnswer {
+public class SpaceReviewAnswer extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
