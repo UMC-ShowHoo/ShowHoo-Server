@@ -2,8 +2,6 @@ package umc.ShowHoo.web.spaceApply.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.api.OpenApiResourceNotFoundException;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
@@ -11,16 +9,12 @@ import umc.ShowHoo.web.holiday.dto.HolidayDTO;
 import umc.ShowHoo.web.holiday.entity.Holiday;
 import umc.ShowHoo.web.holiday.repository.HolidayRepository;
 import umc.ShowHoo.web.notification.service.NotificationService;
-import umc.ShowHoo.web.peakSeasonRentalFee.entity.PeakSeasonRentalFee;
-import umc.ShowHoo.web.peakSeasonRentalFee.repository.PeakSeasonRentalFeeRepository;
 import umc.ShowHoo.web.performer.entity.Performer;
 import umc.ShowHoo.web.performer.repository.PerformerRepository;
 import umc.ShowHoo.web.performerProfile.dto.PerformerProfileRequestDTO;
 import umc.ShowHoo.web.performerProfile.entity.PerformerProfile;
 import umc.ShowHoo.web.performerProfile.entity.ProfileImage;
 import umc.ShowHoo.web.performerProfile.repository.PerformerProfileRepository;
-import umc.ShowHoo.web.rentalFee.entity.RentalFee;
-import umc.ShowHoo.web.rentalFee.repository.RentalFeeRepository;
 import umc.ShowHoo.web.rentalFee.service.RentalFeeService;
 import umc.ShowHoo.web.selectedAdditionalService.entity.SelectedAdditionalService;
 import umc.ShowHoo.web.selectedAdditionalService.repository.SelectedAdditionalServiceRepository;
@@ -29,18 +23,17 @@ import umc.ShowHoo.web.shows.repository.ShowsRepository;
 import umc.ShowHoo.web.space.dto.SpaceResponseDTO;
 import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.space.repository.SpaceRepository;
-import umc.ShowHoo.web.spaceAdditionalService.entity.SpaceAdditionalService;
 import umc.ShowHoo.web.spaceApply.converter.SpaceApplyConverter;
 import umc.ShowHoo.web.spaceApply.dto.SpaceApplyRequestDTO;
 import umc.ShowHoo.web.spaceApply.dto.SpaceApplyResponseDTO;
 import umc.ShowHoo.web.spaceApply.entity.SpaceApply;
 import umc.ShowHoo.web.spaceApply.exception.handler.SpaceApplyHandler;
 import umc.ShowHoo.web.spaceApply.repository.SpaceApplyRepository;
-import umc.ShowHoo.web.spaceUser.repository.SpaceUserRepository;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -241,7 +234,4 @@ public class SpaceApplyService {
 
         return selectedAdditionalServices;
     }
-
 }
-
-
