@@ -50,8 +50,9 @@ public class AudienceResponseDTO {
         String descriptionImg;
         String date; //공연 날짜
         String time; //공연 시간
+        String cancelDate; //취소 가능 날짜
+        String cancelTime; //취소 가능 시간
         String runningTime; //러닝 타임
-        Integer showAge; //관람연령
 
         String ticketPrice; //티켓 가격
         Integer perMaxticket; //티켓 인당 구매 제한
