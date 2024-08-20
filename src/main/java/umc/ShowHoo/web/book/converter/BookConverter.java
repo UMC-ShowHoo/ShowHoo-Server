@@ -33,7 +33,7 @@ public class BookConverter {
 
     public static Book toBook(Audience audience, Shows shows, BookRequestDTO.postDTO request){
         int payment = 0;
-        if(shows.getTicketPrice().isEmpty()){
+        if(!(shows.getTicketPrice().isEmpty())){
             payment = request.getTicketNum() * Integer.parseInt(shows.getTicketPrice());
         }
 
