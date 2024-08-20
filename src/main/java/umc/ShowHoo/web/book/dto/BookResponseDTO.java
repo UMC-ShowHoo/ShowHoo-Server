@@ -63,6 +63,7 @@ public class BookResponseDTO {
         String phoneNum;
         Integer headCount; //인원 수
         Boolean entrance; //입장 여부
+        BookDetail detail; //예매 상태
     }
 
     @Getter

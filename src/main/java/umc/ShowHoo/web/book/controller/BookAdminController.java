@@ -56,7 +56,6 @@ public class BookAdminController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
-    @Parameter(name = "showId",description = "공연 id")
     public ApiResponse<Void> confirmEntrance(@PathVariable(name = "bookId") Long bookId, @RequestParam(name = "request") Boolean request){
         bookAdminService.changeEntranceStatus(bookId, request);
         return ApiResponse.onSuccess(null);

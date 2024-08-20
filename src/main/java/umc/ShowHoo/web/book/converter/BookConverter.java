@@ -99,6 +99,7 @@ public class BookConverter {
                 .phoneNum(book.getPhoneNum())
                 .entrance(book.getEntrance())
                 .headCount(book.getTicketNum())
+                .detail(book.getDetail())
                 .build();
     }
 
