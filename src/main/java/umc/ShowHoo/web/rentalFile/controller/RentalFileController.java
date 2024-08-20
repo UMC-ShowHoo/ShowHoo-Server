@@ -49,7 +49,7 @@ public class RentalFileController {
     }
 
     @GetMapping(value = "/performer/{showId}/prepare")
-    @Operation(summary = "공연자 - 큐시트 작성 API",description = "공연자가 큐시트 작성 시에 다운 받을 양식 자료입니다")
+    @Operation(summary = "공연자 - 큐시트 작성 폼 파일 다운 API",description = "공연자가 큐시트 작성 시에 다운 받을 양식 자료입니다")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
@@ -60,20 +60,18 @@ public class RentalFileController {
     }
 
 
-    @PostMapping(value = "/space/{spaceId}/{showId}/prepare",consumes = "multipart/form-data")
+    @PostMapping(value = "/space/{spaceId}/{spaceApplyId}/prepare",consumes = "multipart/form-data")
     @Operation(summary="공연장 - 공연준비 큐시트 작성 API", description = "공연장이 큐시트 작성 시에 제출해야하는 API입니다")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
     public ApiResponse<RentalFileResponseDTO.postFileDTO> createFormFile(
-            @PathVariable Long spaceId,
-            @PathVariable Long showId,
+            @PathVariable Long spaceApplyId,
             @RequestPart(required = false)MultipartFile setListForm,
             @RequestPart(required = false)MultipartFile rentalTimeForm,
             @RequestPart(required = false)MultipartFile addOrderForm){
         try {
-
-            RentalFile rentalFile=rentalFileService.createFormFile(setListForm,rentalTimeForm,addOrderForm,spaceId,showId);
+            RentalFile rentalFile=rentalFileService.createFormFile(setListForm,rentalTimeForm,addOrderForm,spaceApplyId);
 
             return ApiResponse.onSuccess(RentalFileConverter.toPostFileDTO(rentalFile));
         }catch (RentalFileHandler e){
@@ -83,7 +81,7 @@ public class RentalFileController {
     }
 
     @GetMapping(value = "/space/{showId}/prepare")
-    @Operation(summary = "공연장 - 큐시트 작성 API",description = "공연장이 큐시트 작성 시에 다운 받을 양식 자료입니다")
+    @Operation(summary = "공연장 - 큐시트 파일 다운 API",description = "공연장이 큐시트 작성 시에 다운 받을 양식 자료입니다")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })

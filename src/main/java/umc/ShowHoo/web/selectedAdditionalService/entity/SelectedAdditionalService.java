@@ -3,6 +3,7 @@ package umc.ShowHoo.web.selectedAdditionalService.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import umc.ShowHoo.web.space.entity.Space;
+import umc.ShowHoo.web.spaceAdditionalService.entity.SpaceAdditionalService;
 import umc.ShowHoo.web.spaceApply.entity.SpaceApply;
 
 @Entity
@@ -21,4 +22,9 @@ public class SelectedAdditionalService {
     @ManyToOne
     @JoinColumn(name = "spaceApply_id")
     private SpaceApply spaceApply;
+
+    @ManyToOne
+    @JoinColumn(name = "spaceadditional_service_id")
+    private SpaceAdditionalService spaceAdditionalService;
+
 }

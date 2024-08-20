@@ -85,9 +85,6 @@ public class Space extends BaseEntity {
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
     private List<SpaceReview> spaceReviews;
 
-    @OneToOne(mappedBy = "space")
-    private RentalFile rentalFile;
-
     public void updateGrade() {
         if (spaceReviews != null && !spaceReviews.isEmpty()) {
             this.grade = spaceReviews.stream()
