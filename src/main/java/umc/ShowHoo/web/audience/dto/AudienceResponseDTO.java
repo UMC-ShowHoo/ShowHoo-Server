@@ -33,7 +33,7 @@ public class AudienceResponseDTO {
         String poster;
         String date;
         String time;
-        boolean isPreferred;
+        Boolean isPreferred;
     }
 
     @Getter

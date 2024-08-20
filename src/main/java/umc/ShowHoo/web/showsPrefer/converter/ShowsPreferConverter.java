@@ -43,6 +43,9 @@ public class ShowsPreferConverter {
                 .showsId(showsPrefer.getId())
                 .name(showsPrefer.getShows().getName())
                 .poster(showsPrefer.getShows().getPoster())
+                .date(showsPrefer.getShows().getDate())
+                .time(showsPrefer.getShows().getTime())
+                .isComplete(showsPrefer.getShows().getIsComplete())
                 .build();
     }
 

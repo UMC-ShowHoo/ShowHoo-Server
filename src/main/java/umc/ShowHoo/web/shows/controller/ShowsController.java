@@ -20,8 +20,7 @@ import umc.ShowHoo.web.showsDescription.dto.ShowsDscResponseDTO;
 import umc.ShowHoo.web.showsDescription.entity.ShowsDescription;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,36 +29,54 @@ public class ShowsController {
     private final ShowsService showsService;
     private final S3Service s3Service;
 
-    @PostMapping(value="/{performerProfileId}/show-register",consumes = "multipart/form-data")
-    @Operation(summary = "공연자 공연 준비-공연 포스터 및 공연 정보 등록 api", description = "공연 포스터 및 정보 등록 시에 필요한 API")
+    @GetMapping(value="/{spaceApplyId}/show-date")
+    @Operation(summary = "공연 준비 시, 공연 날짜와 공연 디데이 API",description = "공연 준비 시 위에 띄워야하는 공연 날짜, 공연까지의 디데이 API입니다")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공")
     })
+    public ApiResponse<ShowsResponseDTO.ShowDateDTO> getShowDate(@PathVariable Long spaceApplyId){
 
-    public ApiResponse<Map<String, Object>> createShow(
+        ShowsResponseDTO.ShowDateDTO showDate=showsService.getShowDate(spaceApplyId);
 
+        return ApiResponse.onSuccess(showDate);
+    }
+
+    @PostMapping(value="/{performerProfileId}/{showsId}/show-register")
+    @Operation(summary = "공연자 공연 준비-공연 정보 등록 api", description = "공연 포스터 및 정보 등록 시에 필요한 API")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공")
+    })
+    public ApiResponse<ShowsResponseDTO.postShowDTO> createShow(
             @PathVariable Long performerProfileId,
-            //@RequestBody ShowsRequestDTO showsRequestDTO,
-            @RequestPart ShowsRequestDTO.ShowInfoDTO showsRequestDTO,
-            @RequestPart(required = false) MultipartFile poster)throws IOException {
+            @PathVariable Long showsId,
+            @RequestBody ShowsRequestDTO.ShowInfoDTO showsRequestDTO)throws IOException {
 
+        Shows shows = showsService.createShowsInfo(showsRequestDTO, performerProfileId,showsId);
 
-        String posterUrl = null;
-        if (poster != null) {
-            String objectKey = "posters/" + poster.getOriginalFilename(); // 적절한 objectKey를 생성하세요.
-            posterUrl = s3Service.uploadFile(poster, objectKey);
+        return ApiResponse.onSuccess(ShowsConverter.toPostShowDTO(shows));
+    }
+
+    @PostMapping(value="/upload-poster", consumes = "multipart/form-data")
+    @Operation(summary = "공연 포스터url 반환 API", description = "포스터를 업로드하고 해당 URL을 반환하는 API")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공")
+    })
+    public ApiResponse<ShowsResponseDTO.ShowPosterDTO> uploadPoster(
+            @RequestPart MultipartFile poster) throws IOException {
+
+        if (poster == null || poster.isEmpty()) {
+            throw new IllegalArgumentException("포스터 파일이 필요합니다.");
         }
 
-        Shows shows= showsService.createShows(showsRequestDTO,poster,performerProfileId);
+        String objectKey = "posters/" + UUID.randomUUID().toString() + "-" + poster.getOriginalFilename();
+        String posterUrl = s3Service.uploadFile(poster, objectKey);
 
+        ShowsResponseDTO.ShowPosterDTO responseDTO = new ShowsResponseDTO.ShowPosterDTO(posterUrl);
 
-        // 프론트엔드에 반환할 데이터 준비
-        Map<String, Object> response = new HashMap<>();
-        response.put("posterUrl", posterUrl);
-        response.put("showData", ShowsConverter.toPostShowDTO(shows));
-
-        return ApiResponse.onSuccess(response);
+        return ApiResponse.onSuccess(responseDTO);
     }
+
+
 
     @PostMapping(value="/{showId}/show-register/description",consumes = "multipart/form-data")
     @Operation(summary = "공연자 공연 준비- 공연 설명 등록 API", description = "공연을 등록할 때 공연 설명을 작성하는 API")

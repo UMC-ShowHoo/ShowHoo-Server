@@ -6,17 +6,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
+import umc.ShowHoo.apiPayload.ApiResponse;
 import umc.ShowHoo.jwt.AuthTokens;
 import umc.ShowHoo.web.login.dto.LoginResponseDTO;
 import umc.ShowHoo.web.kakao.KakaoService;
+import umc.ShowHoo.web.login.dto.MemberResponseDTO;
+import umc.ShowHoo.web.member.Service.MemberQueryService;
+import umc.ShowHoo.web.member.entity.Member;
 
 @RestController
 public class LoginController {
     private final KakaoService kakaoService;
+    private final MemberQueryService memberQueryService;
 
     @Autowired
-    public LoginController(KakaoService kakaoService) {
+    public LoginController(KakaoService kakaoService, MemberQueryService memberQueryService) {
         this.kakaoService = kakaoService;
+        this.memberQueryService = memberQueryService;
     };
 
 
@@ -39,7 +45,19 @@ public class LoginController {
     @Value("${kakao.client.id}")
     private String kakaoClientId;
 
-    //멤버 정보 가져오는 API 만들기
+    @GetMapping("/member_info/{uid}")
+    public ApiResponse<MemberResponseDTO> getMemberInfo(@PathVariable(name = "uid") Long uid){
+        Member member = memberQueryService.getMemberByUid(uid);
+        return ApiResponse.onSuccess(MemberResponseDTO.builder()
+                .memberId(member.getId())
+                .performerId(member.getPerformer().getId())
+                .spaceUserId(member.getSpaceUser().getId())
+                .audienceId(member.getAudience().getId())
+                .name(member.getName())
+                .profile_url(member.getProfileimage())
+                .build());
+    }
+
     @GetMapping("/login/oauth2/code/kakao")
     public LoginResponseDTO kakao(@RequestParam("code") String code, HttpSession session) {
         return kakaoService.kakaoLogin(code, redirectUri);

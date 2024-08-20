@@ -28,6 +28,7 @@ public class PerformerProfileResponseDTO {
         private String team;
         private String introduction;
         private List<ProfileImageDTO> profileImages;
+        private LocalDateTime createdAt;
     }
 
     @Getter

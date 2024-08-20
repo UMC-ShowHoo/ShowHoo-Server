@@ -13,9 +13,13 @@ import umc.ShowHoo.web.rentalFile.dto.RentalFileResponseDTO;
 import umc.ShowHoo.web.rentalFile.entity.RentalFile;
 import umc.ShowHoo.web.rentalFile.handler.RentalFileHandler;
 import umc.ShowHoo.web.rentalFile.repository.RentalFileRepository;
+import umc.ShowHoo.web.shows.service.ShowsService;
 import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.space.exception.handler.SpaceHandler;
 import umc.ShowHoo.web.space.repository.SpaceRepository;
+import umc.ShowHoo.web.spaceApply.entity.SpaceApply;
+import umc.ShowHoo.web.spaceApply.exception.handler.SpaceApplyHandler;
+import umc.ShowHoo.web.spaceApply.repository.SpaceApplyRepository;
 
 import java.util.UUID;
 
@@ -26,8 +30,11 @@ public class RentalFileService {
     private final RentalFileRepository rentalFileRepository;
     private final ShowsRepository showsRepository;
     private final AmazonS3Manager amazonS3Manager;
+    private final SpaceApplyRepository spaceApplyRepository;
+    private final ShowsService showsService;
 
     public RentalFile createPerformerFile(MultipartFile setList, MultipartFile rentalTime, MultipartFile addOrder,Long id){
+
         String setListUrl=setList != null ? amazonS3Manager.uploadFile("rentalFile/"+ UUID.randomUUID().toString(),setList):null;
         String rentalTimeUrl=rentalTime != null ? amazonS3Manager.uploadFile("rentalFile/"+ UUID.randomUUID().toString(),rentalTime):null;
         String addOrderUrl=addOrder != null ? amazonS3Manager.uploadFile("rentalFile/"+ UUID.randomUUID().toString(),addOrder):null;
@@ -54,21 +61,18 @@ public class RentalFileService {
     }
 
 
-    public RentalFile createFormFile(MultipartFile setListForm, MultipartFile rentalTimeForm, MultipartFile addOrderForm,Long spaceId,Long showId){
+    public RentalFile createFormFile(MultipartFile setListForm, MultipartFile rentalTimeForm, MultipartFile addOrderForm,Long spaceApplyId){
         String setListFormUrl=setListForm != null ? amazonS3Manager.uploadFile("rentalFileForm/"+ UUID.randomUUID().toString(),setListForm):null;
         String rentalTimeFormUrl=rentalTimeForm != null ? amazonS3Manager.uploadFile("rentalFileForm/"+ UUID.randomUUID().toString(),rentalTimeForm):null;
         String addOrderFormUrl=addOrderForm != null ? amazonS3Manager.uploadFile("rentalFileForm/"+ UUID.randomUUID().toString(),addOrderForm):null;
 
-        Space space=spaceRepository.findById(spaceId)
-                .orElseThrow(()->new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND));
+        SpaceApply spaceApply=spaceApplyRepository.findById(spaceApplyId)
+                .orElseThrow(()-> new SpaceApplyHandler(ErrorStatus.SPACE_APPLY_NOT_FOUND));
 
-        Shows shows=showsRepository.findById(showId)
-                .orElseThrow(()-> new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
-
+        Shows shows=showsService.createShows(spaceApply);
 
         RentalFile rentalFile= RentalFileConverter.toFormEntity(setListFormUrl,rentalTimeFormUrl,addOrderFormUrl);
         rentalFile.setShows(shows);
-        rentalFile.setSpace(space);
 
         return rentalFileRepository.save(rentalFile);
     }

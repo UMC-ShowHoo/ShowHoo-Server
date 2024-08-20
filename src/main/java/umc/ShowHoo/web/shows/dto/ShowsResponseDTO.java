@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 public class ShowsResponseDTO {
 
     @Builder
@@ -38,6 +40,15 @@ public class ShowsResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class ShowRegisterDTO{
+        String poster;
+        ShowinfoDTO showinfoDTO;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class ShowRequirementDTO{
         String requirement;
     }
@@ -47,8 +58,16 @@ public class ShowsResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ShowPosterDTO{
-        Long id;
         String poster; //공연 포스터
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ShowDateDTO{
+        String date;
+        String dDay;
     }
 
 }

@@ -13,6 +13,8 @@ import umc.ShowHoo.web.showsDescription.entity.ShowsDescription;
 import umc.ShowHoo.web.showsPrefer.entity.ShowsPrefer;
 
 import umc.ShowHoo.web.rentalFile.entity.RentalFile;
+import umc.ShowHoo.web.spaceApply.entity.SpaceApply;
+
 
 @Entity
 @Getter @Setter
@@ -40,7 +42,7 @@ public class Shows {
 
     private String cancelDate;  //취소 가능 날짜
     private String cancelTime;  //취소 가능 시간
-    private boolean isComplete; //공연 완료 여부
+    private Boolean isComplete; //공연 완료 여부
 
 
 
@@ -58,4 +60,8 @@ public class Shows {
 
     @OneToOne(mappedBy = "shows")
     private ShowsDescription showsDescription;
+
+    @OneToOne @JoinColumn(name = "spaceApply_id")
+    private SpaceApply spaceApply;
+
 }

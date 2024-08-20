@@ -12,6 +12,5 @@ public interface PerformerProfileRepository extends JpaRepository<PerformerProfi
     Optional<PerformerProfile> findByIdAndPerformer(Long id, Performer performer);
     List<PerformerProfile> findByPerformer(Performer performer);
 
-    @Query("SELECT p FROM PerformerProfile p WHERE p.performer.id = :performerId ORDER BY p.created_at DESC")
-    Optional<PerformerProfile> findTopByPerformerId(Long performerId);
+    Optional<PerformerProfile> findFirstByPerformerIdOrderByCreatedAtDesc(Long performerId);;
 }
