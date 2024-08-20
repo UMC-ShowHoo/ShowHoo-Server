@@ -30,6 +30,7 @@ import umc.ShowHoo.web.spacePhoto.entity.SpacePhoto;
 import umc.ShowHoo.web.spacePhoto.repository.SpacePhotoRepository;
 import umc.ShowHoo.web.spacePrefer.entity.SpacePrefer;
 import umc.ShowHoo.web.spacePrefer.repository.SpacePreferRepository;
+import umc.ShowHoo.web.spaceReview.entity.SpaceReview;
 import umc.ShowHoo.web.spaceUser.entity.SpaceUser;
 
 import java.util.List;
@@ -157,6 +158,34 @@ public class SpaceService {
     public void updateSpaceGrade(Space space) {
         space.updateGrade();
         spaceRepository.save(space);
+    }
+
+    @Transactional
+    public SpaceResponseDTO.SpaceInfoDTO getSpaceDetails(Long spaceId) {
+        Space space = spaceRepository.findById(spaceId)
+                .orElseThrow(() -> new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND));
+
+        // Space의 사진 목록을 URL로 변환
+        List<String> photoUrls = space.getPhotos().stream()
+                .map(SpacePhoto::getPhotoUrl) // SpacePhoto 엔티티에 `getUrl()` 메서드가 있다고 가정
+                .collect(Collectors.toList());
+
+        // 리뷰 개수
+        long reviewCount = space.getSpaceReviews().size();
+
+        // 리뷰 평점 평균 계산
+        double averageGrade = space.getSpaceReviews().stream()
+                .mapToDouble(SpaceReview::getGrade)
+                .average()
+                .orElse(0.0);
+
+        // DTO로 변환하여 반환
+        return SpaceResponseDTO.SpaceInfoDTO.builder()
+                .location(space.getLocation())
+                .photos(photoUrls)
+                .reviewCount(reviewCount)
+                .averageGrade(averageGrade)
+                .build();
     }
 }
 
