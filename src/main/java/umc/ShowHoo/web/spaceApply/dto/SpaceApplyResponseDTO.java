@@ -53,6 +53,17 @@ public class SpaceApplyResponseDTO {
         private int status;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SelectedAdditionalServiceDTO{
+        private Long id;
+        private Long serviceId;
+        private String title;
+        private String price;
+    }
+
 
 
 }
