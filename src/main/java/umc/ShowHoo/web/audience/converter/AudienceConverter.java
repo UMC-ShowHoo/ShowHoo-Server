@@ -70,6 +70,7 @@ public class AudienceConverter {
                 .description(isExist?shows.getShowsDescription().getText():null)
                 .runningTime(shows.getRunningTime())
                 .ticketPrice(shows.getTicketPrice())
+                .remainTicketNum(shows.getRemainTicketNum())
                 .perMaxticket(shows.getPerMaxticket())
                 .bank(shows.getBank())
                 .accountHolder(shows.getAccountHolder())

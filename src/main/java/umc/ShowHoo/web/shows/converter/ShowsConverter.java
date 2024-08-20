@@ -37,6 +37,7 @@ public class ShowsConverter {
         shows.setAccountHolder(dto.getAccountHolder());
         shows.setAccountNum(dto.getAccountNum());
         shows.setTicketNum(dto.getTicketNum());
+        shows.setRemainTicketNum(dto.getTicketNum());
         shows.setTicketPrice(dto.getTicketPrice());
         shows.setPerMaxticket(dto.getPerMaxticket());
 
