@@ -41,9 +41,9 @@ public class SpaceApply {
     @OneToMany(mappedBy = "spaceApply", cascade = CascadeType.ALL)
     private List<SelectedAdditionalService> selectedAdditionalServices;
 
-    @OneToOne(mappedBy = "spaceApply")
+    @OneToOne(mappedBy = "spaceApply",cascade = CascadeType.ALL)
     private Shows shows;
 
-    @OneToOne(mappedBy = "spaceApply")
-    private RentalFile rentalFile;
+/*    @OneToOne(mappedBy = "spaceApply")
+    private RentalFile rentalFile;*/
 }

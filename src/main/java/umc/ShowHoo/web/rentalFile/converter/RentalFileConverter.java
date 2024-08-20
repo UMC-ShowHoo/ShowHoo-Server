@@ -42,6 +42,7 @@ public class RentalFileConverter {
 
     public static RentalFileResponseDTO.SpaceUserSaveDTO toSpaceUserSaveDTO(RentalFile rentalFile){
         return RentalFileResponseDTO.SpaceUserSaveDTO.builder()
+                .id(rentalFile.getId())
                 .setListForm(rentalFile.getSetListForm())
                 .rentalTimeForm(rentalFile.getRentalTimeForm())
                 .addOrderForm(rentalFile.getAddOrderForm())

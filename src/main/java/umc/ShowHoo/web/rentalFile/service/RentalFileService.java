@@ -73,7 +73,6 @@ public class RentalFileService {
 
         RentalFile rentalFile= RentalFileConverter.toFormEntity(setListFormUrl,rentalTimeFormUrl,addOrderFormUrl);
         rentalFile.setShows(shows);
-        rentalFile.setSpaceApply(spaceApply);
 
         return rentalFileRepository.save(rentalFile);
     }

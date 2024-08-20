@@ -28,6 +28,6 @@ public class RentalFile {
     @OneToOne @JoinColumn(name = "shows_id")
     private Shows shows;
 
-    @OneToOne @JoinColumn(name = "space_apply_id")
-    private SpaceApply spaceApply;
+/*    @OneToOne @JoinColumn(name = "space_apply_id")
+    private SpaceApply spaceApply;*/
 }
