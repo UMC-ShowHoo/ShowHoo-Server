@@ -21,6 +21,17 @@ public class SpaceResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class SpaceInfoDTO{
+        private String location;        // 공연장 위치
+        private List<String> photos;    // 공연장 사진 목록 (URL)
+        private long reviewCount;       // 리뷰 개수
+        private double averageGrade;    // 평균 리뷰 평점
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class SpaceDescriptionDTO{
         Long id;
         String name;
