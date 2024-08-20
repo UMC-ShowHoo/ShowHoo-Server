@@ -86,7 +86,16 @@ public class SpaceController {
     public ApiResponse<SpaceResponseDTO.SpaceDescriptionDTO> getSpaceDescription(@PathVariable Long spaceId) {
         SpaceResponseDTO.SpaceDescriptionDTO spaceDescription = spaceService.getSpaceDescriptionBySpaceUserId(spaceId);
         return ApiResponse.onSuccess(spaceDescription);
+    }
 
+    @Operation(summary = "공연장 세부정보 헤더 조회 API", description = "공연장 세부정보를 조회할 때 사진과 리뷰 갯수, 리뷰 평점, 위치 조회하는 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
+    })
+    @GetMapping("/spaces/{spaceId}/header")
+    public ApiResponse<SpaceResponseDTO.SpaceInfoDTO> getSpaceDetails(@PathVariable Long spaceId) {
+        SpaceResponseDTO.SpaceInfoDTO spaceDetails = spaceService.getSpaceDetails(spaceId);
+        return ApiResponse.onSuccess(spaceDetails);
     }
 
     @GetMapping("/spaces/{spaceId}/notice")
