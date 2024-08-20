@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 public class ShowsResponseDTO {
 
     @Builder
@@ -57,6 +59,15 @@ public class ShowsResponseDTO {
     @AllArgsConstructor
     public static class ShowPosterDTO{
         String poster; //공연 포스터
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ShowDateDTO{
+        String date;
+        String dDay;
     }
 
 }

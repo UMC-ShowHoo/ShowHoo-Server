@@ -15,6 +15,7 @@ import umc.ShowHoo.web.showsPrefer.entity.ShowsPrefer;
 import umc.ShowHoo.web.rentalFile.entity.RentalFile;
 import umc.ShowHoo.web.spaceApply.entity.SpaceApply;
 
+
 @Entity
 @Getter @Setter
 @Builder
@@ -60,6 +61,7 @@ public class Shows {
     @OneToOne(mappedBy = "shows")
     private ShowsDescription showsDescription;
 
-    @ManyToOne @JoinColumn(name = "spaceApply_Id")
+    @OneToOne @JoinColumn(name = "spaceApply_id")
     private SpaceApply spaceApply;
+
 }

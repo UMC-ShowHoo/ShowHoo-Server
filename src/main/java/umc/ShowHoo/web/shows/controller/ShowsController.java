@@ -29,17 +29,29 @@ public class ShowsController {
     private final ShowsService showsService;
     private final S3Service s3Service;
 
-    @PostMapping(value="/{performerProfileId}/show-register")
+    @GetMapping(value="/{spaceApplyId}/show-date")
+    @Operation(summary = "공연 준비 시, 공연 날짜와 공연 디데이 API",description = "공연 준비 시 위에 띄워야하는 공연 날짜, 공연까지의 디데이 API입니다")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공")
+    })
+    public ApiResponse<ShowsResponseDTO.ShowDateDTO> getShowDate(@PathVariable Long spaceApplyId){
+
+        ShowsResponseDTO.ShowDateDTO showDate=showsService.getShowDate(spaceApplyId);
+
+        return ApiResponse.onSuccess(showDate);
+    }
+
+    @PostMapping(value="/{performerProfileId}/{showsId}/show-register")
     @Operation(summary = "공연자 공연 준비-공연 정보 등록 api", description = "공연 포스터 및 정보 등록 시에 필요한 API")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공")
     })
-
     public ApiResponse<ShowsResponseDTO.postShowDTO> createShow(
             @PathVariable Long performerProfileId,
-            @RequestPart ShowsRequestDTO.ShowInfoDTO showsRequestDTO)throws IOException {
+            @PathVariable Long showsId,
+            @RequestBody ShowsRequestDTO.ShowInfoDTO showsRequestDTO)throws IOException {
 
-        Shows shows = showsService.createShows(showsRequestDTO, performerProfileId);
+        Shows shows = showsService.createShowsInfo(showsRequestDTO, performerProfileId,showsId);
 
         return ApiResponse.onSuccess(ShowsConverter.toPostShowDTO(shows));
     }

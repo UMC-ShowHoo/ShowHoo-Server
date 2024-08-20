@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import umc.ShowHoo.web.shows.entity.Shows;
 import umc.ShowHoo.web.space.entity.Space;
+import umc.ShowHoo.web.spaceApply.entity.SpaceApply;
 
 @Entity
 @Getter
@@ -27,6 +28,6 @@ public class RentalFile {
     @OneToOne @JoinColumn(name = "shows_id")
     private Shows shows;
 
-    @OneToOne @JoinColumn(name = "space_id")
-    private Space space;
+/*    @OneToOne @JoinColumn(name = "space_apply_id")
+    private SpaceApply spaceApply;*/
 }
