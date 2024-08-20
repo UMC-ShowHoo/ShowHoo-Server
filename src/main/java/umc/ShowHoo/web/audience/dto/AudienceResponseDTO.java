@@ -54,6 +54,7 @@ public class AudienceResponseDTO {
         String cancelTime; //취소 가능 시간
         String runningTime; //러닝 타임
 
+        Integer remainTicketNum; //남은 티켓 매수
         String ticketPrice; //티켓 가격
         Integer perMaxticket; //티켓 인당 구매 제한
         String bank; //은행명
