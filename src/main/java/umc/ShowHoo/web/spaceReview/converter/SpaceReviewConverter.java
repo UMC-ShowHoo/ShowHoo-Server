@@ -39,12 +39,20 @@ public class SpaceReviewConverter {
                         answer.getUpdatedAt()))
                 .collect(Collectors.toList());
 
-        return new SpaceReviewResponseDTO.ReviewPerformerDTO(
-                spaceReview.getId(),
-                spaceReview.getGrade(),
-                spaceReview.getContent(),
-                answers
-        );
+        // SpaceReviewImage에서 이미지 URL 추출
+        List<String> imageUrls = spaceReview.getSpaceReviewImages().stream()
+                .map(SpaceReviewImage::getImageUrl)  // URL을 추출 (SpaceReviewImage 엔티티에 getUrl() 메서드가 있다고 가정)
+                .collect(Collectors.toList());
+
+        // 리뷰 정보와 함께 updatedAt 및 imageUrls를 포함하여 반환
+        return SpaceReviewResponseDTO.ReviewPerformerDTO.builder()
+                .id(spaceReview.getId())
+                .grade(spaceReview.getGrade())
+                .content(spaceReview.getContent())
+                .updatedAt(spaceReview.getUpdatedAt())  // 수정 시간 추가
+                .imageUrls(imageUrls)                   // 이미지 URL 리스트 추가
+                .answers(answers)
+                .build();
     }
 
     public SpaceReviewResponseDTO.ReviewSpaceDTO toGetSpaceReview(SpaceReview spaceReview) {
