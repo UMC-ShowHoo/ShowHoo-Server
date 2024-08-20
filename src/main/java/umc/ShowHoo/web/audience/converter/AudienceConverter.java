@@ -58,7 +58,8 @@ public class AudienceConverter {
     public static AudienceResponseDTO.ShowsDetailDTO toGetShowsDetailDTO(Shows shows, Boolean isExist){
         return AudienceResponseDTO.ShowsDetailDTO.builder()
                 .showsId(shows.getId())
-                .host(shows.getPerformerProfile().getTeam())
+                .host(shows.getPerformerProfile().getName())
+                .place(shows.getSpaceApply().getSpace().getName())
                 .name(shows.getName())
                 .poster(shows.getPoster())
                 .date(shows.getDate())
