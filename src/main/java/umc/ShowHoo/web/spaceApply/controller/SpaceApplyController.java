@@ -9,6 +9,10 @@ import org.springdoc.api.OpenApiResourceNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import umc.ShowHoo.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import umc.ShowHoo.web.performerProfile.dto.PerformerProfileRequestDTO;
+import umc.ShowHoo.web.performerProfile.service.PerformerProfileService;
+import umc.ShowHoo.web.selectedAdditionalService.entity.SelectedAdditionalService;
+import umc.ShowHoo.web.space.dto.SpaceResponseDTO;
 import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.spaceApply.dto.SpaceApplyRequestDTO;
 import umc.ShowHoo.web.spaceApply.dto.SpaceApplyResponseDTO;
@@ -48,13 +52,13 @@ public class SpaceApplyController {
     }
 
 
-    @Operation(summary = "대관 내역 취소 및 거절 API", description = "공연자 대관 내역 확인하는 페이지에서 취소 및 거절할 때 필요한 API입니다.")
+    @Operation(summary = "대관 내역 취소 및 거절 API", description = "공연자 대관 내역 확인하는 페이지에서 취소 및 거절할 때 필요한 API입니다. 대관신청을 공연자가 취소하는 경우 status 0, 공연장이 거절하는 경우 status 1로 호출해주세요")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
-    @DeleteMapping("spaceApply/delete/{spaceApplyId}")
-    public ApiResponse<Void> deleteSpaceApply(@PathVariable Long spaceApplyId) {
-        spaceApplyService.deleteSpaceApply(spaceApplyId);
+    @DeleteMapping("spaceApply/delete/{spaceApplyId}/{status}")
+    public ApiResponse<Void> deleteSpaceApply(@PathVariable Long spaceApplyId, @PathVariable Long status) {
+        spaceApplyService.deleteSpaceApply(spaceApplyId, status);
         return ApiResponse.onSuccess(null);
     }
 
@@ -83,11 +87,39 @@ public class SpaceApplyController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
     })
     @GetMapping("spaces/{spaceId}/spaceApply/info/{date}")
-    public ApiResponse<SpaceApplyResponseDTO.SpaceApplyDetailDTO> getSpaceApplyByDate(
+
+    public ApiResponse<List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO>> getSpaceApplyByDate(
             @PathVariable Long spaceId, @PathVariable LocalDate date
             ) {
-                SpaceApplyResponseDTO.SpaceApplyDetailDTO spaceApplyDTO = spaceApplyService.getSpaceApplyDetailsByDate(spaceId, date);
-                return ApiResponse.onSuccess(spaceApplyDTO);
+               List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> dtoList = spaceApplyService.getSpaceAppliesByPSpaceAndDate(spaceId, date);
+
+                return ApiResponse.onSuccess(dtoList);
 
     }
+
+    @Operation(summary = "대관 영수증 확인 API", description = "공연장이 대관 수락 후 영수증을 확인하는 API 관련 additionalService가 보여야 합.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
+    })
+    @GetMapping("spaces/spaceApply/{spaceApplyId}/receipt")
+    public ApiResponse<List<SpaceResponseDTO.SpaceAdditionalServiceDTO>> getSelectedAdditionalService(
+            @PathVariable Long spaceApplyId) {
+        return ApiResponse.onSuccess(spaceApplyService.getSelectedAdditionalServices(spaceApplyId));
+    }
+
+    @Operation(summary = "공연장-공연자-공연자 프로필 확인 API", description = "공연장이 공연자의 프로필을 확인하는 API")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
+    })
+    @GetMapping("spaces/spaceApply/info/{spaceId}")
+    public ApiResponse<PerformerProfileRequestDTO.CreateProfileDTO> getProfileBySpaceApplyId(
+            @PathVariable long spaceApplyId) {
+        // ProfileService를 이용해 SpaceApplyId로 프로필 정보를 가져옴
+        PerformerProfileRequestDTO.CreateProfileDTO profileDTO = spaceApplyService.getProfileDTOBySpaceAppId(spaceApplyId);
+
+        // 가져온 정보를 ResponseEntity로 반환
+        return ApiResponse.onSuccess(profileDTO);
+    }
+    
+
 }

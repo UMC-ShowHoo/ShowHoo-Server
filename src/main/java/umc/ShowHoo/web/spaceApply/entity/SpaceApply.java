@@ -3,11 +3,9 @@ package umc.ShowHoo.web.spaceApply.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import umc.ShowHoo.web.performer.entity.Performer;
-import umc.ShowHoo.web.rentalFile.entity.RentalFile;
 import umc.ShowHoo.web.selectedAdditionalService.entity.SelectedAdditionalService;
 import umc.ShowHoo.web.shows.entity.Shows;
 import umc.ShowHoo.web.space.entity.Space;
-import umc.ShowHoo.web.spacePrefer.entity.SpacePrefer;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -41,9 +39,7 @@ public class SpaceApply {
     @OneToMany(mappedBy = "spaceApply", cascade = CascadeType.ALL)
     private List<SelectedAdditionalService> selectedAdditionalServices;
 
-    @OneToOne(mappedBy = "spaceApply",cascade = CascadeType.ALL)
-    private Shows shows;
+    @OneToMany(mappedBy = "spaceApply", cascade = CascadeType.ALL)
+    private List<Shows> shows;
 
-/*    @OneToOne(mappedBy = "spaceApply")
-    private RentalFile rentalFile;*/
 }
