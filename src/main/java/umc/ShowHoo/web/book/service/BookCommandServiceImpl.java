@@ -57,7 +57,6 @@ public class BookCommandServiceImpl implements BookCommandService {
             if( num + request.getTicketNum() > shows.getPerMaxticket()){
                 return null;
             }
-
         }
         
         //티켓 매진 로직
@@ -65,7 +64,7 @@ public class BookCommandServiceImpl implements BookCommandService {
             shows.setRemainTicketNum(shows.getRemainTicketNum() - request.getTicketNum());
             showsRepository.save(shows);
         } else {
-            return null;
+            throw new IllegalStateException("no enough tickets");
         }
 
         return bookRepository.save(BookConverter.toBook(audience, shows, request));
