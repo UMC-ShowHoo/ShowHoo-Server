@@ -7,6 +7,7 @@ import umc.ShowHoo.web.performer.entity.Performer;
 import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.spaceReviewAnswer.entity.SpaceReviewAnswer;
 
+import java.net.URL;
 import java.util.List;
 
 @Entity
@@ -22,7 +23,7 @@ public class SpaceReview extends BaseEntity {
 
     private double grade; // 리뷰 평점
     private String content; // 리뷰 내용
-    private String memberUrl; // 리뷰 작성한 유저 프로필 이미지
+    private URL memberUrl; // 리뷰 작성한 유저 프로필 이미지
     private String memberName; // 리뷰 작성한 유저 이름
 
 
