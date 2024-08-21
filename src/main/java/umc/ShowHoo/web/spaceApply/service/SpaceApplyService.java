@@ -137,14 +137,9 @@ public class SpaceApplyService {
 
 
     @Transactional
-
-    public List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> getSpaceAppliesByPSpaceAndDate(Long spaceId) {
+    public List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> getSpaceAppliesBySpaceAndDate(Long spaceId) {
         List<SpaceApply> spaceApplyList = spaceApplyRepository.findBySpaceId(spaceId);
-
-    public List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> getSpaceAppliesBySpaceAndDate(Long spaceId, LocalDate date) {
-        List<SpaceApply> spaceApplyList = spaceApplyRepository.findBySpaceIdAndDate(spaceId, date);
         System.out.println("SpaceApply List : " + spaceApplyList);
-
 
         if (spaceApplyList.isEmpty()) {
             System.out.println("No spaceApply found");

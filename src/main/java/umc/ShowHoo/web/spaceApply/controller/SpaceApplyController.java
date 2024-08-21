@@ -66,7 +66,7 @@ public class SpaceApplyController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
     })
-    @PatchMapping("spaces/{spaceApplyId}/accept}")
+    @PatchMapping("spaces/{spaceApplyId}/accept")
     public ApiResponse<Void> confirmSpaceApply(
             @PathVariable Long spaceApplyId) {
         spaceApplyService.setSpaceApply(spaceApplyId);
@@ -92,10 +92,7 @@ public class SpaceApplyController {
             @PathVariable Long spaceId
             ) {
 
-               List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> dtoList = spaceApplyService.getSpaceAppliesByPSpaceAndDate(spaceId);
-
-               List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> dtoList = spaceApplyService.getSpaceAppliesBySpaceAndDate(spaceId, date);
-
+               List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> dtoList = spaceApplyService.getSpaceAppliesBySpaceAndDate(spaceId);
 
                 return ApiResponse.onSuccess(dtoList);
 
