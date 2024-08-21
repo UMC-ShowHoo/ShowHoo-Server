@@ -10,6 +10,7 @@ import umc.ShowHoo.web.holiday.entity.Holiday;
 import umc.ShowHoo.web.holiday.repository.HolidayRepository;
 import umc.ShowHoo.web.notification.service.NotificationService;
 import umc.ShowHoo.web.performer.entity.Performer;
+import umc.ShowHoo.web.performer.handler.PerformerHandler;
 import umc.ShowHoo.web.performer.repository.PerformerRepository;
 import umc.ShowHoo.web.performerProfile.dto.PerformerProfileRequestDTO;
 import umc.ShowHoo.web.performerProfile.entity.PerformerProfile;
@@ -22,6 +23,7 @@ import umc.ShowHoo.web.shows.entity.Shows;
 import umc.ShowHoo.web.shows.repository.ShowsRepository;
 import umc.ShowHoo.web.space.dto.SpaceResponseDTO;
 import umc.ShowHoo.web.space.entity.Space;
+import umc.ShowHoo.web.space.exception.handler.SpaceHandler;
 import umc.ShowHoo.web.space.repository.SpaceRepository;
 import umc.ShowHoo.web.spaceApply.converter.SpaceApplyConverter;
 import umc.ShowHoo.web.spaceApply.dto.SpaceApplyRequestDTO;
@@ -57,10 +59,10 @@ public class SpaceApplyService {
 
     public SpaceApply createSpaceApply(Long spaceId, Long performerId, SpaceApplyRequestDTO.RegisterDTO registerDTO) {
         Performer performer = performerRepository.findById(performerId)
-                .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_APPLY_NOT_FOUND));
+                .orElseThrow(() -> new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
 
         Space space = spaceRepository.findById(spaceId)
-                .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_NOT_FOUND));
+                .orElseThrow(() -> new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND));
 
         SpaceApply spaceApply = spaceApplyConverter.toCreateSpaceApply(registerDTO, performer, space);
 
@@ -101,10 +103,10 @@ public class SpaceApplyService {
     @Transactional
     public void setSpaceApply(Long spaceId, Long spaceApplyId) {
         Space space = spaceRepository.findById(spaceId)
-                .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_NOT_FOUND));
+                .orElseThrow(() -> new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND));
 
         SpaceApply spaceApply = spaceApplyRepository.findById(spaceApplyId)
-                .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_NOT_FOUND));
+                .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_APPLY_NOT_FOUND));
         spaceApply.setStatus(1);
 
         notificationService.createSpaceConfirmNotification(spaceApply); // 알림 생성
@@ -138,7 +140,7 @@ public class SpaceApplyService {
         List<SpaceApply> spaceApplyList = spaceApplyRepository.findBySpaceIdAndDate(spaceId, date);
 
         if (spaceApplyList.isEmpty()) {
-            throw new EntityNotFoundException("No SpaceApply records found for the given spaceId and date");
+            throw new SpaceApplyHandler(ErrorStatus.SPACE_APPLY_IS_EMPTY);
         }
 
         List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> dtoList = new ArrayList<>();
@@ -173,7 +175,7 @@ public class SpaceApplyService {
 
     public List<SelectedAdditionalService> getAllSelectedServicesBySpaceApply(Long spaceApplyId) {
         SpaceApply spaceApply = spaceApplyRepository.findById(spaceApplyId)
-                .orElseThrow(() -> new EntityNotFoundException("SpaceApply not exist"));
+                .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_APPLY_NOT_FOUND));
 
         return selectedAdditionalServiceRepository.findBySpaceApply(spaceApply);
 
@@ -182,11 +184,11 @@ public class SpaceApplyService {
     public PerformerProfileRequestDTO.CreateProfileDTO getProfileDTOBySpaceAppId(Long spaceApplyId) {
         // spaceApplyId를 사용하여 SpaceApply 엔티티를 조회
         SpaceApply spaceApply = spaceApplyRepository.findById(spaceApplyId)
-                .orElseThrow(() -> new EntityNotFoundException("SpaceApply not found"));
+                .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_APPLY_NOT_FOUND));
 
         // 해당 SpaceApply에서 PerformerProfile ID를 통해 PerformerProfile 엔티티를 조회
         PerformerProfile performerProfile = performerProfileRepository.findById(spaceApply.getPerformerProfileId())
-                .orElseThrow(() -> new EntityNotFoundException("PerformerProfile not found"));
+                .orElseThrow(() -> new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
 
         // PerformerProfile에서 이미지 URL들을 가져옴
         List<String> profileImageUrls = performerProfile.getProfileImages().stream()
