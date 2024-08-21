@@ -35,6 +35,7 @@ public class BookResponseDTO {
         String phoneNum;
         Integer ticketNum;
         String payment;
+        BookDetail detail;
 
         //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
         LocalDateTime dateTime;
@@ -119,6 +120,7 @@ public class BookResponseDTO {
         String name;
         String bankName;
         String account;
+        BookDetail bookDetail;
         LocalDateTime dateTime;
     }
 
