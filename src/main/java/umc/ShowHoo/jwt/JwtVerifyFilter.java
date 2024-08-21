@@ -12,7 +12,7 @@ import umc.ShowHoo.apiPayload.exception.GeneralException;
 import java.io.IOException;
 
 public class JwtVerifyFilter extends OncePerRequestFilter {
-    private static final String[] whitelist = {"/logout", "/kakao/logout/withAccount", "/login/oauth2/code/kakao", "/kakao", "/h2-console/**", "/swagger-ui/index.html", "/swagger-ui/**", "/v3/api-docs/**","/swagger-resources/**", "/v3/api-docs", "/spaces", "/aud", "/aud/search"};
+    private static final String[] whitelist = {"/logout", "/kakao/logout/withAccount", "/login/oauth2/code/kakao", "/kakao", "/h2-console/**", "/swagger-ui/index.html", "/swagger-ui/**", "/v3/api-docs/**","/swagger-resources/**", "/v3/api-docs", "/spaces", "/aud", "/aud/search", "/spaces", "/spaces/**/price", "/spaces/**/pay", "/spaces/**/notice", "/spaces/**/header", "/spaces/**/file", "/spaces/**/description", "/spaces/search", "/review/space/**"};
 
     private final JwtTokenProvider jwtTokenProvider;
 
