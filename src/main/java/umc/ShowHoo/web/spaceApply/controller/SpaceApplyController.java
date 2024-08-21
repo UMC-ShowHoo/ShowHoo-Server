@@ -66,10 +66,10 @@ public class SpaceApplyController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
     })
-    @PatchMapping("spaces/{spaceId}/spaceApply/{spaceApplyId}")
+    @PatchMapping("spaces/{spaceApplyId}/accept")
     public ApiResponse<Void> confirmSpaceApply(
-            @PathVariable Long spaceId , @PathVariable Long spaceApplyId) {
-        spaceApplyService.setSpaceApply(spaceId, spaceApplyId);
+            @PathVariable Long spaceApplyId) {
+        spaceApplyService.setSpaceApply(spaceApplyId);
         return ApiResponse.onSuccess(null);
     }
     @Operation(summary = " 대관 가능 날짜 확인 API", description = "공연자가 공연장 대관 가능 날짜를 확인 하는 API, holiday와 status 체크")
@@ -86,12 +86,13 @@ public class SpaceApplyController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
     })
-    @GetMapping("spaces/{spaceId}/spaceApply/info/{date}")
+    @GetMapping("spaces/{spaceId}/spaceApply/info/calendar")
 
     public ApiResponse<List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO>> getSpaceApplyByDate(
-            @PathVariable Long spaceId, @PathVariable LocalDate date
+            @PathVariable Long spaceId
             ) {
-               List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> dtoList = spaceApplyService.getSpaceAppliesBySpaceAndDate(spaceId, date);
+
+               List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> dtoList = spaceApplyService.getSpaceAppliesBySpaceAndDate(spaceId);
 
                 return ApiResponse.onSuccess(dtoList);
 
