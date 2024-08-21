@@ -66,10 +66,10 @@ public class SpaceApplyController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
     })
-    @PatchMapping("spaces/{spaceId}/spaceApply/{spaceApplyId}")
+    @PatchMapping("spaces/{spaceApplyId}/accept}")
     public ApiResponse<Void> confirmSpaceApply(
-            @PathVariable Long spaceId , @PathVariable Long spaceApplyId) {
-        spaceApplyService.setSpaceApply(spaceId, spaceApplyId);
+            @PathVariable Long spaceApplyId) {
+        spaceApplyService.setSpaceApply(spaceApplyId);
         return ApiResponse.onSuccess(null);
     }
     @Operation(summary = " 대관 가능 날짜 확인 API", description = "공연자가 공연장 대관 가능 날짜를 확인 하는 API, holiday와 status 체크")
