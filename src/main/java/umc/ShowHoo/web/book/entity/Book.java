@@ -30,6 +30,8 @@ public class Book extends BaseEntity {
 
     private String payment;
 
+    private Boolean entrance;
+
     @Enumerated(EnumType.STRING)
     @Builder.Default
     @Column(columnDefinition = "VARCHAR(15) DEFAULT 'BOOK'")

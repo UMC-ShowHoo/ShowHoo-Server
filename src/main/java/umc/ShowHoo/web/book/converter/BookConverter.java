@@ -32,7 +32,10 @@ public class BookConverter {
     }
 
     public static Book toBook(Audience audience, Shows shows, BookRequestDTO.postDTO request){
-        int payment = request.getTicketNum() * Integer.parseInt(shows.getTicketPrice());
+        int payment = 0;
+        if(!(shows.getTicketPrice().isEmpty())){
+            payment = request.getTicketNum() * Integer.parseInt(shows.getTicketPrice());
+        }
 
         return Book.builder()
                 .audience(audience)
@@ -41,6 +44,7 @@ public class BookConverter {
                 .phoneNum(request.getPhoneNum())
                 .ticketNum(request.getTicketNum())
                 .payment(Integer.toString(payment))
+                .entrance(false)
                 .build();
     }
 
@@ -71,6 +75,31 @@ public class BookConverter {
                 .bookId(cancelBook.getBook().getId())
                 .cancelBookId(cancelBook.getId())
                 .alert("예매가 취소되었습니다.")
+                .build();
+    }
+
+    public static BookResponseDTO.getEntranceListDTO toGetEntranceListDTO(Page<Book> bookList){
+        List<BookResponseDTO.getEntranceDTO> getEntranceDTOList = bookList.stream()
+                .map(BookConverter::toGetEntranceDTO).toList();
+
+        return BookResponseDTO.getEntranceListDTO.builder()
+                .isFirst(bookList.isFirst())
+                .isLast(bookList.isLast())
+                .totalPages(bookList.getTotalPages())
+                .totalElements(bookList.getTotalElements())
+                .listSize(getEntranceDTOList.size())
+                .entranceList(getEntranceDTOList)
+                .build();
+    }
+
+    public static BookResponseDTO.getEntranceDTO toGetEntranceDTO(Book book){
+        return BookResponseDTO.getEntranceDTO.builder()
+                .bookId(book.getId())
+                .name(book.getName())
+                .phoneNum(book.getPhoneNum())
+                .entrance(book.getEntrance())
+                .headCount(book.getTicketNum())
+                .detail(book.getDetail())
                 .build();
     }
 

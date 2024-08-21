@@ -1,6 +1,7 @@
 package umc.ShowHoo.web.space.dto;
 
 import lombok.*;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,6 +21,17 @@ public class SpaceResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class SpaceInfoDTO{
+        private String location;        // 공연장 위치
+        private List<String> photos;    // 공연장 사진 목록 (URL)
+        private long reviewCount;       // 리뷰 개수
+        private double averageGrade;    // 평균 리뷰 평점
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class SpaceDescriptionDTO{
         Long id;
         String name;
@@ -30,7 +42,31 @@ public class SpaceResponseDTO {
         Integer seatingCapacity;
         Integer standingCapacity;
         List<SpaceAdditionalServiceDTO> additionalServices;
+        List<RentalFeeDTO> rentalFees;  // RentalFee 리스트 추가
+        List<PeakSeasonRentalFeeDTO> peakSeasonRentalFees;  // PeakSeasonRentalFee 리스트 추가
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class RentalFeeDTO {
+        Long id;
+        umc.ShowHoo.web.rentalFee.entity.DayOfWeek dayOfWeek;  // 요일
+        Integer fee;  // 요금
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PeakSeasonRentalFeeDTO {
+        Long id;
+        umc.ShowHoo.web.rentalFee.entity.DayOfWeek dayOfWeek;  // 요일
+        Integer fee;  // 요금
+    }
+
+
 
     @Builder
     @Getter
