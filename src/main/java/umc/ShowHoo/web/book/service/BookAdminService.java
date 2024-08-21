@@ -1,11 +1,8 @@
 package umc.ShowHoo.web.book.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
-import umc.ShowHoo.web.book.handler.BookHandler;
 import umc.ShowHoo.web.shows.entity.Shows;
 import umc.ShowHoo.web.shows.handler.ShowsHandler;
 import umc.ShowHoo.web.shows.repository.ShowsRepository;
@@ -48,19 +45,5 @@ public class BookAdminService {
                 .collect(Collectors.toList());
     }
 
-    public BookResponseDTO.getEntranceListDTO getEntranceList(Long showId, Integer page){
-        Shows shows = showsRepository.findById(showId)
-                .orElseThrow(()->new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
-        return BookConverter.toGetEntranceListDTO(bookRepository.findAllByShows(shows, PageRequest.of(page, 3)));
-    }
-
-    public void changeEntranceStatus(Long bookId, Boolean request){
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(()->new BookHandler(ErrorStatus.BOOK_NOT_FOUND));
-        if(!(request == book.getEntrance())){
-            book.setEntrance(request);
-        }
-        bookRepository.save(book);
-    }
 
 }

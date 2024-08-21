@@ -24,6 +24,7 @@ import umc.ShowHoo.web.notification.service.NotificationService;
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class BookCommandServiceImpl implements BookCommandService {
 
@@ -36,7 +37,6 @@ public class BookCommandServiceImpl implements BookCommandService {
     private final CancelBookRepository cancelBookRepository;
     private final NotificationService notificationService;
 
-    @Transactional
     public Book postBook(BookRequestDTO.postDTO request) {
         Audience audience = audienceRepository.findById(request.getAudienceId())
                 .orElseThrow(()-> new AudienceHandler(ErrorStatus.AUDIENCE_NOT_FOUND));
@@ -57,15 +57,11 @@ public class BookCommandServiceImpl implements BookCommandService {
             if( num + request.getTicketNum() > shows.getPerMaxticket()){
                 return null;
             }
+
         }
-        
-        //티켓 매진 로직
-        if(shows.getRemainTicketNum() - request.getTicketNum() >= 0){
-            shows.setRemainTicketNum(shows.getRemainTicketNum() - request.getTicketNum());
-            showsRepository.save(shows);
-        } else {
-            throw new IllegalStateException("no enough tickets");
-        }
+        //티켓 매진 로직 2번째 안
+        //shows.setTicketNum(shows.getTicketNum() - request.getTicketNum());
+        //showsRepository.save(shows);
 
         return bookRepository.save(BookConverter.toBook(audience, shows, request));
     }

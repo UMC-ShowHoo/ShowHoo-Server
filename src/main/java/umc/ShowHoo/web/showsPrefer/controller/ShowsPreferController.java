@@ -34,13 +34,13 @@ public class ShowsPreferController {
         return ApiResponse.onSuccess(showsPreferCommandService.createShowsPrefer(request));
     }
 
-    @DeleteMapping("/{audienceId}")
+    @DeleteMapping("/{id}")
     @Operation(summary = "공연 찜 등록 해제 API", description = "관람자가 공연에 대해 찜 등록을 해제할 때 필요한 API")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUDIENCE001", description = "Audience not found", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
     })
-    public ApiResponse<ShowsPreferResponseDTO.deleteDTO> deleteShowsPrefer(@PathVariable(name = "audienceId") Long id){
+    public ApiResponse<ShowsPreferResponseDTO.deleteDTO> deleteShowsPrefer(@PathVariable(name = "id") Long id){
         String msg = showsPreferCommandService.deleteShowsPrefer(id);
         return ApiResponse.onSuccess(ShowsPreferResponseDTO.deleteDTO.builder()
                 .alert(msg)

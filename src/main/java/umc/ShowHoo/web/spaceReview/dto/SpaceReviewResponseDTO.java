@@ -20,9 +20,6 @@ public class SpaceReviewResponseDTO {
         private double grade;
         private String content;
         private List<SpaceReviewAnswerDto> answers;
-        private LocalDateTime updatedAt;      // 리뷰 수정 시간 추가
-        private List<String> imageUrls;       // 이미지 URL 리스트 추가
-
     }
 
     @Builder
