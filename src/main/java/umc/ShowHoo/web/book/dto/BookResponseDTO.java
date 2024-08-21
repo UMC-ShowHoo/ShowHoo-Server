@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import umc.ShowHoo.web.book.entity.Book;
 import umc.ShowHoo.web.book.entity.BookDetail;
 import umc.ShowHoo.web.book.entity.BookStatus;
 
@@ -34,11 +35,37 @@ public class BookResponseDTO {
         String phoneNum;
         Integer ticketNum;
         String payment;
+        BookDetail detail;
 
         //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
         LocalDateTime dateTime;
     }
 
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class getEntranceListDTO {
+        List<getEntranceDTO> entranceList;
+        Integer listSize;
+        Integer totalPages;
+        Long totalElements;
+        Boolean isFirst;
+        Boolean isLast;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class getEntranceDTO{
+        Long bookId;
+        String name;
+        String phoneNum;
+        Integer headCount; //인원 수
+        Boolean entrance; //입장 여부
+        BookDetail detail; //예매 상태
+    }
 
     @Getter
     @Builder
@@ -93,6 +120,7 @@ public class BookResponseDTO {
         String name;
         String bankName;
         String account;
+        BookDetail bookDetail;
         LocalDateTime dateTime;
     }
 

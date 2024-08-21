@@ -1,6 +1,7 @@
 package umc.ShowHoo.web.book.converter;
 
 import org.springframework.data.domain.Page;
+import umc.ShowHoo.web.book.entity.BookDetail;
 import umc.ShowHoo.web.book.entity.BookStatus;
 import umc.ShowHoo.web.shows.entity.Shows;
 import umc.ShowHoo.web.audience.entity.Audience;
@@ -32,7 +33,10 @@ public class BookConverter {
     }
 
     public static Book toBook(Audience audience, Shows shows, BookRequestDTO.postDTO request){
-        int payment = request.getTicketNum() * Integer.parseInt(shows.getTicketPrice());
+        int payment = 0;
+        if(!(shows.getTicketPrice().isEmpty())){
+            payment = request.getTicketNum() * Integer.parseInt(shows.getTicketPrice());
+        }
 
         return Book.builder()
                 .audience(audience)
@@ -41,6 +45,7 @@ public class BookConverter {
                 .phoneNum(request.getPhoneNum())
                 .ticketNum(request.getTicketNum())
                 .payment(Integer.toString(payment))
+                .entrance(false)
                 .build();
     }
 
@@ -71,6 +76,31 @@ public class BookConverter {
                 .bookId(cancelBook.getBook().getId())
                 .cancelBookId(cancelBook.getId())
                 .alert("예매가 취소되었습니다.")
+                .build();
+    }
+
+    public static BookResponseDTO.getEntranceListDTO toGetEntranceListDTO(Page<Book> bookList){
+        List<BookResponseDTO.getEntranceDTO> getEntranceDTOList = bookList.stream()
+                .map(BookConverter::toGetEntranceDTO).toList();
+
+        return BookResponseDTO.getEntranceListDTO.builder()
+                .isFirst(bookList.isFirst())
+                .isLast(bookList.isLast())
+                .totalPages(bookList.getTotalPages())
+                .totalElements(bookList.getTotalElements())
+                .listSize(getEntranceDTOList.size())
+                .entranceList(getEntranceDTOList)
+                .build();
+    }
+
+    public static BookResponseDTO.getEntranceDTO toGetEntranceDTO(Book book){
+        return BookResponseDTO.getEntranceDTO.builder()
+                .bookId(book.getId())
+                .name(book.getName())
+                .phoneNum(book.getPhoneNum())
+                .entrance(book.getEntrance())
+                .headCount(book.getTicketNum())
+                .detail(book.getDetail())
                 .build();
     }
 
@@ -122,6 +152,7 @@ public class BookConverter {
                     .phoneNum(book.getPhoneNum())
                     .ticketNum(book.getTicketNum())
                     .payment(book.getPayment())
+                    .detail(book.getDetail())
                     .dateTime(book.getCreatedAt())
                     .build();
 
@@ -133,8 +164,10 @@ public class BookConverter {
                 .name(cancelBook.getName())
                 .bankName(cancelBook.getBankName())
                 .account(cancelBook.getAccount())
+                .bookDetail(BookDetail.CANCELLING)
                 .dateTime(cancelBook.getCreatedAt())
                 .build();
+
     }
 
 

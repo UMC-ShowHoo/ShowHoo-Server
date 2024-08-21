@@ -32,12 +32,12 @@ public class SpaceApplyController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
-    @PostMapping("spaces/{spaceUserId}/spaceApply/{performerId}")
+    @PostMapping("spaces/{spaceId}/spaceApply/{performerId}")
     public ApiResponse<Void> createSpaceApply(
-            @PathVariable Long spaceUserId,
+            @PathVariable Long spaceId,
             @PathVariable Long performerId,
             @RequestBody SpaceApplyRequestDTO.RegisterDTO registerDTO) {
-        SpaceApply spaceApply = spaceApplyService.createSpaceApply(spaceUserId, performerId, registerDTO);
+        SpaceApply spaceApply = spaceApplyService.createSpaceApply(spaceId, performerId, registerDTO);
         return ApiResponse.onSuccess(null);
     }
 

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 import umc.ShowHoo.apiPayload.ApiResponse;
 import umc.ShowHoo.jwt.AuthTokens;
+import umc.ShowHoo.web.login.dto.KakaoUnlinkDTO;
 import umc.ShowHoo.web.login.dto.LoginResponseDTO;
 import umc.ShowHoo.web.kakao.KakaoService;
 import umc.ShowHoo.web.login.dto.MemberResponseDTO;
@@ -87,9 +88,9 @@ public class LoginController {
 
     //카카오 연결 끊기(by accessToken)
     @PostMapping("/kakao/delete")
-    public String kakaoUnlink(@RequestBody Long uid) {
+    public String kakaoUnlink(@RequestBody KakaoUnlinkDTO request) {
         try {
-            kakaoService.KaKaoUnlink(kakaoService.getAccessToken(uid));
+            kakaoService.KaKaoUnlink(kakaoService.getAccessToken(request.getUid()));
         } catch (JsonProcessingException e){
             throw new RuntimeException(e);
         }
