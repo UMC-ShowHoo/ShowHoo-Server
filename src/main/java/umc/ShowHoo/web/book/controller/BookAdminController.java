@@ -41,24 +41,5 @@ public class BookAdminController {
         return ApiResponse.onSuccess(refundBookList);
     }
 
-    @GetMapping("/{showId}/prepare/book-admin/entrance")
-    @Operation(summary = "공연자 - 공연준비 : 입장 관리 조회 APi",description = "공연자가 공연 준비 시에 예매자의 입장 관리 여부를 조회하기 위한 API")
-    @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
-    })
-    @Parameter(name = "showId",description = "공연 id")
-    public ApiResponse<BookResponseDTO.getEntranceListDTO> getEntranceBookList(@PathVariable(name = "showId") Long showId, @RequestParam(name = "page") Integer page){
-        return ApiResponse.onSuccess(bookAdminService.getEntranceList(showId, page));
-    }
-
-    @PutMapping("/book-admin/{bookId}")
-    @Operation(summary = "공연자 - 공연준비 : 입장 확인 & 확인 취소 API",description = "공연자가 공연 준비 시에 예매자의 입장 확인 & 확인 취소를 위한 API, 입장 확인 시 : request=true, 입장 확인 취소 시 : request=false")
-    @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
-    })
-    public ApiResponse<Void> confirmEntrance(@PathVariable(name = "bookId") Long bookId, @RequestParam(name = "request") Boolean request){
-        bookAdminService.changeEntranceStatus(bookId, request);
-        return ApiResponse.onSuccess(null);
-    }
 
 }

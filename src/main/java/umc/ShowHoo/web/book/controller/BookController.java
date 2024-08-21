@@ -114,7 +114,7 @@ public class BookController {
     })
     @Parameters({
             @Parameter(name = "bookId", description = "예매 내역의 id, pathVariable"),
-            @Parameter(name = "name", description = "환불 계좌의 예금주 이름"),
+            @Parameter(name = "name", description = "예매자의 이름"),
             @Parameter(name = "bankName", description = "환불 받고자 하는 은행의 이름"),
             @Parameter(name = "account", description = "환불 받고자 하는 계좌의 번호"),
             @Parameter(name = "reason", description = "취소 사유"),

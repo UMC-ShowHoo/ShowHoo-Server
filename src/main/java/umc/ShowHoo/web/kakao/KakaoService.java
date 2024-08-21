@@ -220,7 +220,6 @@ public class KakaoService {
     public String getAccessToken(Long uid){
         Member member= memberRepository.findByUid(uid)
                 .orElseThrow(()->new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
-        System.out.println(member.getAccessToken());
         return member.getAccessToken();
     }
 

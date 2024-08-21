@@ -101,27 +101,8 @@ public class SpaceConverter {
     }
 
     public static SpaceResponseDTO.SpaceDescriptionDTO toSpaceDescriptionDTO(Space space) {
-        // 기존의 추가 서비스 변환 로직
         List<SpaceResponseDTO.SpaceAdditionalServiceDTO> additionalServices = space.getAdditionalServices().stream()
                 .map(service -> new SpaceResponseDTO.SpaceAdditionalServiceDTO(service.getId(), service.getTitle(), service.getPrice()))
-                .collect(Collectors.toList());
-
-        // RentalFee 변환 로직
-        List<SpaceResponseDTO.RentalFeeDTO> rentalFeeDTOs = space.getRentalFees().stream()
-                .map(fee -> SpaceResponseDTO.RentalFeeDTO.builder()
-                        .id(fee.getId())
-                        .dayOfWeek(fee.getDayOfWeek())  // 요일
-                        .fee(fee.getFee())  // 요금
-                        .build())
-                .collect(Collectors.toList());
-
-        // PeakSeasonRentalFee 변환 로직
-        List<SpaceResponseDTO.PeakSeasonRentalFeeDTO> peakSeasonRentalFeeDTOs = space.getPeakSeasonRentalFees().stream()
-                .map(fee -> SpaceResponseDTO.PeakSeasonRentalFeeDTO.builder()
-                        .id(fee.getId())
-                        .dayOfWeek(fee.getDayOfWeek())  // 요일
-                        .fee(fee.getFee())  // 요금
-                        .build())
                 .collect(Collectors.toList());
 
         return SpaceResponseDTO.SpaceDescriptionDTO.builder()
@@ -134,8 +115,6 @@ public class SpaceConverter {
                 .seatingCapacity(space.getSeatingCapacity())
                 .standingCapacity(space.getStandingCapacity())
                 .additionalServices(additionalServices)
-                .rentalFees(rentalFeeDTOs)  // RentalFee 추가
-                .peakSeasonRentalFees(peakSeasonRentalFeeDTOs)  // PeakSeasonRentalFee 추가
                 .build();
     }
 
