@@ -35,6 +35,7 @@ public class Shows {
 
     private String ticketPrice; //티켓 가격
     private Integer ticketNum; //티켓 발행 매수
+    private Integer remainTicketNum; //남은 티켓 매수
     private Integer perMaxticket; //티켓 인당 구매 제한
     private String bank; //은행명
     private String accountHolder; //예금주
