@@ -91,27 +91,31 @@ public class SpaceApplyController {
     public ApiResponse<List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO>> getSpaceApplyByDate(
             @PathVariable Long spaceId, @PathVariable LocalDate date
             ) {
-               List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> dtoList = spaceApplyService.getSpaceAppliesByPSpaceAndDate(spaceId, date);
+               List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> dtoList = spaceApplyService.getSpaceAppliesBySpaceAndDate(spaceId, date);
 
                 return ApiResponse.onSuccess(dtoList);
 
     }
+
 
     @Operation(summary = "대관 영수증 확인 API", description = "공연장이 대관 수락 후 영수증을 확인하는 API 관련 additionalService가 보여야 합.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
     })
     @GetMapping("spaces/spaceApply/{spaceApplyId}/receipt")
-    public ApiResponse<List<SpaceResponseDTO.SpaceAdditionalServiceDTO>> getSelectedAdditionalService(
+    public ApiResponse<SpaceApplyResponseDTO.ReceiptDTO> getReceiptBySpaceId(
             @PathVariable Long spaceApplyId) {
-        return ApiResponse.onSuccess(spaceApplyService.getSelectedAdditionalServices(spaceApplyId));
+        SpaceApplyResponseDTO.ReceiptDTO receiptDTO = spaceApplyService.getReceiptDTOBySpaceApplyId(spaceApplyId);
+        return ApiResponse.onSuccess(receiptDTO);
     }
+
+
 
     @Operation(summary = "공연장-공연자-공연자 프로필 확인 API", description = "공연장이 공연자의 프로필을 확인하는 API")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
     })
-    @GetMapping("spaces/spaceApply/info/{spaceId}")
+    @GetMapping("spaces/spaceApply/info/check/{spaceApplyId}")
     public ApiResponse<PerformerProfileRequestDTO.CreateProfileDTO> getProfileBySpaceApplyId(
             @PathVariable long spaceApplyId) {
         // ProfileService를 이용해 SpaceApplyId로 프로필 정보를 가져옴

@@ -16,7 +16,10 @@ import umc.ShowHoo.web.performerProfile.dto.PerformerProfileRequestDTO;
 import umc.ShowHoo.web.performerProfile.entity.PerformerProfile;
 import umc.ShowHoo.web.performerProfile.entity.ProfileImage;
 import umc.ShowHoo.web.performerProfile.repository.PerformerProfileRepository;
+import umc.ShowHoo.web.rentalFee.entity.RentalFee;
+import umc.ShowHoo.web.rentalFee.repository.RentalFeeRepository;
 import umc.ShowHoo.web.rentalFee.service.RentalFeeService;
+import umc.ShowHoo.web.selectedAdditionalService.dto.SelectedAdditionalDTO;
 import umc.ShowHoo.web.selectedAdditionalService.entity.SelectedAdditionalService;
 import umc.ShowHoo.web.selectedAdditionalService.repository.SelectedAdditionalServiceRepository;
 import umc.ShowHoo.web.shows.entity.Shows;
@@ -54,7 +57,7 @@ public class SpaceApplyService {
 
     private final PerformerProfileRepository performerProfileRepository;
     private final ShowsRepository showsRepository;
-    private final RentalFeeService rentalFeeService;
+
 
 
     public SpaceApply createSpaceApply(Long spaceId, Long performerId, SpaceApplyRequestDTO.RegisterDTO registerDTO) {
@@ -136,17 +139,21 @@ public class SpaceApplyService {
 
 
     @Transactional
-    public List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> getSpaceAppliesByPSpaceAndDate(Long spaceId, LocalDate date) {
+    public List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> getSpaceAppliesBySpaceAndDate(Long spaceId, LocalDate date) {
         List<SpaceApply> spaceApplyList = spaceApplyRepository.findBySpaceIdAndDate(spaceId, date);
+        System.out.println("SpaceApply List : " + spaceApplyList);
 
         if (spaceApplyList.isEmpty()) {
-            throw new SpaceApplyHandler(ErrorStatus.SPACE_APPLY_IS_EMPTY);
+            System.out.println("No spaceApply found");
+            return null;
         }
 
         List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> dtoList = new ArrayList<>();
 
         for (SpaceApply spaceApply : spaceApplyList) {
             List<Shows> showsList = showsRepository.findBySpaceApply(spaceApply);
+            System.out.println("Shows List for SpaceApply ID " + spaceApply.getId() + ": " + showsList);
+
 
             for (Shows show : showsList) {
                 SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO dto = SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO.builder()
@@ -165,6 +172,7 @@ public class SpaceApplyService {
                 dtoList.add(dto);
             }
         }
+        System.out.println("Final DTO List: " + dtoList);
 
         return dtoList;
     }
@@ -205,35 +213,29 @@ public class SpaceApplyService {
                 .build();
     }
 
-    //영수증 용 : 대관료 + 추가 서비스(이름과 가격) + 합계
-    @Transactional(readOnly = true)
-    public List<SpaceResponseDTO.SpaceAdditionalServiceDTO> getSelectedAdditionalServices(Long spaceApplyId) {
+    public SpaceApplyResponseDTO.ReceiptDTO getReceiptDTOBySpaceApplyId(Long spaceApplyId) {
+        //영수증 조회 method
         SpaceApply spaceApply = spaceApplyRepository.findById(spaceApplyId)
                 .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_APPLY_NOT_FOUND));
 
-        // 선택된 추가 서비스 정보 목록 생성
-        List<SpaceResponseDTO.SpaceAdditionalServiceDTO> selectedAdditionalServices = selectedAdditionalServiceRepository.findBySpaceApply(spaceApply).stream()
-                .map(service -> new SpaceResponseDTO.SpaceAdditionalServiceDTO(
-                        service.getSpaceAdditionalService().getId(),
-                        service.getSpaceAdditionalService().getTitle(),
-                        service.getSpaceAdditionalService().getPrice()
-                ))
+        List<SelectedAdditionalService> selectedServices = selectedAdditionalServiceRepository.findBySpaceApply(spaceApply);
+
+        List<SelectedAdditionalDTO> selectedAdditionalDTOList = selectedServices.stream()
+                .map(spaceApplyConverter::ConverToSelectedAdditionalDTO)
                 .collect(Collectors.toList());
 
-        // 대관료 및 추가 서비스 가격 계산
-        SpaceResponseDTO.SpacePriceResponseDTO spacePriceResponse = rentalFeeService.getSpaceDate(
-                spaceApply.getSpace().getId(), spaceApply.getDate(),
-                selectedAdditionalServices.stream().map(SpaceResponseDTO.SpaceAdditionalServiceDTO::getTitle).collect(Collectors.toList())
-        );
+        return SpaceApplyResponseDTO.ReceiptDTO.builder()
+                .date(spaceApply.getDate())
+                .rentalFee(spaceApply.getRentalFee())
+                .rentalSum(spaceApply.getRentalSum())
+                .selected(selectedAdditionalDTOList)
+                .build();
 
-        // 추가 서비스 리스트에 대관료와 총 가격을 추가
-        selectedAdditionalServices.add(new SpaceResponseDTO.SpaceAdditionalServiceDTO(
-                null, "Base Rental Fee", String.valueOf(spacePriceResponse.getBasePrice())
-        ));
-        selectedAdditionalServices.add(new SpaceResponseDTO.SpaceAdditionalServiceDTO(
-                null, "Total Price", String.valueOf(spacePriceResponse.getTotalPrice())
-        ));
 
-        return selectedAdditionalServices;
+
     }
+
+
+
+
 }
