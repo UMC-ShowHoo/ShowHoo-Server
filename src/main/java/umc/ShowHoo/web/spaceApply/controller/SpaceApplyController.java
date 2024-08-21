@@ -11,6 +11,7 @@ import umc.ShowHoo.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import umc.ShowHoo.web.performerProfile.dto.PerformerProfileRequestDTO;
 import umc.ShowHoo.web.performerProfile.service.PerformerProfileService;
+import umc.ShowHoo.web.rentalFee.service.RentalFeeService;
 import umc.ShowHoo.web.selectedAdditionalService.entity.SelectedAdditionalService;
 import umc.ShowHoo.web.space.dto.SpaceResponseDTO;
 import umc.ShowHoo.web.space.entity.Space;
@@ -22,11 +23,13 @@ import umc.ShowHoo.web.spaceApply.service.SpaceApplyService;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 public class SpaceApplyController {
     private final SpaceApplyService spaceApplyService;
+    private final RentalFeeService rentalFeeService;
 
     @Operation(summary = "대관 신청 API", description = "공연자 유저가 대관 신청을 클릭했을 때 대관 신청 내역을 저장하는 API입니다. 이때 rentalFee는 날짜에 따른 가격, rentalSum은 날짜가격 + 추가서비스 가격입니다. selectedAdditionalServices는 대관신청하면서 선택한 추가 서비스의 id값 넘겨주시면 돼요")
     @ApiResponses({
@@ -86,12 +89,12 @@ public class SpaceApplyController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
     })
-    @GetMapping("spaces/{spaceId}/spaceApply/info/{date}")
+    @GetMapping("spaces/{spaceId}/spaceApply/info/dates")
 
     public ApiResponse<List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO>> getSpaceApplyByDate(
-            @PathVariable Long spaceId, @PathVariable LocalDate date
+            @PathVariable Long spaceId
             ) {
-               List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> dtoList = spaceApplyService.getSpaceAppliesByPSpaceAndDate(spaceId, date);
+               List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> dtoList = spaceApplyService.getSpaceAppliesBySpaceAndDate(spaceId);
 
                 return ApiResponse.onSuccess(dtoList);
 
@@ -101,10 +104,14 @@ public class SpaceApplyController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "ok, 성공"),
     })
-    @GetMapping("spaces/spaceApply/{spaceApplyId}/receipt")
-    public ApiResponse<List<SpaceResponseDTO.SpaceAdditionalServiceDTO>> getSelectedAdditionalService(
-            @PathVariable Long spaceApplyId) {
-        return ApiResponse.onSuccess(spaceApplyService.getSelectedAdditionalServices(spaceApplyId));
+    @GetMapping("spaces/spaceApply/{spaceId}/{spaceApplyId}/receipt")
+    public ApiResponse<SpaceResponseDTO.SpacePriceResponseDTO> receiptBySpaceApply(
+            @PathVariable Long spaceId, @PathVariable Long spaceApplyId, @RequestParam LocalDate date) {
+        List<String> selectedAdditionalServices = spaceApplyService.getAllSelectedServicesBySpaceApply(spaceApplyId);
+
+        SpaceResponseDTO.SpacePriceResponseDTO spacePriceResponseDTOS = rentalFeeService.getSpaceDate(spaceId, date, selectedAdditionalServices);
+        return ApiResponse.onSuccess(spacePriceResponseDTOS);
+
     }
 
     @Operation(summary = "공연장-공연자-공연자 프로필 확인 API", description = "공연장이 공연자의 프로필을 확인하는 API")

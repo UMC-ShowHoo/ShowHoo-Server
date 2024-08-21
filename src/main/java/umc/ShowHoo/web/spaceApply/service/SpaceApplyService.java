@@ -139,11 +139,11 @@ public class SpaceApplyService {
 
 
     @Transactional
-    public List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> getSpaceAppliesByPSpaceAndDate(Long spaceId, LocalDate date) {
-        List<SpaceApply> spaceApplyList = spaceApplyRepository.findBySpaceIdAndDate(spaceId, date);
+    public List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> getSpaceAppliesBySpaceAndDate(Long spaceId) {
+        List<SpaceApply> spaceApplyList = spaceApplyRepository.findBySpaceId(spaceId);
 
         if (spaceApplyList.isEmpty()) {
-            throw new EntityNotFoundException("No SpaceApply records found for the given spaceId and date");
+            return null;
         }
 
         List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> dtoList = new ArrayList<>();
@@ -176,11 +176,16 @@ public class SpaceApplyService {
     만일을 대비한 코드
      */
 
-    public List<SelectedAdditionalService> getAllSelectedServicesBySpaceApply(Long spaceApplyId) {
+    public List<String> getAllSelectedServicesBySpaceApply(Long spaceApplyId) {
         SpaceApply spaceApply = spaceApplyRepository.findById(spaceApplyId)
                 .orElseThrow(() -> new EntityNotFoundException("SpaceApply not exist"));
 
-        return selectedAdditionalServiceRepository.findBySpaceApply(spaceApply);
+        List<SelectedAdditionalService> selectedAdditionalServices = selectedAdditionalServiceRepository.findBySpaceApply(spaceApply);
+
+        // 각 SelectedAdditionalService에서 필요한 String 값을 추출하여 List<String>으로 변환
+        return selectedAdditionalServices.stream()
+                .map(service -> service.getSpaceAdditionalService().getTitle()) // 여기서 getTitle()을 사용하는 것은 서비스 이름을 추출한다고 가정한 것입니다.
+                .collect(Collectors.toList());
 
     }
 
@@ -208,37 +213,7 @@ public class SpaceApplyService {
                 .build();
     }
 
-    //영수증 용 : 대관료 + 추가 서비스(이름과 가격) + 합계
-    @Transactional(readOnly = true)
-    public List<SpaceResponseDTO.SpaceAdditionalServiceDTO> getSelectedAdditionalServices(Long spaceApplyId) {
-        SpaceApply spaceApply = spaceApplyRepository.findById(spaceApplyId)
-                .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_APPLY_NOT_FOUND));
 
-        // 선택된 추가 서비스 정보 목록 생성
-        List<SpaceResponseDTO.SpaceAdditionalServiceDTO> selectedAdditionalServices = selectedAdditionalServiceRepository.findBySpaceApply(spaceApply).stream()
-                .map(service -> new SpaceResponseDTO.SpaceAdditionalServiceDTO(
-                        service.getSpaceAdditionalService().getId(),
-                        service.getSpaceAdditionalService().getTitle(),
-                        service.getSpaceAdditionalService().getPrice()
-                ))
-                .collect(Collectors.toList());
-
-        // 대관료 및 추가 서비스 가격 계산
-        SpaceResponseDTO.SpacePriceResponseDTO spacePriceResponse = rentalFeeService.getSpaceDate(
-                spaceApply.getSpace().getId(), spaceApply.getDate(),
-                selectedAdditionalServices.stream().map(SpaceResponseDTO.SpaceAdditionalServiceDTO::getTitle).collect(Collectors.toList())
-        );
-
-        // 추가 서비스 리스트에 대관료와 총 가격을 추가
-        selectedAdditionalServices.add(new SpaceResponseDTO.SpaceAdditionalServiceDTO(
-                null, "Base Rental Fee", String.valueOf(spacePriceResponse.getBasePrice())
-        ));
-        selectedAdditionalServices.add(new SpaceResponseDTO.SpaceAdditionalServiceDTO(
-                null, "Total Price", String.valueOf(spacePriceResponse.getTotalPrice())
-        ));
-
-        return selectedAdditionalServices;
-    }
 
 }
 
