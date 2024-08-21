@@ -139,8 +139,8 @@ public class SpaceApplyService {
 
 
     @Transactional
-    public List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> getSpaceAppliesBySpaceAndDate(Long spaceId, LocalDate date) {
-        List<SpaceApply> spaceApplyList = spaceApplyRepository.findBySpaceIdAndDate(spaceId, date);
+    public List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> getSpaceAppliesBySpaceAndDate(Long spaceId) {
+        List<SpaceApply> spaceApplyList = spaceApplyRepository.findBySpaceId(spaceId);
         System.out.println("SpaceApply List : " + spaceApplyList);
 
         if (spaceApplyList.isEmpty()) {
@@ -176,6 +176,7 @@ public class SpaceApplyService {
 
         return dtoList;
     }
+
 
     /*
     만일을 대비한 코드

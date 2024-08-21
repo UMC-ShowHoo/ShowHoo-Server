@@ -14,6 +14,7 @@ import java.util.Optional;
 @Repository
 public interface SpaceApplyRepository extends JpaRepository<SpaceApply, Long> {
     List<SpaceApply> findByPerformerId(Long performerId);
+    List<SpaceApply> findBySpaceId(Long spaceId);
 
 
     Optional<SpaceApply> findBySpaceAndPerformer(Space space, Performer performer);
