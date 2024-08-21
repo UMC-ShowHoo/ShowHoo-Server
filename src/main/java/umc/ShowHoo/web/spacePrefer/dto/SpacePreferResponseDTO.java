@@ -16,4 +16,14 @@ public class SpacePreferResponseDTO {
         Long spacePreferId;
         LocalDateTime createdAt;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CheckResultDTO{
+        Boolean status;
+        Long spacePreferId;
+    }
 }
+

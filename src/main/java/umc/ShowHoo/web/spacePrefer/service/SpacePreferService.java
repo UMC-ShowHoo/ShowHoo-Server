@@ -17,6 +17,9 @@ import umc.ShowHoo.web.spacePrefer.entity.SpacePrefer;
 import umc.ShowHoo.web.spacePrefer.handler.SpacePreferHandler;
 import umc.ShowHoo.web.spacePrefer.repository.SpacePreferRepository;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class SpacePreferService {
@@ -45,11 +48,16 @@ public class SpacePreferService {
     }
 
     @Transactional
-    public Boolean checkSpacePreference(Long spaceId, Long performerId){
+    public SpacePreferResponseDTO.CheckResultDTO checkSpacePreference(Long spaceId, Long performerId){
         Space space = spaceRepository.findById(spaceId)
                 .orElseThrow(() -> new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND));
         Performer performer = performerRepository.findById(performerId)
                 .orElseThrow(() -> new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
-        return spacePreferRepository.existsBySpaceAndPerformer(space, performer);
+        Optional<SpacePrefer> spacePreferOptional = Optional.ofNullable(spacePreferRepository.findBySpaceAndPerformer(space, performer));
+
+        return SpacePreferResponseDTO.CheckResultDTO.builder()
+                .spacePreferId(spacePreferOptional.map(SpacePrefer::getId).orElse(null))
+                .status(spacePreferOptional.isPresent())
+                .build();
     }
 }

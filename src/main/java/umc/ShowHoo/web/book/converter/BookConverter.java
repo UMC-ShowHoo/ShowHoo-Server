@@ -1,6 +1,7 @@
 package umc.ShowHoo.web.book.converter;
 
 import org.springframework.data.domain.Page;
+import umc.ShowHoo.web.book.entity.BookDetail;
 import umc.ShowHoo.web.book.entity.BookStatus;
 import umc.ShowHoo.web.shows.entity.Shows;
 import umc.ShowHoo.web.audience.entity.Audience;
@@ -151,6 +152,7 @@ public class BookConverter {
                     .phoneNum(book.getPhoneNum())
                     .ticketNum(book.getTicketNum())
                     .payment(book.getPayment())
+                    .detail(book.getDetail())
                     .dateTime(book.getCreatedAt())
                     .build();
 
@@ -162,8 +164,10 @@ public class BookConverter {
                 .name(cancelBook.getName())
                 .bankName(cancelBook.getBankName())
                 .account(cancelBook.getAccount())
+                .bookDetail(BookDetail.CANCELLING)
                 .dateTime(cancelBook.getCreatedAt())
                 .build();
+
     }
 
 

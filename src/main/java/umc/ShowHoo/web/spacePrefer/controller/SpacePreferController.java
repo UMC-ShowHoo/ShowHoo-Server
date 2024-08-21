@@ -40,8 +40,8 @@ public class SpacePreferController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
-    public ApiResponse<Boolean> checkSpacePreference(@PathVariable Long spaceId, @PathVariable Long performerId){
-        Boolean check = spacePreferService.checkSpacePreference(spaceId, performerId);
+    public ApiResponse<SpacePreferResponseDTO.CheckResultDTO> checkSpacePreference(@PathVariable Long spaceId, @PathVariable Long performerId){
+        SpacePreferResponseDTO.CheckResultDTO check = spacePreferService.checkSpacePreference(spaceId, performerId);
         return ApiResponse.onSuccess(check);
     }
 }
