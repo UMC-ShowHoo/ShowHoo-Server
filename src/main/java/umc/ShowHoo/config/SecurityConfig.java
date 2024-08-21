@@ -45,7 +45,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/login", "/login/oauth2/code/kakao", "/test", "/h2-console/**", "/kakao", "/swagger-ui/index.html", "/swagger-ui/**", "/v3/api-docs/**","/swagger-resources/**", "/v3/api-docs", "/spaces", "/kakao/logout/withAccount", "/logout", "/aud", "/aud/search").permitAll()  // /login URL은 인증 없이 접근 가능
+                        .requestMatchers("/login", "/login/oauth2/code/kakao", "/test", "/h2-console/**", "/kakao", "/swagger-ui/index.html", "/swagger-ui/**", "/v3/api-docs/**","/swagger-resources/**", "/v3/api-docs", "/spaces", "/kakao/logout/withAccount", "/logout", "/aud", "/aud/search", "/spaces", "/spaces/**/price", "/spaces/**/pay", "/spaces/**/notice", "/spaces/**/header", "/spaces/**/file", "/spaces/**/description", "/spaces/search", "/review/space/**").permitAll()  // /login URL은 인증 없이 접근 가능
                         .anyRequest().authenticated()           // 나머지 URL은 인증 필요
                 )
                 .addFilterBefore(new JwtVerifyFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
