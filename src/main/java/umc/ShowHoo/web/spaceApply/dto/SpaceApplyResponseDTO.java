@@ -2,6 +2,8 @@ package umc.ShowHoo.web.spaceApply.dto;
 
 import lombok.*;
 import umc.ShowHoo.web.performerProfile.entity.PerformerProfile;
+import umc.ShowHoo.web.selectedAdditionalService.dto.SelectedAdditionalDTO;
+import umc.ShowHoo.web.selectedAdditionalService.entity.SelectedAdditionalService;
 import umc.ShowHoo.web.spacePhoto.entity.SpacePhoto;
 
 
@@ -57,12 +59,13 @@ public class SpaceApplyResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class SelectedAdditionalServiceDTO{
-        private Long id;
-        private Long serviceId;
-        private String title;
-        private String price;
+    public static class ReceiptDTO{
+        private LocalDate date;
+        private int rentalFee;
+        private int rentalSum;
+        private List<SelectedAdditionalDTO> selected;
     }
+
 
 
 
