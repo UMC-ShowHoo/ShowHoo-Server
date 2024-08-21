@@ -55,11 +55,11 @@ public class SpaceApplyService {
     private final RentalFeeService rentalFeeService;
 
 
-    public SpaceApply createSpaceApply(Long spaceUserId, Long performerId, SpaceApplyRequestDTO.RegisterDTO registerDTO) {
+    public SpaceApply createSpaceApply(Long spaceId, Long performerId, SpaceApplyRequestDTO.RegisterDTO registerDTO) {
         Performer performer = performerRepository.findById(performerId)
                 .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_APPLY_NOT_FOUND));
 
-        Space space = spaceRepository.findById(spaceUserId)
+        Space space = spaceRepository.findById(spaceId)
                 .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_NOT_FOUND));
 
         SpaceApply spaceApply = spaceApplyConverter.toCreateSpaceApply(registerDTO, performer, space);
@@ -74,7 +74,7 @@ public class SpaceApplyService {
             selectedAdditionalServiceRepository.save(additionalService);
         }
 
-        notificationService.createSpaceApplyNotification(spaceUserId, registerDTO); // 알림 생성
+        notificationService.createSpaceApplyNotification(spaceId, registerDTO); // 알림 생성
 
         return spaceApply;
     }
