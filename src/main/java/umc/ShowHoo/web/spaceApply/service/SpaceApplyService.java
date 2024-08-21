@@ -105,6 +105,7 @@ public class SpaceApplyService {
         Space space = spaceRepository.findById(spaceId)
                 .orElseThrow(() -> new SpaceHandler(ErrorStatus.SPACE_NOT_FOUND));
 
+
         SpaceApply spaceApply = spaceApplyRepository.findById(spaceApplyId)
                 .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_APPLY_NOT_FOUND));
         spaceApply.setStatus(1);
@@ -136,8 +137,8 @@ public class SpaceApplyService {
 
 
     @Transactional
-    public List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> getSpaceAppliesByPSpaceAndDate(Long spaceId, LocalDate date) {
-        List<SpaceApply> spaceApplyList = spaceApplyRepository.findBySpaceIdAndDate(spaceId, date);
+    public List<SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO> getSpaceAppliesByPSpaceAndDate(Long spaceId) {
+        List<SpaceApply> spaceApplyList = spaceApplyRepository.findBySpaceId(spaceId);
 
         if (spaceApplyList.isEmpty()) {
             throw new SpaceApplyHandler(ErrorStatus.SPACE_APPLY_IS_EMPTY);
