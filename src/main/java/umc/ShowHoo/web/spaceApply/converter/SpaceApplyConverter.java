@@ -2,6 +2,7 @@ package umc.ShowHoo.web.spaceApply.converter;
 
 import org.springframework.stereotype.Component;
 import umc.ShowHoo.web.performer.entity.Performer;
+import umc.ShowHoo.web.selectedAdditionalService.dto.SelectedAdditionalDTO;
 import umc.ShowHoo.web.selectedAdditionalService.entity.SelectedAdditionalService;
 import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.spaceApply.dto.SpaceApplyRequestDTO;
@@ -44,6 +45,13 @@ public class SpaceApplyConverter {
                 spaceApply.getSpace().getLocation(),
                 spacePhotoUrl
         );
+    }
+
+    public SelectedAdditionalDTO ConverToSelectedAdditionalDTO(SelectedAdditionalService selected) {
+        SelectedAdditionalDTO dto = new SelectedAdditionalDTO();
+        dto.setTitle(selected.getSpaceAdditionalService().getTitle());
+        dto.setPrice(selected.getSpaceAdditionalService().getPrice());
+        return dto;
     }
 
 
