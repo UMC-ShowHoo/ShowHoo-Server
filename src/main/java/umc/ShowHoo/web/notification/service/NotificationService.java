@@ -120,7 +120,7 @@ public class NotificationService {
     }
 
     @Transactional
-    public void createSpaceCancleNotification(SpaceApply spaceApply){
+    public void createSpaceCancelNotification(SpaceApply spaceApply){
         // spaceUser의 memberId 가져오기
         Long memberId = Optional.ofNullable(spaceApply.getPerformer().getMember().getId())
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
@@ -176,7 +176,7 @@ public class NotificationService {
 
     // 공연자 알림 - 공연 취소
     @Transactional
-    public void createBookCancleNotification(Book book){
+    public void createBookCancelNotification(Book book){
         // spaceUser의 memberId 가져오기
         Long memberId = Optional.ofNullable(book.getShows().getPerformerProfile().getPerformer().getMember().getId())
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));

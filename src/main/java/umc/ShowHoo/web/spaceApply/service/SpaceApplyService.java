@@ -90,7 +90,7 @@ public class SpaceApplyService {
         SpaceApply spaceApply = spaceApplyRepository.findById(spaceApplyId)
                 .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_APPLY_NOT_FOUND));
         if(status == 1){
-            notificationService.createSpaceCancleNotification(spaceApply); // 알림 생성
+            notificationService.createSpaceCancelNotification(spaceApply); // 알림 생성
         }
         spaceApplyRepository.delete(spaceApply);
     }
