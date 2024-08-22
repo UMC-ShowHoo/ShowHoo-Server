@@ -52,6 +52,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     //SPACE_APPLY
     SPACE_APPLY_NOT_FOUND(HttpStatus.NOT_FOUND, "SPACE_APPLY001", "SpaceApply not found"),
+    SPACE_APPLY_IS_EMPTY(HttpStatus.NOT_FOUND, "SPACE_APPLY002", "No SpaceApply for spaceId and date"),
 
     //SPACE_REVIEW
     SPACE_REVIEW_PERMISSION_NOT_FOUND(HttpStatus.NOT_FOUND, "SPACE_REVIEW001", "SpaceReviewPermission not found"),
