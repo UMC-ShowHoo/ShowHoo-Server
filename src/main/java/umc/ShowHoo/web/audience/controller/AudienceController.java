@@ -5,13 +5,14 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import umc.ShowHoo.apiPayload.ApiResponse;
 import umc.ShowHoo.web.shows.entity.Shows;
 import umc.ShowHoo.web.audience.converter.AudienceConverter;
 import umc.ShowHoo.web.audience.dto.AudienceResponseDTO;
 import umc.ShowHoo.web.audience.service.AudienceQueryService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/aud")
@@ -26,8 +27,8 @@ public class AudienceController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
-    public ApiResponse<AudienceResponseDTO.getShowsListDTO> getShowsList(@RequestParam(name = "page") Integer page){
-        Page<Shows> showsList = audienceQueryService.getShowsList(page);
+    public ApiResponse<AudienceResponseDTO.getShowsListDTO> getShowsList(){
+        List<Shows> showsList = audienceQueryService.getShowsList();
         return ApiResponse.onSuccess(AudienceConverter.toGetShowsListDTO(showsList));
     }
 
@@ -36,8 +37,8 @@ public class AudienceController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
-    public ApiResponse<AudienceResponseDTO.getShowsListDTO> getLikedShowsList(@PathVariable(name = "audienceId")Long id, @RequestParam(name = "page") Integer page){
-        return ApiResponse.onSuccess(audienceQueryService.getLikedShowsList(id, page));
+    public ApiResponse<AudienceResponseDTO.getShowsListDTO> getLikedShowsList(@PathVariable(name = "audienceId")Long id){
+        return ApiResponse.onSuccess(audienceQueryService.getLikedShowsList(id));
     }
 
     @GetMapping("/{showsId}/detail")
@@ -58,7 +59,7 @@ public class AudienceController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
     public ApiResponse<AudienceResponseDTO.getShowsListDTO> searchShows(@RequestParam(name = "page") Integer page, @PathVariable(name = "request") String request){
-        Page<Shows> searchedList = audienceQueryService.getSearchedShowsList(page, request);
+        List<Shows> searchedList = audienceQueryService.getSearchedShowsList(request);
         return ApiResponse.onSuccess(AudienceConverter.toGetShowsListDTO(searchedList));
     }
 
@@ -68,7 +69,7 @@ public class AudienceController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
     public ApiResponse<AudienceResponseDTO.getShowsListDTO> searchLikedShows(@PathVariable(name = "audienceId") Long id, @RequestParam(name = "page") Integer page, @PathVariable(name = "request") String request){
-        return ApiResponse.onSuccess(audienceQueryService.getSearchedLikedShowsList(id, page, request));
+        return ApiResponse.onSuccess(audienceQueryService.getSearchedLikedShowsList(id, request));
     }
 
 }
