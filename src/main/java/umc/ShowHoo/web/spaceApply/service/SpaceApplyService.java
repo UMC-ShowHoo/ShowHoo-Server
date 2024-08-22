@@ -1,6 +1,5 @@
 package umc.ShowHoo.web.spaceApply.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,15 +15,11 @@ import umc.ShowHoo.web.performerProfile.dto.PerformerProfileRequestDTO;
 import umc.ShowHoo.web.performerProfile.entity.PerformerProfile;
 import umc.ShowHoo.web.performerProfile.entity.ProfileImage;
 import umc.ShowHoo.web.performerProfile.repository.PerformerProfileRepository;
-import umc.ShowHoo.web.rentalFee.entity.RentalFee;
-import umc.ShowHoo.web.rentalFee.repository.RentalFeeRepository;
-import umc.ShowHoo.web.rentalFee.service.RentalFeeService;
 import umc.ShowHoo.web.selectedAdditionalService.dto.SelectedAdditionalDTO;
 import umc.ShowHoo.web.selectedAdditionalService.entity.SelectedAdditionalService;
 import umc.ShowHoo.web.selectedAdditionalService.repository.SelectedAdditionalServiceRepository;
 import umc.ShowHoo.web.shows.entity.Shows;
 import umc.ShowHoo.web.shows.repository.ShowsRepository;
-import umc.ShowHoo.web.space.dto.SpaceResponseDTO;
 import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.space.exception.handler.SpaceHandler;
 import umc.ShowHoo.web.space.repository.SpaceRepository;
@@ -35,11 +30,9 @@ import umc.ShowHoo.web.spaceApply.entity.SpaceApply;
 import umc.ShowHoo.web.spaceApply.exception.handler.SpaceApplyHandler;
 import umc.ShowHoo.web.spaceApply.repository.SpaceApplyRepository;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -96,11 +89,10 @@ public class SpaceApplyService {
     public void deleteSpaceApply(Long spaceApplyId, Long status) {
         SpaceApply spaceApply = spaceApplyRepository.findById(spaceApplyId)
                 .orElseThrow(() -> new SpaceApplyHandler(ErrorStatus.SPACE_APPLY_NOT_FOUND));
-        spaceApplyRepository.delete(spaceApply);
-
         if(status == 1){
             notificationService.createSpaceCancleNotification(spaceApply); // 알림 생성
         }
+        spaceApplyRepository.delete(spaceApply);
     }
 
     @Transactional
