@@ -72,7 +72,7 @@ public class SpaceApplyService {
             selectedAdditionalServiceRepository.save(additionalService);
         }
 
-//        notificationService.createSpaceApplyNotification(spaceId, registerDTO); // 알림 생성
+        notificationService.createSpaceApplyNotification(space, registerDTO); // 알림 생성
 
         return spaceApply;
     }

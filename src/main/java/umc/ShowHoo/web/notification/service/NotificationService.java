@@ -88,9 +88,9 @@ public class NotificationService {
 
     // 공연장 알림 - 공연장 대관 요청
     @Transactional
-    public void createSpaceApplyNotification(Long spaceUserId, SpaceApplyRequestDTO.RegisterDTO registerDTO){
+    public void createSpaceApplyNotification(Space space, SpaceApplyRequestDTO.RegisterDTO registerDTO){
         // spaceUser의 memberId 가져오기
-        Long memberId = spaceUserRepository.findMemberIdById(spaceUserId)
+        Long memberId = spaceUserRepository.findMemberIdById(space.getSpaceUser().getId())
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
         // LocalDate type -> string
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
