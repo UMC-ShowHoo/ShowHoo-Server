@@ -35,7 +35,7 @@ public class AudienceQueryServiceImpl implements AudienceQueryService{
 
     @Override
     public Page<Shows> getShowsList(Integer page){
-        return showsRepository.findAll(PageRequest.of(page, 8));
+        return showsRepository.findShowsByIsIssuanceTrue(PageRequest.of(page, 8));
     }
 
     @Override
@@ -43,7 +43,7 @@ public class AudienceQueryServiceImpl implements AudienceQueryService{
         Audience audience = audienceRepository.findById(id)
                 .orElseThrow(()->new AudienceHandler(ErrorStatus.AUDIENCE_NOT_FOUND));
 
-        Page<Shows> showsList = showsRepository.findAll(PageRequest.of(page, 8));
+        Page<Shows> showsList = showsRepository.findShowsByIsIssuanceTrue(PageRequest.of(page, 8));
         List<AudienceResponseDTO.getShowsDTO> DTOs = new ArrayList<>();
 
         for (Shows shows : showsList) {
@@ -56,7 +56,7 @@ public class AudienceQueryServiceImpl implements AudienceQueryService{
 
     @Override
     public Page<Shows> getSearchedShowsList(Integer page, String request){
-        return showsRepository.findByNameContaining(request, PageRequest.of(page, 8));
+        return showsRepository.findByNameContainingAndIsIssuanceTrue(request, PageRequest.of(page, 8));
     }
 
     @Override
@@ -64,7 +64,7 @@ public class AudienceQueryServiceImpl implements AudienceQueryService{
         Audience audience = audienceRepository.findById(id)
             .orElseThrow(()->new AudienceHandler(ErrorStatus.AUDIENCE_NOT_FOUND));
 
-        Page<Shows> showsList = showsRepository.findByNameContaining(request, PageRequest.of(page, 8));
+        Page<Shows> showsList = showsRepository.findByNameContainingAndIsIssuanceTrue(request, PageRequest.of(page, 8));
         List<AudienceResponseDTO.getShowsDTO> DTOs = new ArrayList<>();
 
         for (Shows shows : showsList) {
