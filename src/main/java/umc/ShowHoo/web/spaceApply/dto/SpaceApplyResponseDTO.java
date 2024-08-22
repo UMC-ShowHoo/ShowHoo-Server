@@ -4,6 +4,7 @@ import lombok.*;
 import umc.ShowHoo.web.performerProfile.entity.PerformerProfile;
 import umc.ShowHoo.web.selectedAdditionalService.dto.SelectedAdditionalDTO;
 import umc.ShowHoo.web.selectedAdditionalService.entity.SelectedAdditionalService;
+import umc.ShowHoo.web.shows.dto.ShowsResponseDTO;
 import umc.ShowHoo.web.spacePhoto.entity.SpacePhoto;
 
 
@@ -41,8 +42,7 @@ public class SpaceApplyResponseDTO {
         private Integer rentalSum;
         private String spaceName;
         private String spaceLocation;
-        private String title; //공연 제목
-        private String poster;  //공연 포스터
+        private List<ShowsResponseDTO.ShowTitleAndPosterDTO> shows;
     }
 
     @Builder

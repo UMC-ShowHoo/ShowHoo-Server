@@ -18,11 +18,14 @@ import umc.ShowHoo.web.performerProfile.repository.PerformerProfileRepository;
 import umc.ShowHoo.web.selectedAdditionalService.dto.SelectedAdditionalDTO;
 import umc.ShowHoo.web.selectedAdditionalService.entity.SelectedAdditionalService;
 import umc.ShowHoo.web.selectedAdditionalService.repository.SelectedAdditionalServiceRepository;
+import umc.ShowHoo.web.shows.dto.ShowsResponseDTO;
 import umc.ShowHoo.web.shows.entity.Shows;
 import umc.ShowHoo.web.shows.repository.ShowsRepository;
 import umc.ShowHoo.web.space.entity.Space;
 import umc.ShowHoo.web.space.exception.handler.SpaceHandler;
 import umc.ShowHoo.web.space.repository.SpaceRepository;
+import umc.ShowHoo.web.spaceAdditionalService.entity.SpaceAdditionalService;
+import umc.ShowHoo.web.spaceAdditionalService.repository.SpaceAdditionalServiceRepository;
 import umc.ShowHoo.web.spaceApply.converter.SpaceApplyConverter;
 import umc.ShowHoo.web.spaceApply.dto.SpaceApplyRequestDTO;
 import umc.ShowHoo.web.spaceApply.dto.SpaceApplyResponseDTO;
@@ -47,6 +50,7 @@ public class SpaceApplyService {
     private final SpaceApplyConverter spaceApplyConverter;
     private final NotificationService notificationService;
     private final HolidayRepository holidayRepository;
+    private final SpaceAdditionalServiceRepository spaceAdditionalServiceRepository;
 
     private final PerformerProfileRepository performerProfileRepository;
     private final ShowsRepository showsRepository;
@@ -65,8 +69,15 @@ public class SpaceApplyService {
         spaceApplyRepository.save(spaceApply);
 
         for (Long serviceId : registerDTO.getSelectedAdditionalServices()) {
+            SpaceAdditionalService spaceAdditionalService = spaceAdditionalServiceRepository.findById(serviceId)
+                    .orElseThrow(() -> new SpaceHandler(ErrorStatus._BAD_REQUEST));
+            System.out.println("spaceAdditionalService = " + spaceAdditionalService);
+
+
+
             SelectedAdditionalService additionalService = SelectedAdditionalService.builder()
                     .serviceId(serviceId)
+                    .spaceAdditionalService(spaceAdditionalService)
                     .spaceApply(spaceApply)
                     .build();
             selectedAdditionalServiceRepository.save(additionalService);
@@ -152,24 +163,31 @@ public class SpaceApplyService {
             List<Shows> showsList = showsRepository.findBySpaceApply(spaceApply);
             System.out.println("Shows List for SpaceApply ID " + spaceApply.getId() + ": " + showsList);
 
-
+            List<ShowsResponseDTO.ShowTitleAndPosterDTO> showDTOList = new ArrayList<>();
             for (Shows show : showsList) {
-                SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO dto = SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO.builder()
-                        .id(spaceApply.getId())
-                        .date(spaceApply.getDate())
-                        .status(spaceApply.getStatus())
-                        .audienceMin(spaceApply.getAudienceMin())
-                        .audienceMax(spaceApply.getAudienceMax())
-                        .rentalSum(spaceApply.getRentalSum())
-                        .spaceName(spaceApply.getSpace().getName())
-                        .spaceLocation(spaceApply.getSpace().getLocation())
+                ShowsResponseDTO.ShowTitleAndPosterDTO showDTO = ShowsResponseDTO.ShowTitleAndPosterDTO.builder()
                         .title(show.getName())
                         .poster(show.getPoster())
                         .build();
-
-                dtoList.add(dto);
+                showDTOList.add(showDTO);
             }
-        }
+
+            // SpaceApplyWithShowsDTO 생성
+            SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO dto = SpaceApplyResponseDTO.SpaceApplyWitProfilesDTO.builder()
+                    .id(spaceApply.getId())
+                    .date(spaceApply.getDate())
+                    .status(spaceApply.getStatus())
+                    .audienceMin(spaceApply.getAudienceMin())
+                    .audienceMax(spaceApply.getAudienceMax())
+                    .rentalSum(spaceApply.getRentalSum())
+                    .spaceName(spaceApply.getSpace().getName())
+                    .spaceLocation(spaceApply.getSpace().getLocation())
+                    .shows(showDTOList) // Shows 목록 추가
+                    .build();
+
+            dtoList.add(dto);
+            }
+
         System.out.println("Final DTO List: " + dtoList);
 
         return dtoList;
