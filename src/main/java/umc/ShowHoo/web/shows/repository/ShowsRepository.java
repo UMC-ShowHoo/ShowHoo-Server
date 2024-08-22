@@ -12,9 +12,9 @@ import java.util.List;
 
 @Repository
 public interface ShowsRepository extends JpaRepository<Shows, Long> {
-    Page<Shows> findByNameContainingAndIsIssuanceTrue(String request, PageRequest pageRequest);
+    List<Shows> findByNameContainingAndIsIssuanceTrue(String request);
 
     List<Shows> findBySpaceApply(SpaceApply spaceApply);
 
-    Page<Shows> findShowsByIsIssuanceTrue(PageRequest pageRequest);
+    List<Shows> findShowsByIsIssuanceTrue();
 }
