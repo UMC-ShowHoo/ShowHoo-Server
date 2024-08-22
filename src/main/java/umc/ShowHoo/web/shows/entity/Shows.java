@@ -51,7 +51,7 @@ public class Shows {
     @ManyToOne @JoinColumn(name = "performerProfile_id")
     private PerformerProfile performerProfile;
 
-    @OneToOne(mappedBy = "shows")
+    @OneToOne(mappedBy = "shows",cascade = CascadeType.ALL)
     private RentalFile rentalFile;
 
     @OneToMany(mappedBy = "shows", cascade = CascadeType.ALL)
@@ -63,8 +63,7 @@ public class Shows {
     @OneToOne(mappedBy = "shows", cascade = CascadeType.ALL)
     private ShowsDescription showsDescription;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "spaceApply_id")
+    @OneToOne @JoinColumn(name = "spaceApply_id")
     private SpaceApply spaceApply;
 
 }
