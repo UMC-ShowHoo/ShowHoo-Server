@@ -58,7 +58,7 @@ public class AudienceController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
-    public ApiResponse<AudienceResponseDTO.getShowsListDTO> searchShows(@RequestParam(name = "page") Integer page, @PathVariable(name = "request") String request){
+    public ApiResponse<AudienceResponseDTO.getShowsListDTO> searchShows(@PathVariable(name = "request") String request){
         List<Shows> searchedList = audienceQueryService.getSearchedShowsList(request);
         return ApiResponse.onSuccess(AudienceConverter.toGetShowsListDTO(searchedList));
     }
@@ -68,7 +68,7 @@ public class AudienceController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
-    public ApiResponse<AudienceResponseDTO.getShowsListDTO> searchLikedShows(@PathVariable(name = "audienceId") Long id, @RequestParam(name = "page") Integer page, @PathVariable(name = "request") String request){
+    public ApiResponse<AudienceResponseDTO.getShowsListDTO> searchLikedShows(@PathVariable(name = "audienceId") Long id, @PathVariable(name = "request") String request){
         return ApiResponse.onSuccess(audienceQueryService.getSearchedLikedShowsList(id, request));
     }
 
