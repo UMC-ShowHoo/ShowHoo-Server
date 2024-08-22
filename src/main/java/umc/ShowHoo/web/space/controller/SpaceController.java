@@ -147,8 +147,8 @@ public class SpaceController {
 
     @GetMapping("/spaces")
     @Operation(summary = "공연장 전체 조회 API", description = "공연장 찜 순과 평점 순으로 각각 8개씩 조회하는 API입니다.")
-    public ApiResponse<SpaceResponseDTO.SpaceListDTO> getTopSpacesWithPreference(@RequestParam(required = false) Long performerId) {
-        SpaceResponseDTO.SpaceListDTO spaces = spaceService.getTopSpacesWithPreference(performerId);
+    public ApiResponse<SpaceResponseDTO.SpaceListDTO> getTopSpaces() {
+        SpaceResponseDTO.SpaceListDTO spaces = spaceService.getTopSpaces();
         return ApiResponse.onSuccess(spaces);
     }
 
@@ -164,17 +164,25 @@ public class SpaceController {
                                                                            @RequestParam(required = false) Integer minCapacity,
                                                                            @RequestParam(required = false) Integer maxCapacity,
                                                                            @RequestParam(defaultValue = "0") int page,
-                                                                           @RequestParam(defaultValue = "12") int size,
-                                                                           @RequestParam(required = false) Long performerId) {
+                                                                           @RequestParam(defaultValue = "12") int size) {
         SpaceRequestDTO.SpaceSearchRequestDTO searchRequest = new SpaceRequestDTO.SpaceSearchRequestDTO(
                 name, city, district, date, type, minPrice, maxPrice, minCapacity, maxCapacity, page, size);
 
-        SpaceResponseDTO.SpaceFilteredListDTO spaces = spaceService.searchSpaces(searchRequest, performerId);
+        SpaceResponseDTO.SpaceFilteredListDTO spaces = spaceService.searchSpaces(searchRequest);
         return ApiResponse.onSuccess(spaces);
     }
 
     @GetMapping("/spaces/{performerId}/prefer")
     @Operation(summary = "찜한 공연장 조회 API", description = "performer가 찜한 공연장을 조회하는 API입니다.")
+    @Parameter(
+            in = ParameterIn.HEADER,
+            name = "Authorization", required = true,
+            schema = @Schema(type = "string"),
+            description = "Bearer [Access 토큰]"
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
+    })
     public ApiResponse<SpaceResponseDTO.SpaceFilteredListDTO> getPreferSpace(@PathVariable Long performerId) {
         SpaceResponseDTO.SpaceFilteredListDTO spaces = spaceService.getPreferSpace(performerId);
         return ApiResponse.onSuccess(spaces);

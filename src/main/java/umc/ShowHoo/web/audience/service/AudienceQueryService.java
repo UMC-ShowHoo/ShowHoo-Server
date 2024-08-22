@@ -1,18 +1,19 @@
 package umc.ShowHoo.web.audience.service;
 
-import org.springframework.data.domain.Page;
 import umc.ShowHoo.web.shows.entity.Shows;
 import umc.ShowHoo.web.audience.dto.AudienceResponseDTO;
 
+import java.util.List;
+
 public interface AudienceQueryService {
 
-    Page<Shows> getShowsList(Integer page);
+    List<Shows> getShowsList();
 
-    AudienceResponseDTO.getShowsListDTO getLikedShowsList(Long id, Integer page);
+    AudienceResponseDTO.getShowsListDTO getLikedShowsList(Long id);
 
-    Page<Shows> getSearchedShowsList(Integer page, String request);
+    List<Shows> getSearchedShowsList(String request);
 
-    AudienceResponseDTO.getShowsListDTO getSearchedLikedShowsList(Long id, Integer page, String request);
+    AudienceResponseDTO.getShowsListDTO getSearchedLikedShowsList(Long id, String request);
 
     Shows getShowsDetail(Long showsId);
 

@@ -88,9 +88,9 @@ public class NotificationService {
 
     // 공연장 알림 - 공연장 대관 요청
     @Transactional
-    public void createSpaceApplyNotification(Long spaceUserId, SpaceApplyRequestDTO.RegisterDTO registerDTO){
+    public void createSpaceApplyNotification(Space space, SpaceApplyRequestDTO.RegisterDTO registerDTO){
         // spaceUser의 memberId 가져오기
-        Long memberId = spaceUserRepository.findMemberIdById(spaceUserId)
+        Long memberId = spaceUserRepository.findMemberIdById(space.getSpaceUser().getId())
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
         // LocalDate type -> string
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -120,7 +120,7 @@ public class NotificationService {
     }
 
     @Transactional
-    public void createSpaceCancleNotification(SpaceApply spaceApply){
+    public void createSpaceCancelNotification(SpaceApply spaceApply){
         // spaceUser의 memberId 가져오기
         Long memberId = Optional.ofNullable(spaceApply.getPerformer().getMember().getId())
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
@@ -176,7 +176,7 @@ public class NotificationService {
 
     // 공연자 알림 - 공연 취소
     @Transactional
-    public void createBookCancleNotification(Book book){
+    public void createBookCancelNotification(Book book){
         // spaceUser의 memberId 가져오기
         Long memberId = Optional.ofNullable(book.getShows().getPerformerProfile().getPerformer().getMember().getId())
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));

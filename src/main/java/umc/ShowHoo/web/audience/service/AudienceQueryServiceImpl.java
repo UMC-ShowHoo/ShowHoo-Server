@@ -2,8 +2,6 @@ package umc.ShowHoo.web.audience.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import umc.ShowHoo.apiPayload.code.status.ErrorStatus;
 import umc.ShowHoo.web.audience.handler.AudienceHandler;
@@ -34,16 +32,16 @@ public class AudienceQueryServiceImpl implements AudienceQueryService{
     private final ShowsDscRepository showsDscRepository;
 
     @Override
-    public Page<Shows> getShowsList(Integer page){
-        return showsRepository.findAll(PageRequest.of(page, 8));
+    public List<Shows> getShowsList(){
+        return showsRepository.findShowsByIsIssuanceTrue();
     }
 
     @Override
-    public AudienceResponseDTO.getShowsListDTO getLikedShowsList(Long id, Integer page){
+    public AudienceResponseDTO.getShowsListDTO getLikedShowsList(Long id){
         Audience audience = audienceRepository.findById(id)
                 .orElseThrow(()->new AudienceHandler(ErrorStatus.AUDIENCE_NOT_FOUND));
 
-        Page<Shows> showsList = showsRepository.findAll(PageRequest.of(page, 8));
+        List<Shows> showsList = showsRepository.findShowsByIsIssuanceTrue();
         List<AudienceResponseDTO.getShowsDTO> DTOs = new ArrayList<>();
 
         for (Shows shows : showsList) {
@@ -55,16 +53,16 @@ public class AudienceQueryServiceImpl implements AudienceQueryService{
     }
 
     @Override
-    public Page<Shows> getSearchedShowsList(Integer page, String request){
-        return showsRepository.findByNameContaining(request, PageRequest.of(page, 8));
+    public List<Shows> getSearchedShowsList(String request){
+        return showsRepository.findByNameContainingAndIsIssuanceTrue(request);
     }
 
     @Override
-    public AudienceResponseDTO.getShowsListDTO getSearchedLikedShowsList(Long id, Integer page, String request){
+    public AudienceResponseDTO.getShowsListDTO getSearchedLikedShowsList(Long id, String request){
         Audience audience = audienceRepository.findById(id)
             .orElseThrow(()->new AudienceHandler(ErrorStatus.AUDIENCE_NOT_FOUND));
 
-        Page<Shows> showsList = showsRepository.findByNameContaining(request, PageRequest.of(page, 8));
+        List<Shows> showsList = showsRepository.findByNameContainingAndIsIssuanceTrue(request);
         List<AudienceResponseDTO.getShowsDTO> DTOs = new ArrayList<>();
 
         for (Shows shows : showsList) {

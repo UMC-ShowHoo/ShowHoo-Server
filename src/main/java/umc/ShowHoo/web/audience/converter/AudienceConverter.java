@@ -1,6 +1,5 @@
 package umc.ShowHoo.web.audience.converter;
 
-import org.springframework.data.domain.Page;
 import umc.ShowHoo.web.shows.entity.Shows;
 import umc.ShowHoo.web.audience.dto.AudienceResponseDTO;
 
@@ -8,26 +7,18 @@ import java.util.List;
 
 public class AudienceConverter {
 
-    public static AudienceResponseDTO.getShowsListDTO toGetShowsListDTO(Page<Shows> showsList){
+    public static AudienceResponseDTO.getShowsListDTO toGetShowsListDTO(List<Shows> showsList){
         List<AudienceResponseDTO.getShowsDTO> getShowsDTOList = showsList.stream()
                 .map(AudienceConverter::toGetShowsDTO).toList();
 
         return AudienceResponseDTO.getShowsListDTO.builder()
-                .isFirst(showsList.isFirst())
-                .isLast(showsList.isLast())
-                .totalElements(showsList.getTotalElements())
-                .totalPages(showsList.getTotalPages())
                 .showsList(getShowsDTOList)
                 .listSize(getShowsDTOList.size())
                 .build();
     }
 
-    public static AudienceResponseDTO.getShowsListDTO toGetLikedShowsListDTO(List<AudienceResponseDTO.getShowsDTO> showsList,Page<Shows> shows){
+    public static AudienceResponseDTO.getShowsListDTO toGetLikedShowsListDTO(List<AudienceResponseDTO.getShowsDTO> showsList,List<Shows> shows){
         return AudienceResponseDTO.getShowsListDTO.builder()
-                .isFirst(shows.isFirst())
-                .isLast(shows.isLast())
-                .totalElements(shows.getTotalElements())
-                .totalPages(shows.getTotalPages())
                 .showsList(showsList)
                 .listSize(showsList.size())
                 .build();
