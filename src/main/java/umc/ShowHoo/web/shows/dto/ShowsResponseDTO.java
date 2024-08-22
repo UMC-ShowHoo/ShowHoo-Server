@@ -70,13 +70,4 @@ public class ShowsResponseDTO {
         String dDay;
     }
 
-    @Builder
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class ShowTitleAndPosterDTO{
-        String poster;
-        String title;
-    }
-
 }

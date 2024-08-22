@@ -49,8 +49,6 @@ public class Space extends BaseEntity {
     private String bankName; //은행명
     private String bankAccount; //계좌번호
     private String bankOwner; //예금주
-    private double latitude;
-    private double longitude;
     @Column(nullable = false)
     private String notice; // 유의사항
     private Double grade; // 평점
