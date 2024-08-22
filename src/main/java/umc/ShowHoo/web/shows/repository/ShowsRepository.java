@@ -9,10 +9,13 @@ import umc.ShowHoo.web.shows.entity.Shows;
 import umc.ShowHoo.web.spaceApply.entity.SpaceApply;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ShowsRepository extends JpaRepository<Shows, Long> {
     Page<Shows> findByNameContaining(String request, PageRequest pageRequest);
 
     List<Shows> findBySpaceApply(SpaceApply spaceApply);
+
+    Optional<Shows> findBySpaceApplyId(Long spaceApplyId);
 }
