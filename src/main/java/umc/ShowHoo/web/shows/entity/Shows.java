@@ -40,6 +40,7 @@ public class Shows {
     private String bank; //은행명
     private String accountHolder; //예금주
     private String accountNum; //계좌번호
+    private Boolean isIssuance; //티켓 발행 여부
 
     private String cancelDate;  //취소 가능 날짜
     private String cancelTime;  //취소 가능 시간

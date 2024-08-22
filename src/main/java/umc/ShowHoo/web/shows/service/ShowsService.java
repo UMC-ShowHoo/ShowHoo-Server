@@ -52,7 +52,6 @@ public class ShowsService {
 
         shows=ShowsConverter.toShowInfo(requestDTO,shows);
         shows.setPerformerProfile(performer);
-        shows.setIsComplete(false);
 
         return showsRepository.save(shows);
     }
