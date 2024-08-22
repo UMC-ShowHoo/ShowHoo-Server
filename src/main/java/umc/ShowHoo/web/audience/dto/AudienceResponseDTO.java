@@ -16,10 +16,6 @@ public class AudienceResponseDTO {
     public static class getShowsListDTO{
         List<getShowsDTO> showsList;
         Integer listSize;
-        Integer totalPages;
-        Long totalElements;
-        Boolean isFirst;
-        Boolean isLast;
     }
 
 
