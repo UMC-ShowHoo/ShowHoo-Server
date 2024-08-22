@@ -10,6 +10,8 @@ public class ShowsConverter {
     public static Shows toShowsSpaceApply(SpaceApply spaceApply){
         return Shows.builder()
                 .spaceApply(spaceApply)
+                .isComplete(false)
+                .isIssuance(false)
                 .build();
     }
 
@@ -40,6 +42,7 @@ public class ShowsConverter {
         shows.setRemainTicketNum(dto.getTicketNum());
         shows.setTicketPrice(dto.getTicketPrice());
         shows.setPerMaxticket(dto.getPerMaxticket());
+        shows.setIsIssuance(true);
 
         return shows;
     }
