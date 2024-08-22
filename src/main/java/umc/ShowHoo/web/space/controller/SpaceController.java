@@ -174,6 +174,15 @@ public class SpaceController {
 
     @GetMapping("/spaces/{performerId}/prefer")
     @Operation(summary = "찜한 공연장 조회 API", description = "performer가 찜한 공연장을 조회하는 API입니다.")
+    @Parameter(
+            in = ParameterIn.HEADER,
+            name = "Authorization", required = true,
+            schema = @Schema(type = "string"),
+            description = "Bearer [Access 토큰]"
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
+    })
     public ApiResponse<SpaceResponseDTO.SpaceFilteredListDTO> getPreferSpace(@PathVariable Long performerId) {
         SpaceResponseDTO.SpaceFilteredListDTO spaces = spaceService.getPreferSpace(performerId);
         return ApiResponse.onSuccess(spaces);
