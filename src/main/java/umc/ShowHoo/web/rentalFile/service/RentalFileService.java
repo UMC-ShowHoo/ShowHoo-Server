@@ -33,13 +33,16 @@ public class RentalFileService {
     private final SpaceApplyRepository spaceApplyRepository;
     private final ShowsService showsService;
 
-    public RentalFile createPerformerFile(MultipartFile setList, MultipartFile rentalTime, MultipartFile addOrder,Long id){
+    public RentalFile createPerformerFile(MultipartFile setList, MultipartFile rentalTime, MultipartFile addOrder,Long spaceApplyId){
 
         String setListUrl=setList != null ? amazonS3Manager.uploadFile("rentalFile/"+ UUID.randomUUID().toString(),setList):null;
         String rentalTimeUrl=rentalTime != null ? amazonS3Manager.uploadFile("rentalFile/"+ UUID.randomUUID().toString(),rentalTime):null;
         String addOrderUrl=addOrder != null ? amazonS3Manager.uploadFile("rentalFile/"+ UUID.randomUUID().toString(),addOrder):null;
 
-        Shows shows= showsRepository.findById(id)
+/*        SpaceApply spaceApply=spaceApplyRepository.findById(spaceApplyId)
+                .orElseThrow(()->new SpaceApplyHandler(ErrorStatus.SPACE_APPLY_NOT_FOUND));*/
+
+        Shows shows=showsRepository.findBySpaceApplyId(spaceApplyId)
                 .orElseThrow(()->new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
 
         RentalFile rentalFile = rentalFileRepository.findByShows(shows);
