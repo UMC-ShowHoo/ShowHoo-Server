@@ -60,7 +60,7 @@ public class RentalFileController {
     }
 
 
-    @PostMapping(value = "/space/{spaceId}/{spaceApplyId}/prepare",consumes = "multipart/form-data")
+    @PostMapping(value = "/space/{spaceApplyId}/prepare",consumes = "multipart/form-data")
     @Operation(summary="공연장 - 공연준비 큐시트 작성 API", description = "공연장이 큐시트 작성 시에 제출해야하는 API입니다")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
