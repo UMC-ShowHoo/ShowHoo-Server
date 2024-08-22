@@ -102,21 +102,16 @@ public class SpaceService {
         return SpaceConverter.toSpacePayDTO(space);
     }
     @Transactional
-    public SpaceResponseDTO.SpaceListDTO getTopSpacesWithPreference(Long performerId) {
+    public SpaceResponseDTO.SpaceListDTO getTopSpaces() {
         Pageable pageable = PageRequest.of(0, 8);
         List<Space> spacePreferList = spaceRepository.findTopBySpacePreferOrderByCountDesc(pageable); // prefer순 8개 조회
         List<Space> gradeList = spaceRepository.findTopByOrderByGradeDesc(pageable); // grade순 8개 조회
 
-        if (performerId != null) {
-            performerRepository.findById(performerId).orElseThrow(() -> new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
-            return spaceConverter.toTopSpaceListDTO(spacePreferList, gradeList, performerId);
-        } else {
-            return spaceConverter.toTopSpaceListWithNullDTO(spacePreferList, gradeList);
-        }
+        return spaceConverter.toTopSpaceListDTO(spacePreferList, gradeList);
     }
 
     @Transactional
-    public SpaceResponseDTO.SpaceFilteredListDTO searchSpaces(SpaceRequestDTO.SpaceSearchRequestDTO searchRequest, Long performerId) {
+    public SpaceResponseDTO.SpaceFilteredListDTO searchSpaces(SpaceRequestDTO.SpaceSearchRequestDTO searchRequest) {
         Pageable pageable = PageRequest.of(searchRequest.getPage(), searchRequest.getSize());
 
         List<Space> spaces = spaceRepository.searchSpaces(
@@ -132,12 +127,7 @@ public class SpaceService {
                 pageable
         );
 
-        if (performerId != null) {
-            performerRepository.findById(performerId).orElseThrow(() -> new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
-            return spaceConverter.toSpaceListDTO(spaces, performerId);
-        } else {
-            return spaceConverter.toSpaceListWithNullDTO(spaces);
-        }
+        return spaceConverter.toSpaceListDTO(spaces);
     }
 
     @Transactional
@@ -146,7 +136,7 @@ public class SpaceService {
                 .orElseThrow(() -> new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
         List<SpacePrefer> spacePreferList = spacePreferRepository.findByPerformer(performer);
 
-        return spaceConverter.toSpaceByPreferListDTO(spacePreferList, performerId);
+        return spaceConverter.toSpaceByPreferListDTO(spacePreferList);
     }
 
     public Space saveSpaceName(SpaceRequestDTO.SpaceNameDTO spaceNameDTO, SpaceUser spaceUser) {

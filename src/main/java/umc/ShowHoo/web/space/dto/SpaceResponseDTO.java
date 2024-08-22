@@ -121,6 +121,7 @@ public class SpaceResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SpaceSummaryDTO{
+        Long spaceId;
         String name;
         String location;
         Integer totalCapacity;
@@ -129,7 +130,6 @@ public class SpaceResponseDTO {
         String imageURL;
         Double grade;
         Integer minRentalFee;
-        Boolean isPreferred;
     }
 
     @Getter

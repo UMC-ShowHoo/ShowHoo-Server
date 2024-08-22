@@ -166,19 +166,7 @@ public class SpaceConverter {
                 .build();
     }
 
-    public SpaceResponseDTO.SpaceListDTO toTopSpaceListDTO(List<Space> spacePreferList, List<Space> gradeList, Long performerId) {
-        List<SpaceResponseDTO.SpaceSummaryDTO> spacePreferDTOList = spacePreferList.stream()
-                .map(space -> toSpaceDTOWithPreference(space, performerId))
-                .collect(Collectors.toList());
-
-        List<SpaceResponseDTO.SpaceSummaryDTO> gradeDTOList = gradeList.stream()
-                .map(space -> toSpaceDTOWithPreference(space, performerId))
-                .collect(Collectors.toList());
-
-        return new SpaceResponseDTO.SpaceListDTO(spacePreferDTOList, gradeDTOList);
-    }
-
-    public SpaceResponseDTO.SpaceListDTO toTopSpaceListWithNullDTO(List<Space> spacePreferList, List<Space> gradeList) {
+    public SpaceResponseDTO.SpaceListDTO toTopSpaceListDTO(List<Space> spacePreferList, List<Space> gradeList) {
         List<SpaceResponseDTO.SpaceSummaryDTO> spacePreferDTOList = spacePreferList.stream()
                 .map(space -> toSpaceDTO(space))
                 .collect(Collectors.toList());
@@ -190,23 +178,16 @@ public class SpaceConverter {
         return new SpaceResponseDTO.SpaceListDTO(spacePreferDTOList, gradeDTOList);
     }
 
-    public SpaceResponseDTO.SpaceFilteredListDTO toSpaceListDTO(List<Space> spaces, Long performerId) {
-        List<SpaceResponseDTO.SpaceSummaryDTO> spaceSummaryDTOs = spaces.stream()
-                .map(space -> toSpaceDTOWithPreference(space, performerId))
-                .collect(Collectors.toList());
-        return new SpaceResponseDTO.SpaceFilteredListDTO(spaceSummaryDTOs);
-    }
-
-    public SpaceResponseDTO.SpaceFilteredListDTO toSpaceListWithNullDTO(List<Space> spaces) {
+    public SpaceResponseDTO.SpaceFilteredListDTO toSpaceListDTO(List<Space> spaces) {
         List<SpaceResponseDTO.SpaceSummaryDTO> spaceSummaryDTOs = spaces.stream()
                 .map(space -> toSpaceDTO(space))
                 .collect(Collectors.toList());
         return new SpaceResponseDTO.SpaceFilteredListDTO(spaceSummaryDTOs);
     }
 
-    public SpaceResponseDTO.SpaceFilteredListDTO toSpaceByPreferListDTO(List<SpacePrefer> spacePrefers, Long performerId) {
+    public SpaceResponseDTO.SpaceFilteredListDTO toSpaceByPreferListDTO(List<SpacePrefer> spacePrefers) {
         List<SpaceResponseDTO.SpaceSummaryDTO> spaceSummaryDTOs = spacePrefers.stream()
-                .map(spacePrefer -> toSpaceDTOWithPreference(spacePrefer.getSpace(), performerId))
+                .map(spacePrefer -> toSpaceDTO(spacePrefer.getSpace()))
                 .collect(Collectors.toList());
         return new SpaceResponseDTO.SpaceFilteredListDTO(spaceSummaryDTOs);
     }
@@ -224,6 +205,7 @@ public class SpaceConverter {
                 .orElse(null);
 
         return new SpaceResponseDTO.SpaceSummaryDTO(
+                space.getId(),
                 space.getName(),
                 space.getLocation(),
                 totalCapacity,
@@ -231,8 +213,7 @@ public class SpaceConverter {
                 additionalService,
                 imageURL,
                 space.getGrade(),
-                minRentalFee,
-                null
+                minRentalFee
         );
     }
 
@@ -243,11 +224,4 @@ public class SpaceConverter {
                 .build();
     }
 
-
-    public SpaceResponseDTO.SpaceSummaryDTO toSpaceDTOWithPreference(Space space, Long performerId) {
-        SpaceResponseDTO.SpaceSummaryDTO dto = toSpaceDTO(space);
-        Boolean isPreferred = spaceRepository.isSpacePreferredByUser(space.getId(), performerId);
-        dto.setIsPreferred(isPreferred);
-        return dto;
-    }
 }
