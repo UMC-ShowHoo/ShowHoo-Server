@@ -40,5 +40,5 @@ public class SpaceApply {
     private List<SelectedAdditionalService> selectedAdditionalServices;
 
     @OneToOne(mappedBy = "spaceApply", cascade = CascadeType.ALL, orphanRemoval = true)
-    private SpaceApply spaceApply;
+    private Shows shows;
 }
