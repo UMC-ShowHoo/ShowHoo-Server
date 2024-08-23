@@ -42,7 +42,7 @@ security:
           client-id: ${KAKAO_CLIENT_ID}
           client-secret: ${KAKAO_CLIENT_SECRET}
           authorization-grant-type: authorization_code
-          redirect-uri: https://66c81c7bad01400008a289e2--showhoo.netlify.app/login/oauth2/code/kakao
+          redirect-uri: https://66c82156b6d67800084f0db9--showhoo.netlify.app/login/oauth2/code/kakao
           client-authentication-method: client_secret_post
       provider:
         kakao:
