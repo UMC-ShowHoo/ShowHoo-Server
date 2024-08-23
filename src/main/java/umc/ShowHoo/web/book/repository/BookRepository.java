@@ -19,8 +19,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     Page<Book> findAllByAudienceAndStatus(Audience audience, BookStatus status, PageRequest pageRequest);
 
-    Page<Book> findAllByShows(Shows shows, PageRequest pageRequest);
-
     @Query("SELECT b FROM Book b JOIN b.shows s WHERE b.audience = :audience AND b.detail = :detail ORDER BY s.date ASC")
     List<Book> findAllByAudienceAndDetailOrderByShowsDateAsc(@Param("audience") Audience audience, @Param("detail") BookDetail detail);
 
