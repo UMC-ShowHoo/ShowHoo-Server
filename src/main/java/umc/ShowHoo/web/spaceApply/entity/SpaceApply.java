@@ -39,6 +39,8 @@ public class SpaceApply {
     @OneToMany(mappedBy = "spaceApply", cascade = CascadeType.ALL)
     private List<SelectedAdditionalService> selectedAdditionalServices;
 
-    @OneToOne(mappedBy = "spaceApply")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "shows")
     private Shows shows;
+
 }
