@@ -79,15 +79,11 @@ public class BookConverter {
                 .build();
     }
 
-    public static BookResponseDTO.getEntranceListDTO toGetEntranceListDTO(Page<Book> bookList){
+    public static BookResponseDTO.getEntranceListDTO toGetEntranceListDTO(List<Book> bookList){
         List<BookResponseDTO.getEntranceDTO> getEntranceDTOList = bookList.stream()
                 .map(BookConverter::toGetEntranceDTO).toList();
 
         return BookResponseDTO.getEntranceListDTO.builder()
-                .isFirst(bookList.isFirst())
-                .isLast(bookList.isLast())
-                .totalPages(bookList.getTotalPages())
-                .totalElements(bookList.getTotalElements())
                 .listSize(getEntranceDTOList.size())
                 .entranceList(getEntranceDTOList)
                 .build();
