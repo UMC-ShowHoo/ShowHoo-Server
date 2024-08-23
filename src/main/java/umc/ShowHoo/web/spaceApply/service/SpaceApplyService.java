@@ -186,6 +186,7 @@ public class SpaceApplyService {
                     .build();
 
             dtoList.add(dto);
+
             }
 
         System.out.println("Final DTO List: " + dtoList);
