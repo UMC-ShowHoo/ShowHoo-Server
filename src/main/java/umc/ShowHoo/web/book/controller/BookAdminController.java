@@ -47,8 +47,8 @@ public class BookAdminController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
     @Parameter(name = "showId",description = "공연 id")
-    public ApiResponse<BookResponseDTO.getEntranceListDTO> getEntranceBookList(@PathVariable(name = "showId") Long showId, @RequestParam(name = "page") Integer page){
-        return ApiResponse.onSuccess(bookAdminService.getEntranceList(showId, page));
+    public ApiResponse<BookResponseDTO.getEntranceListDTO> getEntranceBookList(@PathVariable(name = "showId") Long showId){
+        return ApiResponse.onSuccess(bookAdminService.getEntranceList(showId));
     }
 
     @PutMapping("/book-admin/{bookId}")

@@ -48,10 +48,10 @@ public class BookAdminService {
                 .collect(Collectors.toList());
     }
 
-    public BookResponseDTO.getEntranceListDTO getEntranceList(Long showId, Integer page){
+    public BookResponseDTO.getEntranceListDTO getEntranceList(Long showId){
         Shows shows = showsRepository.findById(showId)
                 .orElseThrow(()->new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
-        return BookConverter.toGetEntranceListDTO(bookRepository.findAllByShows(shows, PageRequest.of(page, 3)));
+        return BookConverter.toGetEntranceListDTO(bookRepository.findAllByShows(shows));
     }
 
     public void changeEntranceStatus(Long bookId, Boolean request){
