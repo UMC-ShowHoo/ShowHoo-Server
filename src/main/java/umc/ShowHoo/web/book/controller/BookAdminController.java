@@ -20,6 +20,17 @@ public class BookAdminController {
     private final BookAdminService bookAdminService;
 
     @GetMapping("/{showId}/prepare/book-admin")
+    @Operation(summary = "공연자 - 공연 준비 시 전체 예매자 조회 API",description = "공연자가 공연 준비 시에 전체 예매자를 조회하기 위한 API")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+    })
+    @Parameter(name = "showId",description = "공연 id")
+    public ApiResponse<List<BookResponseDTO.bookInfoDTO>> getAllBookList(@PathVariable(name = "showId") Long showsId){
+        List<BookResponseDTO.bookInfoDTO> bookInfoList= bookAdminService.getAllBookList(showsId);
+        return ApiResponse.onSuccess(bookInfoList);
+    }
+
+    @GetMapping("/{showId}/prepare/book-admin")
     @Operation(summary = "공연자 - 공연 준비 시 예매자 관리 API",description = "공연자가 공연 준비 시에 예매자를 조회하기 위한 API")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
@@ -47,8 +58,8 @@ public class BookAdminController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
     @Parameter(name = "showId",description = "공연 id")
-    public ApiResponse<BookResponseDTO.getEntranceListDTO> getEntranceBookList(@PathVariable(name = "showId") Long showId, @RequestParam(name = "page") Integer page){
-        return ApiResponse.onSuccess(bookAdminService.getEntranceList(showId, page));
+    public ApiResponse<BookResponseDTO.getEntranceListDTO> getEntranceBookList(@PathVariable(name = "showId") Long showId){
+        return ApiResponse.onSuccess(bookAdminService.getEntranceList(showId));
     }
 
     @PutMapping("/book-admin/{bookId}")

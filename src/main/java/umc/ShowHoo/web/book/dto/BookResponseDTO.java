@@ -48,10 +48,6 @@ public class BookResponseDTO {
     public static class getEntranceListDTO {
         List<getEntranceDTO> entranceList;
         Integer listSize;
-        Integer totalPages;
-        Long totalElements;
-        Boolean isFirst;
-        Boolean isLast;
     }
 
     @Getter
