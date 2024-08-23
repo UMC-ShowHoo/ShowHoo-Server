@@ -66,4 +66,5 @@ public class Shows {
     @OneToOne
     @JoinColumn(name = "space_apply_id")
     private SpaceApply spaceApply;
+
 }

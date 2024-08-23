@@ -36,7 +36,6 @@ public class BookResponseDTO {
         Integer ticketNum;
         String payment;
         BookDetail detail;
-
         //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
         LocalDateTime dateTime;
     }
