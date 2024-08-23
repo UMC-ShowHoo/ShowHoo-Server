@@ -28,7 +28,7 @@ import java.util.List;
 public class SpaceApplyController {
     private final SpaceApplyService spaceApplyService;
 
-    @Operation(summary = "대관 신청 API", description = "공연자 유저가 대관 신청을 클릭했을 때 대관 신청 내역을 저장하는 API입니다. 이때 rentalFee는 날짜에 따른 가격, rentalSum은 날짜가격 + 추가서비스 가격입니다. selectedAdditionalServices는 대관신청하면서 선택한 추가 서비스의 id값 넘겨주시면 돼요")
+    @Operation(summary = "대관 신청 API", description = "공연자 유저가 대관 신청을 클릭했을 때 대관 신청 내역을 저장하는 API입니다. 이때 rentalFee는 날짜에 따른 가격, rentalSum은 날짜가격 + 추가서비스 가격입니다. selectedAdditionalServices는 대관신청하면서 SpaceAdditionalServiceId 넘겨주시면 되요.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공"),
     })
@@ -97,6 +97,7 @@ public class SpaceApplyController {
                 return ApiResponse.onSuccess(dtoList);
 
     }
+
 
 
     @Operation(summary = "대관 영수증 확인 API", description = "공연장이 대관 수락 후 영수증을 확인하는 API 관련 additionalService가 보여야 합.")
