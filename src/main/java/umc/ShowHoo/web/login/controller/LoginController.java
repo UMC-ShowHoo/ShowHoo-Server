@@ -37,10 +37,10 @@ public class LoginController {
         return "로그아웃";
     }
 
-    @Value("https://66c816c530dd15000863adfb--showhoo.netlify.app/login/oauth2/code/kakao")
+    @Value("https://66c81c7bad01400008a289e2--showhoo.netlify.app/login/oauth2/code/kakao")
     private String redirectUri;
 
-    @Value("https://66c816c530dd15000863adfb--showhoo.netlify.app/")
+    @Value("https://66c81c7bad01400008a289e2--showhoo.netlify.app")
     private String logout_redirectUri;
 
     @Value("${kakao.client.id}")
