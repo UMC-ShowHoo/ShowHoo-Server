@@ -63,6 +63,7 @@ public class Shows {
     @OneToOne(mappedBy = "shows", cascade = CascadeType.ALL)
     private ShowsDescription showsDescription;
 
-    @OneToOne(mappedBy = "shows")
+    @OneToOne
+    @JoinColumn(name = "space_apply_id")
     private SpaceApply spaceApply;
 }
