@@ -36,7 +36,6 @@ public class BookResponseDTO {
         Integer ticketNum;
         String payment;
         BookDetail detail;
-
         //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
         LocalDateTime dateTime;
     }
@@ -48,10 +47,6 @@ public class BookResponseDTO {
     public static class getEntranceListDTO {
         List<getEntranceDTO> entranceList;
         Integer listSize;
-        Integer totalPages;
-        Long totalElements;
-        Boolean isFirst;
-        Boolean isLast;
     }
 
     @Getter

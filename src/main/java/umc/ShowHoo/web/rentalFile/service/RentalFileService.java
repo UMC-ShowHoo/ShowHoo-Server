@@ -54,9 +54,9 @@ public class RentalFileService {
         return rentalFileRepository.save(rentalFile);
     }
 
-    public RentalFileResponseDTO.SpaceUserSaveDTO getFormFile(Long showId){
-        Shows shows=showsRepository.findById(showId)
-                .orElseThrow(()-> new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
+    public RentalFileResponseDTO.SpaceUserSaveDTO getFormFile(Long spaceApplyId){
+        Shows shows=showsRepository.findBySpaceApplyId(spaceApplyId)
+                .orElseThrow(()->new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
 
         RentalFile rentalFile=rentalFileRepository.findByShows(shows);
 

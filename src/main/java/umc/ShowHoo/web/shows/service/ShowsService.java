@@ -43,8 +43,8 @@ public class ShowsService {
         return showsRepository.save(shows);
     }
 
-    public Shows createShowsInfo(ShowsRequestDTO.ShowInfoDTO requestDTO, Long performerProfileId,Long showsId){
-        PerformerProfile performer = performerProfileRepository.findById(performerProfileId)
+    public Shows createShowsInfo(ShowsRequestDTO.ShowInfoDTO requestDTO, Long performerUserId,Long showsId){
+        PerformerProfile performer = performerProfileRepository.findById(performerUserId)
             .orElseThrow(()->new PerformerHandler(ErrorStatus.PERFORMER_NOT_FOUND));
 
         Shows shows=showsRepository.findById(showsId)

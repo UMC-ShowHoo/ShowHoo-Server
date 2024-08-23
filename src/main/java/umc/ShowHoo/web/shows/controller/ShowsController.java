@@ -41,17 +41,17 @@ public class ShowsController {
         return ApiResponse.onSuccess(showDate);
     }
 
-    @PostMapping(value="/{performerProfileId}/{showsId}/show-register")
+    @PostMapping(value="/{performerUserId}/{showsId}/show-register")
     @Operation(summary = "공연자 공연 준비-공연 정보 등록 api", description = "공연 포스터 및 정보 등록 시에 필요한 API")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OK, 성공")
     })
     public ApiResponse<ShowsResponseDTO.postShowDTO> createShow(
-            @PathVariable Long performerProfileId,
+            @PathVariable Long performerUserId,
             @PathVariable Long showsId,
             @RequestBody ShowsRequestDTO.ShowInfoDTO showsRequestDTO)throws IOException {
 
-        Shows shows = showsService.createShowsInfo(showsRequestDTO, performerProfileId,showsId);
+        Shows shows = showsService.createShowsInfo(showsRequestDTO, performerUserId,showsId);
 
         return ApiResponse.onSuccess(ShowsConverter.toPostShowDTO(shows));
     }

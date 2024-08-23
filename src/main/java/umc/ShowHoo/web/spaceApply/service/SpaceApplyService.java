@@ -104,13 +104,6 @@ public class SpaceApplyService {
             notificationService.createSpaceCancelNotification(spaceApply); // 알림 생성
         }
 
-        // Shows 엔티티와의 관계 끊기
-        if (spaceApply.getShows() != null) {
-            Shows shows = spaceApply.getShows();
-            shows.setSpaceApply(null); // 양방향 관계에서 참조 제거
-            showsRepository.save(shows); // 변경 사항 저장
-        }
-
         spaceApplyRepository.delete(spaceApply);
     }
 
