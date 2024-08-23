@@ -65,4 +65,5 @@ public class Shows {
 
     @OneToOne(mappedBy = "shows")
     private SpaceApply spaceApply;
+
 }

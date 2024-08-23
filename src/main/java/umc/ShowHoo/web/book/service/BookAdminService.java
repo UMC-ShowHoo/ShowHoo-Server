@@ -27,6 +27,16 @@ public class BookAdminService {
     private final BookRepository bookRepository;
     private final CancelBookRepository cancelBookRepository;
 
+    public List<BookResponseDTO.bookInfoDTO> getAllBookList(Long showsId){
+        Shows shows=showsRepository.findById(showsId)
+                .orElseThrow(()->new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
+        List<Book> bookList=bookRepository.findAllByShows(shows);
+
+        return bookList.stream()
+                .map(BookConverter::toBookInfoDTO)
+                .collect(Collectors.toList());
+    }
+
     public List<BookResponseDTO.bookInfoDTO> getBookInfoList(Long showsId, BookDetail detail){
         Shows shows=showsRepository.findById(showsId)
                 .orElseThrow(()->new ShowsHandler(ErrorStatus.SHOW_NOT_FOUND));
