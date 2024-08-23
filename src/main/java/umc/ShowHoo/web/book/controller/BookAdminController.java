@@ -30,7 +30,7 @@ public class BookAdminController {
         return ApiResponse.onSuccess(bookInfoList);
     }
 
-    @GetMapping("/{showId}/prepare/book-admin")
+    @GetMapping("/{showId}/prepare/book-admin/detail")
     @Operation(summary = "공연자 - 공연 준비 시 예매자 관리 API",description = "공연자가 공연 준비 시에 예매자를 조회하기 위한 API")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
