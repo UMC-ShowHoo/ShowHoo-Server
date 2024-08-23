@@ -34,7 +34,6 @@ jobs:
           sed -i 's|${S3_SECRET_KEY}|'"${{ secrets.S3_SECRET_KEY }}"'|g' application-prod.yml
           sed -i 's|${KAKAO_CLIENT_ID}|'"${{ secrets.KAKAO_CLIENT_ID }}"'|g' application-prod.yml
           sed -i 's|${KAKAO_CLIENT_SECRET}|'"${{ secrets.KAKAO_CLIENT_SECRET }}"'|g' application-prod.yml
-          sed -i 's|${EC2_HOST}|'"${{ secrets.EC2_HOST }}"'|g' application-prod.yml
 
       - name: Grant permission
         run: chmod +x ./gradlew
